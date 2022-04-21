@@ -1,0 +1,18 @@
+Aktorzy:
+Aktorzy zewnętrzni:
+- użytkownik
+- administrator
+- samochód
+
+Mikroserwisy:
+- manager samochodów
+- monitor tras
+- system taryf
+- baza danych samochodów
+- system wynajmu/użyczenia
+- system rezerwacji
+- system płatności
+- system powiadomień
+- system autentykacji
+- system raportujący
+- system parkingów
