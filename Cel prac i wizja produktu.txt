@@ -1,0 +1,20 @@
+- Problem do rozwiązania, nasza propozycja, opis klienta i jego potrzeb, opis firmy i jej potrzeb
+- Krótkie podsumowanie obszarów funkcjonalnych i niefunkcjonalnych (ogólne wymagania, bez szczegółów jeszcze)
+- Przegląd dostępnych/konkurencyjnych rozwiązań (uwzględniający screenshoty, linki oraz komentarz technologiczno-koncepcyjny) wraz z ew. uzasadnieniem planowanego produktu pod kątem biznesowych (czyli np. dlaczego Wasz produkt będzie lepszy)
+Jakaś firma + różnice
+
+- Aktorzy, Uml use case i opis
+- Opis mikroserwisów, zadania, zakres odpowiedzialności
+- Opis dziedziny problemu wraz z ilustracją zidentyfikowanych procesów, funkcjonujących systemów i wszelkich artefaktów (np. dokumenty Excele), które mają znaczenie z punktu widzenia projektu
+używanie blockchainu, lokalizacji, map, parkingów. Co dokładnie używamy.
+
+
+- Studium wykonalności, a więc analizę technologiczną wraz z podsumowaniem dotyczącym wybranych technologii i zrealizowanych prototypów (z tego ma wynikać, że podjętą decyzją technologiczna była przemyślana)
+- Analizę ryzyka wraz z komentarzem dotyczącym podjętych działań i tego, czy dane ryzyko wystąpiło
+Dlaczego mikroserwisy? blockchain? smartkontrakty? RabbitMQ? REST Api?  ryzyko technoligiczne, ryzyko biznesowe. 
+
+
+
+
+
+- Słownik pojęć, jeśli takowy jest potrzebny.
