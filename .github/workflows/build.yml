@@ -23,4 +23,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x api/gradlew
     - name: Build with Gradle
-      run: ./api/gradlew build
+      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      with:
+        arguments: build
+        build-root-directory: api
