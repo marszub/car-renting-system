@@ -7,21 +7,22 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build-auth:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
-    - name: Change dir
-      run: cd auth
     - name: Setup .NET
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 5.0.x
+        dotnet-version: 6.0.x
     - name: Restore dependencies
+      working-directory: ./auth
       run: dotnet restore
     - name: Build
+      working-directory: ./auth
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./auth
       run: dotnet test --no-build --verbosity normal
