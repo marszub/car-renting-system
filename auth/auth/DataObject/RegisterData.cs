@@ -1,4 +1,4 @@
-﻿namespace auth.dto
+﻿namespace auth.DataObject
 {
     using System.ComponentModel.DataAnnotations;
     public class RegisterData
