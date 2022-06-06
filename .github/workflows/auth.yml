@@ -23,6 +23,8 @@ jobs:
     - name: Build
       working-directory: ./auth
       run: dotnet build --no-restore
+    - name: Run database container
+      run: docker run -d -p 5011:5432 --name auth -e POSTGRES_PASSWORD=password postgres
     - name: Test
       working-directory: ./auth
       run: dotnet test --no-build --verbosity normal
