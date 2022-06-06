@@ -2,11 +2,11 @@
 {
     public class User
     {
-        public int UserID { get; set; }
+        public int UserID { get; set; } = default!;
         public string Login { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual Role Role { get; set; } = default!;
 
         public User(string login, string email, string password)
         {

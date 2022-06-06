@@ -14,8 +14,8 @@ namespace auth.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Role> Roles { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
