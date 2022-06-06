@@ -11,12 +11,10 @@ namespace auth.Controllers
     public class AuthController : ControllerBase
     {
         private readonly AuthContext context;
-        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AuthContext context, ILogger<AuthController> logger)
+        public AuthController(AuthContext context)
         {
             this.context = context;
-            _logger = logger;
         }
 
         [HttpPost("register")]
