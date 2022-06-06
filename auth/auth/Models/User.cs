@@ -8,11 +8,12 @@
         public string Password { get; set; }
         public virtual Role Role { get; set; }
 
-        public User(string login, string email, string password)
+        public User(string login, string email, string password, Role role)
         {
             Login = login;
             Email = email;
             Password = password;
+            Role = role;
         }
     }
 }
