@@ -34,8 +34,8 @@ namespace auth.Data
                 throw new UserAlreadyExistsException();
             }
 
-            Role userRole = Roles.Single(role => role.Name == "User");
-            User user = new User(data.Login, data.Email, data.Password, userRole);
+            User user = new User(data.Login, data.Email, data.Password);
+            user.Role = Roles.Single(role => role.Name == "User");
             Users.Add(user);
 
             SaveChanges();
