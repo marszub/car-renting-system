@@ -1,5 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using auth.Models;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using auth.DataObject;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace auth.Data
 {
@@ -12,30 +16,53 @@ namespace auth.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RolePossesion> RolePossesions { get; set; }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<Role>().ToTable("Role");
-            modelBuilder.Entity<RolePossesion>().ToTable("RolePossesion");
+            modelBuilder.UseSerialColumns();
+            modelBuilder.Entity<Role>().ToTable("Roles");
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<User>().HasOne(user => user.Role)
+                .WithMany(role => role.Users)
+                .IsRequired();
         }
 
-        /*public User? RegisterUser(RegisterData data)
+        public void RegisterUser(RegisterData data)
         {
-            if(Users.Where((User user) => user.Login == data.Login || user.Email == data.Email).Any())
+            if(UserExists(data.Login, data.Email))
             {
-                return null;
+                throw new UserAlreadyExistsException();
             }
 
             User user = new User(data.Login, data.Email, data.Password);
+            user.Role = Roles.Single(role => role.Name == "User");
             Users.Add(user);
-            Users.
 
-            RolePossesion possesion = new RolePossesion(entry.)
+            SaveChanges();
+        }
 
-            return user;
+/*        public string GetToken(LoginData data)
+        {
+            User? user = GetVerifiedUser(data.Login, data.Password);
+            if (user == null)
+            {
+                throw new BadUserCredentialsException();
+            }
+        }*/
+
+        private bool UserExists(string Login, string Email)
+        {
+            return Users.Where((User user)
+                => user.Login == Login
+                || user.Email == Email).Any();
+        }
+
+        /*private User? GetVerifiedUser(string UserId, string Password)
+        {
+            return Users.Where((User user)
+                => (user.Login == UserId
+                || user.Email == UserId) 
+                && user.Password == Password).SingleOrDefault();
         }*/
     }
 }

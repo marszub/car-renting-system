@@ -9,7 +9,7 @@
 
         [Required]
         [EmailAddress]
-        public string Mail { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [StringLength(200, MinimumLength = 8)]
