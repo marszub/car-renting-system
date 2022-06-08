@@ -22,8 +22,12 @@ namespace auth.Data
             modelBuilder.UseSerialColumns();
             modelBuilder.Entity<Role>().ToTable("Roles");
             modelBuilder.Entity<User>().ToTable("Users");
+
             modelBuilder.Entity<User>().HasOne(user => user.Role)
                 .WithMany(role => role.Users)
+                .IsRequired();
+            modelBuilder.Entity<User>().HasMany(user => user.Tokens)
+                .WithOne(token => token.User)
                 .IsRequired();
         }
 
