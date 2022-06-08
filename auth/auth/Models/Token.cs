@@ -1,16 +1,19 @@
 ﻿namespace auth.Models
 {
-    using System.ComponentModel.DataAnnotations.Schema;
-
     public class Token
     {
         public int TokenID { get; set; }
-        public User User { get; set; }
         public string Value { get; set; }
+        public User Owner { get; set; } = default!;
 
-        public Token(User user, string value)
+        public Token(string value)
         {
-            User = user;
+            Value = value;
+        }
+
+        public Token(string value, User user)
+        {
+            Owner = user;
             Value = value;
         }
     }

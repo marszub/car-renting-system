@@ -16,18 +16,20 @@ namespace auth.Data
 
         public DbSet<User> Users { get; set; } = default!;
         public DbSet<Role> Roles { get; set; } = default!;
+        public DbSet<Token> Tokens { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
             modelBuilder.Entity<Role>().ToTable("Roles");
             modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Token>().ToTable("Tokens");
 
             modelBuilder.Entity<User>().HasOne(user => user.Role)
                 .WithMany(role => role.Users)
                 .IsRequired();
             modelBuilder.Entity<User>().HasMany(user => user.Tokens)
-                .WithOne(token => token.User)
+                .WithOne(token => token.Owner)
                 .IsRequired();
         }
 
