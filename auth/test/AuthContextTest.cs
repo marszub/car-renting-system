@@ -47,8 +47,7 @@ namespace test
             Assert.True(context.Users.Any());
             var createdUsers = context.Users.Where(
                 user => user.Login == login1 &&
-                user.Email == email1 &&
-                user.Password == password1);
+                user.Email == email1);
             Assert.True(createdUsers.Any());
 
             context.ChangeTracker.Clear();
