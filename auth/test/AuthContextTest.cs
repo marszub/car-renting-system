@@ -6,21 +6,51 @@ namespace test
 {
     public class AuthContextTest : IClassFixture<TestDatabaseFixture>
     {
-        private readonly string login1 = "1login123456";
-        private readonly string email1 = "1user@email.com";
-        private readonly string password1 = "1password12345";
-        private readonly string login2 = "2login123456";
-        private readonly string email2 = "2user@email.com";
-        private readonly string password2 = "2password12345";
+        private static readonly string login1 = "1login123456";
+        private static readonly string email1 = "1user@email.com";
+        private static readonly string password1 = "1password12345";
+        private static readonly string login2 = "2login123456";
+        private static readonly string email2 = "2user@email.com";
+        private static readonly string password2 = "2password12345";
 
-        private readonly RegisterData registerData1;
-        private readonly RegisterData registerData2;
+        private static readonly RegisterData registerData1 = new RegisterData
+        {
+            Login = login1,
+            Email = email1,
+            Password = password1
+        };
+        private static readonly RegisterData registerData2 = new RegisterData
+        {
+            Login = login2,
+            Email = email2,
+            Password = password2
+        };
+
+        private static readonly LoginData loginDataLogin1 = new LoginData
+        {
+            Login = login1,
+            Password = password1
+        };
+        private static readonly LoginData loginDataEmail1 = new LoginData
+        {
+            Login = email1,
+            Password = password1
+        };
+        private static readonly LoginData loginDataLogin2 = new LoginData
+        {
+            Login = login2,
+            Password = password2
+        };
+        private static readonly LoginData loginDataEmail2 = new LoginData
+        {
+            Login = email2,
+            Password = password2
+        };
 
         public AuthContextTest(TestDatabaseFixture fixture)
         {
             Fixture = fixture;
-            registerData1 = new RegisterData { Login = login1, Email = email1, Password = password1 };
-            registerData2 = new RegisterData { Login = login2, Email = email2, Password = password2 };
+            
         }
 
         public TestDatabaseFixture Fixture { get; }
@@ -48,6 +78,21 @@ namespace test
             var createdUsers = context.Users.Where(
                 user => user.Login == login1 &&
                 user.Email == email1);
+            Assert.True(createdUsers.Any());
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Fact]
+        public void RegisteredUserHasEncryptedPassword()
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData1);
+
+            Assert.True(context.Users.Any());
+            var createdUsers = context.Users.Where(user => user.Password != password1 && user.Password.Length > 0);
             Assert.True(createdUsers.Any());
 
             context.ChangeTracker.Clear();
@@ -95,6 +140,71 @@ namespace test
             context.RegisterUser(registerData2);
 
             Assert.Equal(2, context.Users.Select(user => user.UserID).Distinct().Count());
+
+            context.ChangeTracker.Clear();
+        }
+
+        public static IEnumerable<object[]> RegisterAndLoginUsers =>
+        new List<object[]>
+        {
+            new object[] { registerData1, loginDataLogin1 },
+            new object[] { registerData1, loginDataEmail1 },
+            new object[] { registerData2, loginDataLogin2 },
+            new object[] { registerData2, loginDataEmail2 },
+        };
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void LogingSingleUser(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            string token = context.CreateToken(loginData);
+
+            Assert.True(context.Tokens.Where(token => token.Owner.Login == registerData.Login && token.Owner.Email == registerData.Email).Any());
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void TokenForSameUserChange(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            string token1 = context.CreateToken(loginData);
+            string token2 = context.CreateToken(loginData);
+
+            Assert.NotEqual(token1, token2);
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Fact]
+        public void NotCreateTokenForNotExistingUser()
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData1);
+            Assert.Throws<BadUserCredentialsException>(() => context.CreateToken(loginDataLogin2));
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Fact]
+        public void NotCreateTokenForWrongPassword()
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData1);
+            Assert.Throws<BadUserCredentialsException>(() => context.CreateToken(new LoginData { Login = login1, Password = password2 }));
+            Assert.False(context.Tokens.Any());
 
             context.ChangeTracker.Clear();
         }

@@ -56,7 +56,7 @@ namespace auth.Data
                 throw new BadUserCredentialsException();
             }
 
-            string tokenValue = HashGenerator.GetHash(user.Login) + HashGenerator.GetHash(user.Email) + HashGenerator.GetHash(DateTime.Now.ToString());
+            string tokenValue = HashGenerator.GetHash(user.Login) + HashGenerator.GetHash(user.Email) + HashGenerator.GetHash(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss:ffff"));
 
             Token token = new Token(tokenValue, user);
             Tokens.Add(token);
