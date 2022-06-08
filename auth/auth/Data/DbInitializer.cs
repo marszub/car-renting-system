@@ -1,12 +1,14 @@
-﻿namespace auth.Data
+﻿using auth.Models;
+
+namespace auth.Data
 {
     public static class DbInitializer
     {
         public static void Initialize(AuthContext context)
         {
-            if (!context.Roles.Where(((Models.Role role) => role.Name == "User")).Any())
+            if (!context.Roles.Where((role => role.Name == "User")).Any())
             {
-                context.Roles.Add(new Models.Role(1, "User", "Regular user without additional privilages"));
+                context.Roles.Add(new Role(1, "User", "Regular user without additional privilages"));
                 context.SaveChanges();
             }
         }
