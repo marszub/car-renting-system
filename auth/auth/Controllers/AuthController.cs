@@ -24,7 +24,7 @@ namespace auth.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Register([Required] RegisterData data)
+        public ActionResult<ValidToken> Register([Required] RegisterData data)
         {
             try
             {
@@ -49,7 +49,7 @@ namespace auth.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Login([Required] LoginData data)
+        public ActionResult<ValidToken> Login([Required] LoginData data)
         {
             try
             {
