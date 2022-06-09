@@ -4,7 +4,7 @@ using auth.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace auth.Controllers
+namespace auth.Controller
 {
     [ApiController]
     [Route("api/auth")]
@@ -64,9 +64,17 @@ namespace auth.Controllers
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Logout()
+        public IActionResult Logout([FromHeader] string token)
         {
-            return Ok();
+            try
+            {
+                context.DeleteToken(token);
+                return Ok();
+            }
+            catch(UnauthorizedAccessException)
+            {
+                return Unauthorized();
+            }
         }
     }
 }

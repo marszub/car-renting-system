@@ -66,6 +66,17 @@ namespace auth.Data
             return tokenValue;
         }
 
+        public void DeleteToken(string token)
+        {
+            var found = Tokens.Where(entity => entity.Value == token);
+            if (!found.Any())
+            {
+                throw new UnauthorizedAccessException();
+            }
+            Tokens.RemoveRange(found.ToList());
+            SaveChanges();
+        }
+
         private bool UserExists(string Login, string Email)
         {
             return Users.Where((User user)

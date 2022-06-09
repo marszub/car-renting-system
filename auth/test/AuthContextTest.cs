@@ -230,5 +230,51 @@ namespace test
 
             context.ChangeTracker.Clear();
         }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void DeleteExistingToken(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            string token = context.CreateToken(loginData);
+            context.DeleteToken(token);
+            Assert.False(context.Tokens.Any());
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void DeleteOnlyOneToken(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            context.CreateToken(loginData);
+            string token = context.CreateToken(loginData);
+            context.DeleteToken(token);
+            Assert.True(context.Tokens.Any());
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void ThrowWhenDeleteWrongToken(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            context.CreateToken(loginData);
+            Assert.Throws<UnauthorizedAccessException>(() => context.DeleteToken("wrong token"));
+            Assert.True(context.Tokens.Any());
+
+            context.ChangeTracker.Clear();
+        }
     }
 }
