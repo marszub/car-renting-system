@@ -144,14 +144,16 @@ namespace test
             context.ChangeTracker.Clear();
         }
 
-        public static IEnumerable<object[]> RegisterAndLoginUsers =>
-        new List<object[]>
+        private static IEnumerable<object[]> RegisterAndLoginUsers()
         {
-            new object[] { registerData1, loginDataLogin1 },
-            new object[] { registerData1, loginDataEmail1 },
-            new object[] { registerData2, loginDataLogin2 },
-            new object[] { registerData2, loginDataEmail2 },
-        };
+            return new List<object[]>
+            {
+                new object[] { registerData1, loginDataLogin1 },
+                new object[] { registerData1, loginDataEmail1 },
+                new object[] { registerData2, loginDataLogin2 },
+                new object[] { registerData2, loginDataEmail2 },
+            };
+        }
 
         [Theory]
         [MemberData(nameof(RegisterAndLoginUsers))]
@@ -161,9 +163,13 @@ namespace test
             context.Database.BeginTransaction();
 
             context.RegisterUser(registerData);
-            string token = context.CreateToken(loginData);
+            string generatedToken = context.CreateToken(loginData);
 
-            Assert.True(context.Tokens.Where(token => token.Owner.Login == registerData.Login && token.Owner.Email == registerData.Email).Any());
+            Assert.True(context.Tokens
+                .Where(token => token.Owner.Login == registerData.Login
+                && token.Owner.Email == registerData.Email
+                && token.Value == generatedToken)
+                .Any());
 
             context.ChangeTracker.Clear();
         }
@@ -180,6 +186,22 @@ namespace test
             string token2 = context.CreateToken(loginData);
 
             Assert.NotEqual(token1, token2);
+
+            context.ChangeTracker.Clear();
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void BothTokensForSameUserAreSaved(RegisterData registerData, LoginData loginData)
+        {
+            using var context = Fixture.CreateContext();
+            context.Database.BeginTransaction();
+
+            context.RegisterUser(registerData);
+            string token1 = context.CreateToken(loginData);
+            string token2 = context.CreateToken(loginData);
+
+            Assert.Equal(2, context.Tokens.Count());
 
             context.ChangeTracker.Clear();
         }
