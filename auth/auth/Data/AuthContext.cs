@@ -28,9 +28,11 @@ namespace auth.Data
 
             modelBuilder.Entity<User>().HasOne(user => user.Role)
                 .WithMany(role => role.Users)
+                .HasForeignKey(user => user.RoleID)
                 .IsRequired();
-            modelBuilder.Entity<User>().HasMany(user => user.Tokens)
-                .WithOne(token => token.Owner)
+            modelBuilder.Entity<Token>().HasOne(token => token.Owner)
+                .WithMany(user => user.Tokens)
+                .HasForeignKey(token => token.UserID)
                 .IsRequired();
         }
 

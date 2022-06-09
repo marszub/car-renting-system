@@ -4,6 +4,7 @@
     {
         public int TokenID { get; set; }
         public string Value { get; set; }
+        public int UserID { get; set; }
         public User Owner { get; set; } = default!;
 
         public Token(string value)
