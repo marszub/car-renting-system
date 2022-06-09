@@ -45,7 +45,7 @@ namespace auth.Controllers
             }
         }
 
-        [HttpGet("token")]
+        [HttpPost("token")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
