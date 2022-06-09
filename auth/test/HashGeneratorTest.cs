@@ -63,5 +63,12 @@ namespace test
         {
             Assert.True(HashGenerator.VerifyHash(plainText, HashGenerator.GetHash(plainText)));
         }
+
+        [Theory]
+        [MemberData(nameof(GetStrings), parameters: new object[] { 10000, 5, 50989 })]
+        public void HashLongString(string plainText)
+        {
+            Assert.True(HashGenerator.VerifyHash(plainText, HashGenerator.GetHash(plainText)));
+        }
     }
 }
