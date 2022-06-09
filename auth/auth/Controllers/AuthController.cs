@@ -37,7 +37,7 @@ namespace auth.Controllers
 
             try
             {
-                return Ok(new ValidToken { value = context.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
+                return Ok(new ValidToken { token = context.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
             }
             catch (BadUserCredentialsException)
             {
@@ -53,7 +53,7 @@ namespace auth.Controllers
         {
             try
             {
-                return Ok(new ValidToken { value = context.CreateToken(data) });
+                return Ok(new ValidToken { token = context.CreateToken(data) });
             }
             catch(BadUserCredentialsException)
             {

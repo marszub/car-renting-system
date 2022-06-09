@@ -2,6 +2,6 @@
 {
     public class ValidToken
     {
-        public string value { get; set; } = default!;
+        public string token { get; set; } = default!;
     }
 }
