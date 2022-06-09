@@ -60,8 +60,7 @@ namespace auth.Data
 
             string tokenValue = HashGenerator.GetHash(user.Login) + HashGenerator.GetHash(user.Email) + HashGenerator.GetHash(DateTime.Now.ToString("yyyy.MM.dd HH:mm:ss:ffff"));
 
-            Token token = new Token(tokenValue, user);
-            Tokens.Add(token);
+            user.Tokens.Add(new Token(tokenValue));
             SaveChanges();
 
             return tokenValue;
@@ -78,7 +77,7 @@ namespace auth.Data
         {
             string hashedPassword = HashGenerator.GetHash(Password);
 
-            return Users.Where((User user)
+            return Users.Include(user => user.Tokens).Where((User user)
                 => (user.Login == UserId
                 || user.Email == UserId)
                 && user.Password == hashedPassword)
