@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace test
+namespace test.Utils
 {
     public class TestDatabaseFixture
     {
@@ -18,7 +18,7 @@ namespace test
 
         public TestDatabaseFixture()
         {
-            if(_databaseInitialized)
+            if (_databaseInitialized)
             {
                 return;
             }

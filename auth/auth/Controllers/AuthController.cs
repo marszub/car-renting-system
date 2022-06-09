@@ -22,8 +22,9 @@ namespace auth.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public /*async Task<*/IActionResult/*>*/ Register([Required] RegisterData data)
+        public ActionResult<ValidToken> Register([Required] RegisterData data)
         {
             try
             {
@@ -33,23 +34,37 @@ namespace auth.Controllers
             {
                 return Conflict();
             }
-            
-            return Ok();
+
+            try
+            {
+                return Ok(new ValidToken { token = context.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
+            }
+            catch (BadUserCredentialsException)
+            {
+                return Unauthorized();
+            }
         }
 
-        [HttpGet("token")]
+        [HttpPost("token")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public /*async Task<*/IActionResult/*>*/ Login([Required] LoginData data)
+        public ActionResult<ValidToken> Login([Required] LoginData data)
         {
-            return Unauthorized();
+            try
+            {
+                return Ok(new ValidToken { token = context.CreateToken(data) });
+            }
+            catch(BadUserCredentialsException)
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpPost("logout")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public /*async Task<*/IActionResult/*>*/ Logout()
+        public IActionResult Logout()
         {
             return Ok();
         }
