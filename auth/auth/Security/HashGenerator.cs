@@ -18,7 +18,7 @@ namespace auth.Security
         {
             var hashOfInput = GetHash(input);
 
-            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+            StringComparer comparer = StringComparer.Ordinal;
 
             return comparer.Compare(hashOfInput, hash) == 0;
         }
