@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PageNotFound from "./components/PageNotFound";
 import MainPage from "./components/MainPage";
 import SignUpForm from "./components/SignUpForm";
+import SignInForm from "./components/SignInForm";
 
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
     <Routes>
         <Route path='/' element={ <MainPage /> } />
         <Route path='/sign-up' element={ <SignUpForm /> } />
+        <Route path='/sign-in' element={ <SignInForm /> } />
         <Route path='*' element={ <PageNotFound /> } />
     </Routes>
     </Router>

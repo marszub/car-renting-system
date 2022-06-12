@@ -31,7 +31,10 @@ export default function MainPage() {
                     navigate("/error");
                     break;
             }
-        })
+        }).catch(err => {
+            console.log("err");
+            navigate("/error");
+        });
     }
 
     return (
@@ -47,6 +50,20 @@ export default function MainPage() {
                     error={true}
                     helperText={tokenStorage.accessToken}
                 />
+            </Box>
+            <Box sx = {{
+                textAlign: "center",
+                marginTop: 8}}>
+                <Button onClick={() => {navigate("/sign-in")}}>
+                    Login
+                </Button>
+            </Box>
+            <Box sx = {{
+                textAlign: "center",
+                marginTop: 8}}>
+                <Button onClick={() => {navigate("sign-up")}}>
+                    Register
+                </Button>
             </Box>
             <Box sx = {{
                 textAlign: "center",
