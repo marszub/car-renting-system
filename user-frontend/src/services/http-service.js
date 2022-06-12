@@ -8,11 +8,12 @@ export class HttpService {
     }
 
     request(path, requestMethod, body) {
+        alert(JSON.stringify((tokenStorage.accessToken) && {'token': tokenStorage.accessToken}));
         return fetch(`${this.servicePath}${path}`, {
             method: requestMethod,
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                ...(tokenStorage.accessToken) && {'Authorization': + tokenStorage.accessToken},
+                ...(tokenStorage.accessToken) && {'token': tokenStorage.accessToken},
             },
             credentials: 'include',
             body: body && JSON.stringify(body, this.replacer)

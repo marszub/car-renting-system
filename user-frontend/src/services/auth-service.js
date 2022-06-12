@@ -1,6 +1,6 @@
 import { HttpService, ShortResponse } from "./http-service"
 import { AUTH_SERVICE } from "../config";
-import { HTTP_OK } from "../utils/http-status";
+import { HTTP_NO_CONTENT, HTTP_OK } from "../utils/http-status";
 import { tokenStorage } from "./token-storage";
 
 export class AuthService extends HttpService {
@@ -31,7 +31,7 @@ export class AuthService extends HttpService {
     signOut(data) {
         return super.post("/auth/logout", data)
             .then(res => {
-                if(res.status == HTTP_OK) {
+                if(res.status == HTTP_NO_CONTENT) {
                     tokenStorage.revokeToken();
                 }
                 return res;
