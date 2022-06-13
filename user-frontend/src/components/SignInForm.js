@@ -28,6 +28,16 @@ export default function SignInForm() {
             formData.get("password")
         );
 
+        var loginMessage = authValidators.validateLogin(requestBody.login);
+        var passwordMessage = authValidators.validateLogin(requestBody.password);
+
+        setLoginErrorMessage(loginMessage);
+        setPasswordErrorMessage(passwordMessage);
+
+        if(loginMessage || passwordMessage) {
+            return;
+        }
+
         service.signIn(requestBody).then( res => {
             switch (res.status) {
                 case HTTP_OK:
@@ -58,7 +68,7 @@ export default function SignInForm() {
                 marginTop: 8
             }}>
                 <Typography component="h1" variant="h3">
-                    Register new account
+                    Login
                 </Typography>
             </Box>
             <Box component="form" onSubmit={handleSubmit} sx={{

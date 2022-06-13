@@ -28,5 +28,5 @@ export const authValidators = {
     }
 }
 
-const loginRegex = /^\S{4,40}/
+const loginRegex = /^\S{4,50}/
 const emailRegex = /^\S+@\S+(\.\S+)+$/
