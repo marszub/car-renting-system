@@ -2,6 +2,7 @@
 using auth.Models;
 using Auth;
 using Ice;
+using Microsoft.EntityFrameworkCore;
 
 namespace auth.SharedObject
 {
@@ -15,18 +16,22 @@ namespace auth.SharedObject
 
         public override TokenVerificationStatus verifyToken(AccessData accessData, Current current)
         {
-            User user = GetUser(current.id.name);
-            if(!VerifyRole(user, accessData.role))
+            return verifyTokenImpl(accessData, current.id.name);
+        }
+
+        public TokenVerificationStatus verifyTokenImpl(AccessData accessData, string userId)
+        {
+            User user = GetUser(userId);
+            if (!VerifyRole(user, accessData.role))
             {
                 return TokenVerificationStatus.RoleNotAssigned;
             }
-            if(!VerifyToken(user, accessData.token))
+            if (!VerifyToken(user, accessData.token))
             {
                 return TokenVerificationStatus.InvalidToken;
             }
             return TokenVerificationStatus.Ok;
         }
-
 
         public override void ice_ping(Ice.Current current)
         {
