@@ -11,6 +11,7 @@
   "profiles": {
     "auth": {
       "commandName": "Project",
+      "commandLineArgs": "--Ice.Config=config.authice",
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {

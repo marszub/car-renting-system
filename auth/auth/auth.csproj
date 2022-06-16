@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -19,6 +19,12 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="zeroc.ice.net" Version="3.7.7" />
+    <PackageReference Include="zeroc.icebuilder.msbuild" Version="5.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SliceCompile Include="..\..\slice\auth.ice" Link="auth.ice" />
   </ItemGroup>
 
 </Project>
