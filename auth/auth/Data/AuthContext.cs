@@ -44,7 +44,7 @@ namespace auth.Data
             }
 
             User user = new User(data.Login, data.Email, HashGenerator.GetHash(data.Password));
-            user.Role = Roles.Single(role => role.Name == "User");
+            user.Role = Roles.Single(role => role.Name == Auth.Role.User.ToString());
             Users.Add(user);
 
             SaveChanges();

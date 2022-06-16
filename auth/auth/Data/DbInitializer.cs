@@ -8,7 +8,7 @@ namespace auth.Data
         {
             if (!context.Roles.Where((role => role.Name == "User")).Any())
             {
-                context.Roles.Add(new Role(1, "User", "Regular user without additional privilages"));
+                context.Roles.Add(new Role(1, Auth.Role.User.ToString(), "Regular user without additional privilages"));
                 context.SaveChanges();
             }
         }
