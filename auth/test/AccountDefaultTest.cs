@@ -1,8 +1,8 @@
-﻿using auth.Data;
-using auth.DataObject;
-using auth.Models;
-using auth.Service;
-using auth.SharedObject;
+﻿using Auth.Data;
+using Auth.DataObject;
+using Auth.Models;
+using Auth.Service;
+using Auth.SharedObject;
 using test.Utils;
 using Auth;
 using Microsoft.EntityFrameworkCore;

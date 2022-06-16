@@ -1,4 +1,4 @@
-﻿using auth.Security;
+﻿using Auth.Security;
 using test.Utils;
 
 namespace test

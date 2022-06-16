@@ -1,6 +1,4 @@
-﻿using auth.Models;
-
-namespace auth.Data
+﻿namespace Auth.Data
 {
     public static class DbInitializer
     {
@@ -8,7 +6,7 @@ namespace auth.Data
         {
             if (!context.Roles.Where((role => role.Name == "User")).Any())
             {
-                context.Roles.Add(new Role(1, Auth.Role.User.ToString(), "Regular user without additional privilages"));
+                context.Roles.Add(new Models.Role(1, Role.User.ToString(), "Regular user without additional privilages"));
                 context.SaveChanges();
             }
         }

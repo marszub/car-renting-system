@@ -1,10 +1,10 @@
-﻿using auth.Data;
-using auth.Models;
+﻿using Auth.Data;
+using Auth.Models;
 using Auth;
 using Ice;
 using Microsoft.EntityFrameworkCore;
 
-namespace auth.SharedObject
+namespace Auth.SharedObject
 {
     public class AccountDefault : AccountDisp_
     {

@@ -1,10 +1,10 @@
-﻿using auth.Data;
-using auth.DataObject;
-using auth.Models;
-using auth.Security;
+﻿using Auth.Data;
+using Auth.DataObject;
+using Auth.Models;
+using Auth.Security;
 using Microsoft.EntityFrameworkCore;
 
-namespace auth.Service
+namespace Auth.Service
 {
     public class TokenService
     {

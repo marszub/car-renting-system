@@ -1,5 +1,5 @@
-﻿using auth.Data;
-using auth.Models;
+﻿using Auth.Data;
+using Auth.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

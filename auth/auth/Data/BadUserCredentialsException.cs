@@ -1,4 +1,4 @@
-﻿namespace auth.Data
+﻿namespace Auth.Data
 {
     public class BadUserCredentialsException : Exception
     {

@@ -1,4 +1,4 @@
-﻿namespace auth.DataObject
+﻿namespace Auth.DataObject
 {
     using System.ComponentModel.DataAnnotations;
     public class LoginData

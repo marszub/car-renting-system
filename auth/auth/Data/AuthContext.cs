@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using auth.Models;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using auth.DataObject;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using auth.Security;
+using Auth.Models;
+using Auth.DataObject;
+using Auth.Security;
 
-namespace auth.Data
+namespace Auth.Data
 {
     public class AuthContext : DbContext
     {
@@ -16,13 +13,13 @@ namespace auth.Data
         }
 
         public DbSet<User> Users { get; set; } = default!;
-        public DbSet<Role> Roles { get; set; } = default!;
+        public DbSet<Models.Role> Roles { get; set; } = default!;
         public DbSet<Token> Tokens { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.UseSerialColumns();
-            modelBuilder.Entity<Role>().ToTable("Roles");
+            modelBuilder.Entity<Models.Role>().ToTable("Roles");
             modelBuilder.Entity<User>().ToTable("Users");
             modelBuilder.Entity<Token>().ToTable("Tokens");
 

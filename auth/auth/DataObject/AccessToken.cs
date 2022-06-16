@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace auth.DataObject
+namespace Auth.DataObject
 {
     public class AccessToken
     {

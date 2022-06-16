@@ -1,8 +1,8 @@
-using auth.Data;
-using auth.SharedObject;
+using Auth.Data;
+using Auth.SharedObject;
 using Microsoft.EntityFrameworkCore;
 
-namespace auth
+namespace Auth
 {
     public class Program
     {

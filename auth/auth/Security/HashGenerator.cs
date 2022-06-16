@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace auth.Security
+namespace Auth.Security
 {
     public class HashGenerator
     {

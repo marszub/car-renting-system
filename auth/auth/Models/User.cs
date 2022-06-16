@@ -1,4 +1,4 @@
-﻿namespace auth.Models
+﻿namespace Auth.Models
 {
     public class User
     {

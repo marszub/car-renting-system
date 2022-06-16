@@ -1,6 +1,6 @@
-﻿using auth.Data;
-using auth.DataObject;
-using auth.Service;
+﻿using Auth.Data;
+using Auth.DataObject;
+using Auth.Service;
 using test.Utils;
 
 namespace test

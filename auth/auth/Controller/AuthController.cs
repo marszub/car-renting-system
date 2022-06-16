@@ -1,14 +1,14 @@
-using auth.Data;
-using auth.DataObject;
-using auth.Models;
-using auth.Service;
+using Auth.Data;
+using Auth.DataObject;
+using Auth.Models;
+using Auth.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace auth.Controller
+namespace Auth.Controller
 {
     [ApiController]
-    [Route("api/auth")]
+    [Route("api/Auth")]
     public class AuthController : ControllerBase
     {
         private readonly AuthContext context;
