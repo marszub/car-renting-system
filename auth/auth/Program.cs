@@ -1,10 +1,31 @@
 using auth.Data;
+using auth.SharedObject;
 using Microsoft.EntityFrameworkCore;
 
 namespace auth
 {
     public class Program
     {
+        private static void RunIceServices(string[] args, AuthContext context)
+        {
+            try
+            {
+                using (Ice.Communicator communicator = Ice.Util.initialize(ref args))
+                {
+                    var adapter = communicator.createObjectAdapter("Adapter");
+
+                    adapter.addDefaultServant(new AccountDefault(context), "account");
+
+                    adapter.activate();
+                    communicator.waitForShutdown();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine(e);
+            }
+        }
+
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -31,13 +52,15 @@ namespace auth
             {
                 var services = scope.ServiceProvider;
 
-                var context = services.GetRequiredService<AuthContext>();
+                AuthContext context = services.GetRequiredService<AuthContext>();
                 if (!context.Database.CanConnect())
                 {
                     Thread.Sleep(10000);
                 }
                 context.Database.EnsureCreated();
                 DbInitializer.Initialize(context);
+
+                RunIceServices(args, context);
             }
 
             app.UseCors();
