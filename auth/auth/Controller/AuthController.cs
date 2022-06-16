@@ -27,7 +27,7 @@ namespace auth.Controller
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<ValidToken> Register([Required] RegisterData data)
+        public ActionResult<AccessToken> Register([Required] RegisterData data)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace auth.Controller
 
             try
             {
-                return Ok(new ValidToken { token = tokenService.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
+                return Ok(new AccessToken { token = tokenService.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
             }
             catch (BadUserCredentialsException)
             {
@@ -52,11 +52,11 @@ namespace auth.Controller
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public ActionResult<ValidToken> Login([Required] LoginData data)
+        public ActionResult<AccessToken> Login([Required] LoginData data)
         {
             try
             {
-                return Ok(new ValidToken { token = tokenService.CreateToken(data) });
+                return Ok(new AccessToken { token = tokenService.CreateToken(data) });
             }
             catch(BadUserCredentialsException)
             {

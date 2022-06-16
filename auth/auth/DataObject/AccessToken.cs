@@ -2,7 +2,7 @@
 
 namespace auth.DataObject
 {
-    public class ValidToken
+    public class AccessToken
     {
         [Required]
         public string token { get; set; } = default!;
