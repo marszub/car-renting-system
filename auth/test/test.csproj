@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\auth\auth.csproj" />
+    <ProjectReference Include="..\auth\Auth.csproj" />
   </ItemGroup>
 
 </Project>
