@@ -17,7 +17,6 @@ namespace auth
                     adapter.addDefaultServant(new AccountDefault(context), "account");
 
                     adapter.activate();
-                    communicator.waitForShutdown();
                 }
             }
             catch (Exception e)
