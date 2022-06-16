@@ -44,7 +44,7 @@ namespace auth.SharedObject
             {
                 throw new ObjectNotExistException();
             }
-            User? user = context.Users.SingleOrDefault(user => user.UserID == userId);
+            User? user = context.Users.Include(user => user.Tokens).SingleOrDefault(user => user.UserID == userId);
 
             if (user == null)
             {
@@ -60,7 +60,7 @@ namespace auth.SharedObject
 
         private bool VerifyToken(User user, string token)
         {
-            return user.Tokens.Contains(new Token(token));
+            return user.Tokens.Where(t => t.Value == token).Any();
         }
     }
 }
