@@ -1,6 +1,7 @@
 using auth.Data;
 using auth.DataObject;
 using auth.Models;
+using auth.Service;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,11 +12,13 @@ namespace auth.Controller
     public class AuthController : ControllerBase
     {
         private readonly AuthContext context;
+        private readonly TokenService tokenService;
         private readonly ILogger<AuthController> _logger;
 
         public AuthController(AuthContext context, ILogger<AuthController> logger)
         {
             this.context = context;
+            this.tokenService = new TokenService(context);
             _logger = logger;
         }
 
@@ -37,7 +40,7 @@ namespace auth.Controller
 
             try
             {
-                return Ok(new ValidToken { token = context.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
+                return Ok(new ValidToken { token = tokenService.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
             }
             catch (BadUserCredentialsException)
             {
@@ -53,7 +56,7 @@ namespace auth.Controller
         {
             try
             {
-                return Ok(new ValidToken { token = context.CreateToken(data) });
+                return Ok(new ValidToken { token = tokenService.CreateToken(data) });
             }
             catch(BadUserCredentialsException)
             {
@@ -69,7 +72,7 @@ namespace auth.Controller
         {
             try
             {
-                context.DeleteToken(token);
+                tokenService.DeleteToken(token);
                 return NoContent();
             }
             catch(UnauthorizedAccessException)
