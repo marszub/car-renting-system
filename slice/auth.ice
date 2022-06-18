@@ -3,11 +3,17 @@
 
 module Auth
 {
-    enum Role { User, Admin };
+    enum Role { User };
+    enum TokenVerificationStatus { Ok, InvalidToken, RoleNotAssigned};
+
+    struct AccessData {
+        string token;
+        Role role;
+    };
 
     interface Account
     {
-        bool verifyRole(Role role);
+        TokenVerificationStatus verifyToken(AccessData accessData);
     };
 };
 #endif
