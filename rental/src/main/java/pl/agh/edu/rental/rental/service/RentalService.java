@@ -28,7 +28,7 @@ public class RentalService {
 
     public RentalData getRental(final User user) throws NoRentalError {
         //If user has no rental throw error NoRentalError
-        if (user.id() == 1) {
+        if (user.id() == -1) {
             throw new NoRentalError();
         }
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
