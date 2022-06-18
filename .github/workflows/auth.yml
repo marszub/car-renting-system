@@ -17,7 +17,7 @@ jobs:
     - name: Install ice repository
       run: sudo apt-add-repository -s "deb http://zeroc.com/download/Ice/3.7/ubuntu`lsb_release -rs` stable main"
     - name: Update package list
-      run: apt-get update
+      run: sudo apt-get update
     - name: Install ice
       run: apt-get install zeroc-ice-all-runtime zeroc-ice-all-dev
     - uses: actions/checkout@v3
