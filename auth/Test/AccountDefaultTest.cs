@@ -24,7 +24,6 @@ namespace test
 
         private static readonly string token1 = "token1";
         private static readonly string token2 = "token2";
-        private static readonly string token3 = "token3";
 
         private static readonly RegisterData registerData1 = new RegisterData
         {

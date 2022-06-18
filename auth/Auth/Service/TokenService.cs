@@ -15,7 +15,7 @@ namespace Auth.Service
             this.context = context;
         }
 
-        public string CreateToken(LoginData data)
+        public AccessToken CreateToken(LoginData data)
         {
             User? user = GetVerifiedUser(data.Login, data.Password);
             if (user == null)
@@ -28,12 +28,12 @@ namespace Auth.Service
             user.Tokens.Add(new Token(tokenValue));
             context.SaveChanges();
 
-            return tokenValue;
+            return new AccessToken(user.UserID, tokenValue);
         }
 
-        public void DeleteToken(string token)
+        public void DeleteToken(AccessToken token)
         {
-            var found = context.Tokens.Where(entity => entity.Value == token);
+            var found = context.Tokens.Where(entity => entity.Value == token.Token && entity.UserID == token.UserID);
             if (!found.Any())
             {
                 throw new UnauthorizedAccessException();

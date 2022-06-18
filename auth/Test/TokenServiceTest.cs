@@ -68,12 +68,13 @@ namespace test
         public void LogingSingleUser(RegisterData registerData, LoginData loginData)
         {
             context.RegisterUser(registerData);
-            string generatedToken = tokenService.CreateToken(loginData);
+            AccessToken generatedToken = tokenService.CreateToken(loginData);
 
             Assert.True(context.Tokens
                 .Where(token => token.Owner.Login == registerData.Login
                 && token.Owner.Email == registerData.Email
-                && token.Value == generatedToken)
+                && token.Owner.UserID == generatedToken.UserID
+                && token.Value == generatedToken.Token)
                 .Any());
         }
 
@@ -82,8 +83,8 @@ namespace test
         public void TokenForSameUserChange(RegisterData registerData, LoginData loginData)
         {
             context.RegisterUser(registerData);
-            string token1 = tokenService.CreateToken(loginData);
-            string token2 = tokenService.CreateToken(loginData);
+            AccessToken token1 = tokenService.CreateToken(loginData);
+            AccessToken token2 = tokenService.CreateToken(loginData);
 
             Assert.NotEqual(token1, token2);
         }
@@ -93,8 +94,8 @@ namespace test
         public void BothTokensForSameUserAreSaved(RegisterData registerData, LoginData loginData)
         {
             context.RegisterUser(registerData);
-            string token1 = tokenService.CreateToken(loginData);
-            string token2 = tokenService.CreateToken(loginData);
+            AccessToken token1 = tokenService.CreateToken(loginData);
+            AccessToken token2 = tokenService.CreateToken(loginData);
 
             Assert.Equal(2, context.Tokens.Count());
         }
@@ -130,7 +131,7 @@ namespace test
         public void DeleteExistingToken(RegisterData registerData, LoginData loginData)
         {
             context.RegisterUser(registerData);
-            string token = tokenService.CreateToken(loginData);
+            AccessToken token = tokenService.CreateToken(loginData);
             tokenService.DeleteToken(token);
             Assert.False(context.Tokens.Any());
         }
@@ -141,7 +142,7 @@ namespace test
         {
             context.RegisterUser(registerData);
             tokenService.CreateToken(loginData);
-            string token = tokenService.CreateToken(loginData);
+            AccessToken token = tokenService.CreateToken(loginData);
             tokenService.DeleteToken(token);
             Assert.True(context.Tokens.Any());
         }
@@ -151,8 +152,18 @@ namespace test
         public void ThrowWhenDeleteWrongToken(RegisterData registerData, LoginData loginData)
         {
             context.RegisterUser(registerData);
-            tokenService.CreateToken(loginData);
-            Assert.Throws<UnauthorizedAccessException>(() => tokenService.DeleteToken("wrong token"));
+            AccessToken validToken = tokenService.CreateToken(loginData);
+            Assert.Throws<UnauthorizedAccessException>(() => tokenService.DeleteToken(new AccessToken(validToken.UserID, "wrong token" )));
+            Assert.True(context.Tokens.Any());
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void ThrowWhenDeleteWrongUserId(RegisterData registerData, LoginData loginData)
+        {
+            context.RegisterUser(registerData);
+            AccessToken validToken = tokenService.CreateToken(loginData);
+            Assert.Throws<UnauthorizedAccessException>(() => tokenService.DeleteToken(new AccessToken(validToken.UserID + 1, validToken.Token)));
             Assert.True(context.Tokens.Any());
         }
     }
