@@ -97,6 +97,21 @@ contract Rental {
 
    }
 
+   function getActiveRental(uint256 _userID) public view returns(RentalRecord memory)
+   {
+        for(uint256 i=rentalHistory.length-1; i>=0; i--){
+            if(rentalHistory[i].userID == _userID){
+                if(rentalHistory[i].rentalState == RentalStatus.END)
+                {
+                    revert("No active rental record");
+                }else{
+                    return rentalHistory[i];
+                }
+            }
+        }
+        revert("No active rental record");
+   }
+
    
    //help functions
 
