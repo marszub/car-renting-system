@@ -1,6 +1,7 @@
 package pl.agh.edu.cardatabase.car.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
@@ -49,6 +50,7 @@ public class CarService {
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
     }
 
+    @Transactional
     public CarData create(final CarInputData data) throws CarAlreadyExistsError {
         final Car car = carRepository.save(new Car(data.name()));
         try{
