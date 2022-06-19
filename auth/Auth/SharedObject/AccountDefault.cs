@@ -16,6 +16,7 @@ namespace Auth.SharedObject
 
         public override TokenVerificationStatus verifyToken(AccessData accessData, Current current)
         {
+            Console.WriteLine("\n\nVerify token:\n" + current.id.name + "\n" + accessData.token + "\n" + accessData.role.ToString() + "\n\n");
             return verifyTokenImpl(accessData, current.id.name);
         }
 
@@ -44,7 +45,7 @@ namespace Auth.SharedObject
             {
                 throw new ObjectNotExistException();
             }
-            User? user = context.Users.Include(user => user.Tokens).SingleOrDefault(user => user.UserID == userId);
+            User? user = context.Users.Include(user => user.Tokens).Include(user => user.Role).SingleOrDefault(user => user.UserID == userId);
 
             if (user == null)
             {

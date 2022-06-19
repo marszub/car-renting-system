@@ -1,4 +1,4 @@
-package pl.agh.edu.rental.errors;
+package pl.edu.agh.rental.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
