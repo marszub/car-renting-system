@@ -1,4 +1,4 @@
-package pl.agh.edu.rental.rental.dto;
+package pl.edu.agh.rental.rental.dto;
 
 import javax.validation.constraints.NotNull;
 

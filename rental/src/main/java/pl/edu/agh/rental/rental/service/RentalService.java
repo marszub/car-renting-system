@@ -1,11 +1,11 @@
-package pl.agh.edu.rental.rental.service;
+package pl.edu.agh.rental.rental.service;
 
 import org.springframework.stereotype.Service;
-import pl.agh.edu.rental.auth.User;
-import pl.agh.edu.rental.errors.NoRentalError;
-import pl.agh.edu.rental.errors.UserUnauthorizedError;
-import pl.agh.edu.rental.rental.dto.RentalCreateInput;
-import pl.agh.edu.rental.rental.dto.RentalData;
+import pl.edu.agh.rental.auth.User;
+import pl.edu.agh.rental.errors.NoRentalError;
+import pl.edu.agh.rental.errors.UserUnauthorizedError;
+import pl.edu.agh.rental.rental.dto.RentalCreateInput;
+import pl.edu.agh.rental.rental.dto.RentalData;
 
 import java.sql.Timestamp;
 

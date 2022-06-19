@@ -5,12 +5,20 @@ plugins {
     id 'checkstyle'
 }
 
-group = 'pl.agh.edu'
+group = 'pl.edu.agh'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '18'
 
 repositories {
     mavenCentral()
+}
+
+sourceSets {
+    main{
+        java {
+            srcDir 'slice'
+        }
+    }
 }
 
 dependencies {
@@ -20,6 +28,26 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.zeroc:ice:3.7.7'
+    implementation 'com.zeroc:icestorm:3.7.7'
+}
+
+task compileSlice(type: Exec) {
+    def sliceDir = new File("${projectDir}/slice")
+    sliceDir.mkdirs()
+
+    commandLine 'slice2java', '--output-dir', "${projectDir}/slice", "${projectDir}/../slice/auth.ice"
+
+    standardOutput = new ByteArrayOutputStream()
+
+    ext.output = {
+        standardOutput.toString()
+    }
+
+}
+
+gradle.projectsEvaluated {
+    compileJava.dependsOn(compileSlice)
 }
 
 tasks.named('test') {
