@@ -37,7 +37,7 @@ public class UserFilter extends OncePerRequestFilter {
                                     final FilterChain filterChain) throws ServletException, IOException {
         final String userToken = request.getHeader(TOKEN_FIELD);
         final String userId = request.getHeader(USERID_FIELD);
-        System.out.println("\n" + userId + "\n" + userToken + "\n");
+
         SecurityContextHolder.clearContext();
         if (userToken != null) {
             verifyUser(userId, userToken);

@@ -16,7 +16,6 @@ namespace Auth.SharedObject
 
         public override TokenVerificationStatus verifyToken(AccessData accessData, Current current)
         {
-            Console.WriteLine("\n\nVerify token:\n" + current.id.name + "\n" + accessData.token + "\n" + accessData.role.ToString() + "\n\n");
             return verifyTokenImpl(accessData, current.id.name);
         }
 
