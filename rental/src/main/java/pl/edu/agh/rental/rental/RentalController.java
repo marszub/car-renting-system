@@ -1,4 +1,4 @@
-package pl.agh.edu.rental.rental;
+package pl.edu.agh.rental.rental;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.agh.edu.rental.auth.CurrentUser;
-import pl.agh.edu.rental.auth.User;
-import pl.agh.edu.rental.errors.NoRentalError;
-import pl.agh.edu.rental.errors.UserUnauthorizedError;
-import pl.agh.edu.rental.rental.dto.RentalCreateInput;
-import pl.agh.edu.rental.rental.dto.RentalData;
-import pl.agh.edu.rental.rental.service.RentalService;
+import pl.edu.agh.rental.auth.CurrentUser;
+import pl.edu.agh.rental.auth.User;
+import pl.edu.agh.rental.errors.NoRentalError;
+import pl.edu.agh.rental.errors.UserUnauthorizedError;
+import pl.edu.agh.rental.rental.dto.RentalCreateInput;
+import pl.edu.agh.rental.rental.dto.RentalData;
+import pl.edu.agh.rental.rental.service.RentalService;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
