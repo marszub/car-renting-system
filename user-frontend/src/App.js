@@ -4,6 +4,7 @@ import PageNotFound from "./components/PageNotFound";
 import MainPage from "./components/MainPage";
 import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
+import Rental from "./components/Rental";
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
         <Route path='/' element={ <MainPage /> } />
         <Route path='/sign-up' element={ <SignUpForm /> } />
         <Route path='/sign-in' element={ <SignInForm /> } />
+        <Route path='/rental' element={ <Rental /> } />
         <Route path='*' element={ <PageNotFound /> } />
     </Routes>
     </Router>
