@@ -1,10 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Auth.DataObject
 {
     public class AccessToken
     {
         [Required]
-        public string token { get; set; } = default!;
+        public int UserID { get; set; }
+        [Required]
+        public string Token { get; set; }
+
+        public AccessToken(int userID, string token)
+        {
+            UserID = userID;
+            Token = token;
+        }
     }
 }

@@ -40,7 +40,7 @@ namespace Auth.Controller
 
             try
             {
-                return Ok(new AccessToken { token = tokenService.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) });
+                return Ok(tokenService.CreateToken(new LoginData { Login = data.Login, Password = data.Password }) );
             }
             catch (BadUserCredentialsException)
             {
@@ -56,7 +56,7 @@ namespace Auth.Controller
         {
             try
             {
-                return Ok(new AccessToken { token = tokenService.CreateToken(data) });
+                return Ok(tokenService.CreateToken(data));
             }
             catch(BadUserCredentialsException)
             {
@@ -68,11 +68,11 @@ namespace Auth.Controller
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public IActionResult Logout([FromHeader] string token)
+        public IActionResult Logout([FromHeader(Name = "userId")] int UserId, [FromHeader(Name = "token")] string Token)
         {
             try
             {
-                tokenService.DeleteToken(token);
+                tokenService.DeleteToken(new AccessToken(UserId, Token));
                 return NoContent();
             }
             catch(UnauthorizedAccessException)
