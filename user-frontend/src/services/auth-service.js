@@ -2,6 +2,7 @@ import { HttpService, ShortResponse } from "./http-service"
 import { AUTH_SERVICE } from "../config";
 import { HTTP_NO_CONTENT, HTTP_OK, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, isServerError} from "../utils/http-status";
 import { tokenStorage } from "./token-storage";
+import { userIdStorage } from "./userId-storage";
 
 const onResponse = (res) => {
         if (res.status == HTTP_NO_CONTENT) {
@@ -13,6 +14,7 @@ const onResponse = (res) => {
         }else if (res.status === HTTP_UNAUTHORIZED && res.url !== AUTH_SERVICE + "/auth/token") {
             console.log("user unauthorized");
             tokenStorage.revokeToken();
+            userIdStorage.revokeUserId();
             window.location.replace("/sign-in");
         }
         return new Promise((resolve, reject) => res.json()
@@ -30,6 +32,8 @@ export class AuthService extends HttpService {
             .then(res => {
                 if(res.status == HTTP_OK) {
                     tokenStorage.accessToken = res.body.token;
+                    console.log(res.body.userID);
+                    userIdStorage.userId = parseInt(res.body.userID);
                 }
                 return res;
             }).catch(err => {return err});
@@ -40,6 +44,7 @@ export class AuthService extends HttpService {
             .then(res => {
                 if(res.status == HTTP_OK) {
                     tokenStorage.accessToken = res.body.token;
+                    userIdStorage.userId = parseInt(res.body.userID);
                 }
                 return res;
             }).catch(err => {return err});
@@ -50,6 +55,7 @@ export class AuthService extends HttpService {
             .then(res => {
                 if(res.status == HTTP_NO_CONTENT) {
                     tokenStorage.revokeToken();
+                    userIdStorage.revokeUserId();
                 }
                 return res;
         }).catch(err => {return err});
