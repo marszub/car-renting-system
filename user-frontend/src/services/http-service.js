@@ -1,6 +1,7 @@
 import SelectInput from "@mui/material/Select/SelectInput";
 import {HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_UNAUTHORIZED, isServerError, HTTP_COLISION} from "../utils/http-status";
 import { tokenStorage } from "./token-storage";
+import { userIdStorage } from "./userId-storage";
 
 const onResponseFunction = (res) => {
         if (res.status == HTTP_NO_CONTENT) {
@@ -12,6 +13,7 @@ const onResponseFunction = (res) => {
         }else if (res.status === HTTP_UNAUTHORIZED) {
             console.log("user unauthorized");
             tokenStorage.revokeToken();
+            userIdStorage.revokeUserId();
             window.location.replace("/sign-in");
         }
         return new Promise((resolve, reject) => res.json()
@@ -32,6 +34,7 @@ export class HttpService {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 ...(tokenStorage.accessToken) && {'token': tokenStorage.accessToken},
+                ...(userIdStorage.userId) && {'userId': userIdStorage.userId},
             },
             credentials: 'include',
             body: body && JSON.stringify(body)
@@ -48,6 +51,10 @@ export class HttpService {
     
     patch(path, body) {
         return this.request(path, "PATCH", body);
+    }
+
+    put(path, body=null) {
+        return this.request(path, "PUT", body);
     }
 
     delete(path, body) {
