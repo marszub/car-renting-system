@@ -33,7 +33,7 @@ public class CarService {
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
 
-    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5031/";//TODO - change to config
+    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5000/";//TODO - change to config
 
     public CarService(final CarRepository carRepository) {
         this.carRepository = carRepository;
