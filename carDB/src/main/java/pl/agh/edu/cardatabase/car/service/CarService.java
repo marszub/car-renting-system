@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import pl.agh.edu.cardatabase.car.dto.CarData;
@@ -70,15 +71,25 @@ public class CarService {
     }
 
     public CarList getCars() {
-        List carIDs;
+        List <BigInteger> carIDs;
+        List <Boolean> carAvailability;
         try{
-            carIDs = adminRentalService.getCars().send();
+            Tuple2 <java.util.List<java.math.BigInteger>, java.util.List<java.lang.Boolean>>
+                    res= adminRentalService.getAllAvailableCars().send();
+           carIDs  = res.component1();
+           carAvailability = res.component2();
+
         }catch(Exception e){
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
-        System.out.println(carIDs);//TODO - I don't know if carIDs form blockchain are needed here,
-        final List<Car> list = carRepository.getCars();
-        return new CarList(list.stream().map(CarData::new).toList());
+
+        final List<Car> carList = carRepository.getCars();
+        for(int i =0; i< carIDs.size(); i++){
+            if(carAvailability.get(i)){
+                carList.add(carRepository.getById(carIDs.get(i).intValue()));
+            }
+        }
+        return new CarList(carList.stream().map(CarData::new).toList());
     }
 }
