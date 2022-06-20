@@ -67,3 +67,4 @@ export class Rental extends React.Component {
             }
         }else return <a style={{textAlign: "center"}}>loading data...</a>; 
     }
+}
