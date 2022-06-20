@@ -41,6 +41,7 @@ public class RentalController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public RentalData getRental(@CurrentUser final User user) throws NoRentalError {
+        //throw new NoRentalError();
         return reservationService.getRental(user);
     }
 }

@@ -5,7 +5,7 @@
 #
 Adapter.Endpoints=tcp -h localhost -p 5012 -z -t 5012 : udp -h localhost -p 5012 -z
 
-Adapter.ThreadPool.Size=5
+Adapter.ThreadPool.Size=1
 
 #
 # Warn about connection exceptions
