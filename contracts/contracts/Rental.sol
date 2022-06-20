@@ -99,17 +99,31 @@ contract Rental {
 
    function getActiveRental(uint256 _userID) public view returns(RentalRecord memory)
    {
-        for(uint256 i=rentalHistory.length-1; i>=0; i--){
-            if(rentalHistory[i].userID == _userID){
-                if(rentalHistory[i].rentalState == RentalStatus.END)
+        for(uint256 i=rentalHistory.length; i>0; i--){
+            if(rentalHistory[i-1].userID == _userID){
+                if(rentalHistory[i-1].rentalState == RentalStatus.END)
                 {
                     revert("No active rental record");
                 }else{
-                    return rentalHistory[i];
+                    return rentalHistory[i-1];
                 }
             }
         }
         revert("No active rental record");
+   }
+
+   function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory)
+   {
+        bool[] memory result = new bool[](cars.length);
+        for(uint256 i=0; i<cars.length; i++){
+            if(!checkIfCarRented(cars[i])){
+                result[i] = false;
+            }
+            else{
+                result[i] = true;
+            }
+        }
+        return (cars,result);
    }
 
    
@@ -121,6 +135,20 @@ contract Rental {
             if(cars[i] == carID)
             {
                 return true;
+            }
+        }
+        return false;
+    }
+
+    function checkIfCarRented(uint256 _carID) private view returns (bool){
+         for(uint256 i=rentalHistory.length; i>0; i--){
+            if(rentalHistory[i-1].carID == _carID){
+                if(rentalHistory[i-1].rentalState == RentalStatus.END)
+                {
+                    return false;
+                }else{
+                    return true;
+                }
             }
         }
         return false;

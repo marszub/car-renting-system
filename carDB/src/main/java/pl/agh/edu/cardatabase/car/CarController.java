@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.service.CarService;
 
 import javax.validation.Valid;
