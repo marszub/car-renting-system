@@ -4,7 +4,7 @@ import PageNotFound from "./components/PageNotFound";
 import MainPage from "./components/MainPage";
 import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
-import Rental from "./components/Rental";
+import { Rental } from "./components/Rental";
 
 
 function App() {

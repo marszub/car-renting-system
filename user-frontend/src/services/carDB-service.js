@@ -3,7 +3,7 @@ import { CAR_DB_SERVICE } from "../config";
 
 export class CarDBService extends HttpService {
     constructor() {
-        super(CAR_DB_SERVICE, onResponse);
+        super(CAR_DB_SERVICE);
     }
 
     carList() {

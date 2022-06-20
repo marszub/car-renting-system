@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.agh.edu.cardatabase.auth.CurrentUser;
-import pl.agh.edu.cardatabase.auth.User;
 import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
@@ -17,8 +15,8 @@ import pl.agh.edu.cardatabase.car.service.CarService;
 
 import javax.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/api/cars")
 public class CarController {
     private final CarService carService;
@@ -29,7 +27,7 @@ public class CarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CarData create(@Valid @RequestBody final CarInputData data, @CurrentUser final User user) {
+    public CarData create(@Valid @RequestBody final CarInputData data) {
         return carService.create(data);
     }
 

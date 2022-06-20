@@ -53,6 +53,10 @@ export class HttpService {
         return this.request(path, "PATCH", body);
     }
 
+    put(path, body=null) {
+        return this.request(path, "PUT", body);
+    }
+
     delete(path, body) {
         return this.request(path, "DELETE", body);
     }

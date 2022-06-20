@@ -68,6 +68,13 @@ export default function MainPage() {
             <Box sx = {{
                 textAlign: "center",
                 marginTop: 8}}>
+                <Button onClick={() => {navigate("rental")}}>
+                    Rent
+                </Button>
+            </Box>
+            <Box sx = {{
+                textAlign: "center",
+                marginTop: 8}}>
                 <Button onClick={logOut}>
                     Log out
                 </Button>
