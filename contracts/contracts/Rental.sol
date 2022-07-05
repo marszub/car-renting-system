@@ -81,7 +81,7 @@ contract Rental {
             revert("Rental with that ID has already ended");
         }
 
-        RentalRecord memory record = rentalHistory[rentalMappingStart[rentalID]]-1;
+        RentalRecord memory record = rentalHistory[rentalMappingStart[rentalID]-1];
 
         RentalRecord memory newRecord = RentalRecord({
             rentTime : _endRentTime,
