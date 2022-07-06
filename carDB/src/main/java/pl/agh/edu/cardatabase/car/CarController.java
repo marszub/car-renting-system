@@ -28,7 +28,7 @@ public class CarController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CarData create(@Valid @RequestBody final CarInputData data) {
+    public CarData create(@Valid @RequestBody final CarInputData data) throws CarAlreadyExistsError {
         return carService.create(data);
     }
 
