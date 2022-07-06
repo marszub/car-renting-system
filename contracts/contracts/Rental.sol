@@ -4,7 +4,7 @@ pragma solidity >=0.4.22 <0.9.0;
 contract Rental {
     address private ADMIN_ADDRESS = msg.sender;//the address that put this contract here (though truffle it is the index 0 address)
 
-    uint256 private nextRentalID = 0;//increment after every retnal transaction
+    uint256 private nextRentalID = 1;//increment after every retnal transaction
 
     enum RentalStatus{START, END}
     
@@ -77,7 +77,7 @@ contract Rental {
             revert("No rental with that ID started");
         }
 
-        if(!checkIfRentalEnded(rentalID)){
+        if(checkIfRentalEnded(rentalID)){
             revert("Rental with that ID has already ended");
         }
 
