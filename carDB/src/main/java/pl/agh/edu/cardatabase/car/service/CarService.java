@@ -1,4 +1,4 @@
-package pl.edu.agh.cardatabase.car.service;
+package pl.agh.edu.cardatabase.car.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,13 +8,13 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
-import pl.edu.agh.cardatabase.car.dto.CarData;
-import pl.edu.agh.cardatabase.car.dto.CarInputData;
-import pl.edu.agh.cardatabase.car.dto.CarList;
-import pl.edu.agh.cardatabase.car.error.CarAlreadyExistsError;
-import pl.edu.agh.cardatabase.car.persistence.Car;
-import pl.edu.agh.cardatabase.car.persistence.CarRepository;
-import pl.edu.agh.cardatabase.rentalContract.Rental;
+import pl.agh.edu.cardatabase.car.dto.CarData;
+import pl.agh.edu.cardatabase.car.dto.CarInputData;
+import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
+import pl.agh.edu.cardatabase.rentalContract.Rental;
+import pl.agh.edu.cardatabase.car.persistence.Car;
+import pl.agh.edu.cardatabase.car.persistence.CarRepository;
 
 import java.math.BigInteger;
 import java.util.List;

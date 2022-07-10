@@ -1,4 +1,4 @@
-package pl.edu.agh.cardatabase.config;
+package pl.agh.edu.cardatabase.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

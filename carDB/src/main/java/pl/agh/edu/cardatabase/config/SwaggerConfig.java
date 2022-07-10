@@ -1,4 +1,4 @@
-package pl.edu.agh.cardatabase.config;
+package pl.agh.edu.cardatabase.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +15,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("pl.edu.agh.cardatabase.car"))
+                .apis(RequestHandlerSelectors.basePackage("pl.agh.edu.cardatabase.car"))
                 .paths(PathSelectors.any())
                 .build();
     }

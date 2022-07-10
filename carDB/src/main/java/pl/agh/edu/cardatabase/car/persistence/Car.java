@@ -1,4 +1,4 @@
-package pl.edu.agh.cardatabase.car.persistence;
+package pl.agh.edu.cardatabase.car.persistence;
 
 
 import javax.persistence.Entity;
