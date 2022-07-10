@@ -1,4 +1,4 @@
-package pl.agh.edu.cardatabase.rentalContract;
+package pl.edu.agh.cardatabase.rentalContract;
 
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.*;

@@ -1,4 +1,4 @@
-package pl.agh.edu.cardatabase.car.persistence;
+package pl.edu.agh.cardatabase.car.persistence;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

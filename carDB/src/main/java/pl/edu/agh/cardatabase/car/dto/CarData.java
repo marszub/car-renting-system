@@ -1,6 +1,6 @@
-package pl.agh.edu.cardatabase.car.dto;
+package pl.edu.agh.cardatabase.car.dto;
 
-import pl.agh.edu.cardatabase.car.persistence.Car;
+import pl.edu.agh.cardatabase.car.persistence.Car;
 
 import javax.validation.constraints.NotNull;
 

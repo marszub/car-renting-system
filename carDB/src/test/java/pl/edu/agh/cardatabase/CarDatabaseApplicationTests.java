@@ -1,4 +1,4 @@
-package pl.agh.edu.cardatabase;
+package pl.edu.agh.cardatabase;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
