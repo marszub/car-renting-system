@@ -98,7 +98,7 @@ contract Rental {
 
           
 
-        rentalMappingEnd[record.rentalID] = rentalHistory.length ;
+        rentalMappingEnd[record.rentalID] = rentalHistory.length;
 
    }
 
