@@ -39,7 +39,7 @@ public class RentalService {
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
 
-    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5031/";//TODO - change to config
+    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5000/";//TODO - change to config
     public RentalService() {
         this.web3client =
                 Web3j.build(new HttpService(BLOCKCHAIN_ADDRESS));//where blockchain is TODO - change to config
@@ -69,19 +69,16 @@ public class RentalService {
             reservationID = adminRentalService.getAddedNewRentalIDEvents(reservationReceipt).get(0).reservationID.intValue();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert Car does not exist!")){
+            if(e.getMessage().contains("Car already exists!")){
                 throw new NoCarError();
             }
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert Active record")){
+            if(e.getMessage().contains("Active record")){
                 throw new ActiveRentalError();
             }
 
             throw new RuntimeException(e);
             //TODO - problem with revert() - reason as a part of message string
+            //possibly solved with string.contains()
         }
 
         return new RentalData(reservationID, input.carId(), timestamp.getTime());
@@ -95,18 +92,15 @@ public class RentalService {
             adminRentalService.endRental(BigInteger.valueOf(rentalId),BigInteger.valueOf(timestamp.getTime())).send();
         }catch (Exception e) {
             System.out.println(e.getMessage());
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert No rental with that ID started")){
+            if(e.getMessage().contains("No rental with that ID started")){
                 throw new UserUnauthorizedError();
             }
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert Rental with that ID has already ended")){
+            if(e.getMessage().contains("Rental with that ID has already ended")){
                 throw new UserUnauthorizedError();
             }
             throw new RuntimeException(e);
             //TODO - problem with revert() - reason as a part of message string
+            //possibly solved with string.contains()
         }
     }
 
@@ -118,9 +112,7 @@ public class RentalService {
 
         }catch (Exception e) {
             System.out.println(e.getMessage());
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert No active rental record")){
+            if(e.getMessage().contains("No active rental record")){
                 throw new NoRentalError();
             }
             else{
@@ -129,6 +121,7 @@ public class RentalService {
 
         }
         //TODO - problem with revert() - reason as a part of message string
+        //possibly solved with string.contains()
 
         return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.rentTime.longValue());
     }
