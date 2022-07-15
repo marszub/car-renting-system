@@ -3,7 +3,7 @@
 # "Hello". The following line sets the endpoints for this
 # adapter.
 #
-Adapter.Endpoints=tcp -h localhost -p 5012 -z -t 5012 : udp -h localhost -p 5012 -z
+Adapter.Endpoints=tcp -h auth -p 5012 -z -t 5012 : udp -h auth -p 5012 -z
 
 Adapter.ThreadPool.Size=1
 
