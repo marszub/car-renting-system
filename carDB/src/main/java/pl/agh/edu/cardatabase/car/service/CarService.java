@@ -58,9 +58,7 @@ public class CarService {
             adminRentalService.addCar(BigInteger.valueOf(car.getId())).send();
         }catch(Exception e){
             System.out.println(e.getMessage());
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert Car already exists!")){
+            if(e.getMessage().contains("Car already exists!")){
                 carRepository.deleteById(car.getId());//something wrong with blockchain, so delete in DB
                 throw new CarAlreadyExistsError();
             }
