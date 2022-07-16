@@ -42,6 +42,17 @@ namespace Auth.Service
             context.SaveChanges();
         }
 
+        public UserData GetUser(string token)
+        {
+            User user = context.Tokens
+                .Include(token => token.Owner)
+                .ThenInclude((User user) => user.Role)
+                .Single(t => t.Value == token)
+                .Owner;
+
+            return new UserData(user);
+        }
+
         private User? GetVerifiedUser(string UserId, string Password)
         {
             string hashedPassword = HashGenerator.GetHash(Password);
