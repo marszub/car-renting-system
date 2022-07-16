@@ -12,9 +12,9 @@ import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
+import pl.agh.edu.cardatabase.rentalContract.Rental;
 import pl.agh.edu.cardatabase.car.persistence.Car;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
-import pl.agh.edu.cardatabase.rentalContract.Rental;
 
 import java.math.BigInteger;
 import java.util.List;
