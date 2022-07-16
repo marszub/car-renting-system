@@ -166,5 +166,25 @@ namespace test
             Assert.Throws<UnauthorizedAccessException>(() => tokenService.DeleteToken(new AccessToken(validToken.UserID + 1, validToken.Token)));
             Assert.True(context.Tokens.Any());
         }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void GetUserFromExistingToken(RegisterData registerData, LoginData loginData)
+        {
+            context.RegisterUser(registerData);
+            AccessToken token = tokenService.CreateToken(loginData);
+            UserData user = tokenService.GetUser(token.Token);
+            Assert.Equal(registerData.Login, user.Login);
+            Assert.Equal("User", user.Role);
+        }
+
+        [Theory]
+        [MemberData(nameof(RegisterAndLoginUsers))]
+        public void ThrowWhenGetUserFromWrongToken(RegisterData registerData, LoginData loginData)
+        {
+            context.RegisterUser(registerData);
+            AccessToken validToken = tokenService.CreateToken(loginData);
+            Assert.Throws<InvalidOperationException>(() => tokenService.GetUser("wrong token"));
+        }
     }
 }
