@@ -3,9 +3,3 @@ docker network create --attachable --driver=bridge --subnet=172.16.7.0/24 --ip-r
 cd ./auth
 docker buildx build -t auth:dev --build-context slice=../shared/slice .
 docker-compose up auth
-
-
-
-
-
-
