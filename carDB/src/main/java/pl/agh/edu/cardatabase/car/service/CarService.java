@@ -12,9 +12,9 @@ import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
+import pl.agh.edu.cardatabase.rentalContract.Rental;
 import pl.agh.edu.cardatabase.car.persistence.Car;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
-import pl.agh.edu.cardatabase.rentalContract.Rental;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -58,9 +58,7 @@ public class CarService {
             adminRentalService.addCar(BigInteger.valueOf(car.getId())).send();
         }catch(Exception e){
             System.out.println(e.getMessage());
-            if(Objects.equals(e.getMessage(),
-                    "Error processing transaction request: VM Exception while processing transaction:" +
-                            " revert Car already exists!")){
+            if(e.getMessage().contains("Car already exists!")){
                 carRepository.deleteById(car.getId());//something wrong with blockchain, so delete in DB
                 throw new CarAlreadyExistsError();
             }
