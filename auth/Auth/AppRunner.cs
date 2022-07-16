@@ -10,7 +10,7 @@ namespace Auth
         {
             try
             {
-                Ice.Communicator communicator = Ice.Util.initialize(ref args);
+                Ice.Communicator communicator = Ice.Util.initialize(args[0]);
                 var adapter = communicator.createObjectAdapter("Adapter");
 
                 adapter.addDefaultServant(new AccountDefault(context), "account");
@@ -31,6 +31,13 @@ namespace Auth
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddJsonFile(args[1],
+                                   optional: false,
+                                   reloadOnChange: true);
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -43,6 +50,7 @@ namespace Auth
 
         public void Run(string[] args)
         {
+            Console.WriteLine("Starting auth...");
             var app = BuildWebApp(args);
 
             if (app.Environment.IsDevelopment())
