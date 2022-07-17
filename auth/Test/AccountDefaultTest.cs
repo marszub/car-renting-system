@@ -60,12 +60,12 @@ namespace test
         };
 
         private AuthContext context { get; }
-        private AccountDefault servant { get; }
+        private AccountServant servant { get; }
 
         public AccountDefaultTest(TestDatabaseFixture fixture)
         {
             context = fixture.CreateContext();
-            servant = new AccountDefault(context);
+            servant = new AccountServant(context);
 
             context.Database.BeginTransaction();
 
