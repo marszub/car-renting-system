@@ -6,14 +6,14 @@ namespace Auth
 {
     public class AppRunner
     {
-        private Ice.Communicator? RunIceServices(string[] args, AuthContext context)
+        private Ice.Communicator? RunIceServices(string[] args, IServiceProvider services)
         {
             try
             {
                 Ice.Communicator communicator = Ice.Util.initialize(args[0]);
                 var adapter = communicator.createObjectAdapter("Adapter");
 
-                adapter.addDefaultServant(new AccountDefault(context), "account");
+                adapter.addServantLocator(new AccountLocator(services), "account");
 
                 adapter.activate();
 
@@ -43,7 +43,8 @@ namespace Auth
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<AuthContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("AuthPostgresConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("AuthPostgresConnection")),
+                ServiceLifetime.Transient);
 
             return builder.Build();
         }
@@ -71,7 +72,7 @@ namespace Auth
             context.Database.EnsureCreated();
             DbInitializer.Initialize(context);
 
-            var communicator = RunIceServices(args, context);
+            var communicator = RunIceServices(args, services);
 
             app.UseCors();
 
