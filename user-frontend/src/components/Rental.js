@@ -1,17 +1,9 @@
 import * as React from "react";
-import { Container, padding } from "@mui/system";
-import { Typography, TextField, Button } from "@mui/material";
-import { Link } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { Box } from "@mui/material";
-import { tokenStorage } from "../services/token-storage";
-import { CarDBService } from "../services/carDB-service";
-import { useState } from "react";
-import { HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_OK} from "../utils/http-status";
+import { createTheme } from "@mui/material";
+import { HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_OK } from "../utils/http-status";
 import { RentalService } from "../services/rental-service";
 import { RentalView } from "./RentalView";
-import { CarListView } from "./CarListView";
+import  CarListView from "./CarListView";
 
 const theme = createTheme()
 
@@ -41,7 +33,11 @@ export class Rental extends React.Component {
                 default:
                     console.log("Internal server error");
                     break;
-        }});
+        }}).catch( err => {
+                console.log("error while extracting data");
+                this.setState({isRental: false, isLoading: false, rentalData: null});
+            }
+        );
     }
 
 

@@ -1,15 +1,17 @@
 import * as React from "react";
-import { Container, padding } from "@mui/system";
-import { Grid, TextField, Typography, Button } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material";
-import { Box, List } from "@mui/material";
+import { Container } from "@mui/system";
+import { Typography, Button } from "@mui/material";
+import { createTheme } from "@mui/material";
+import { Box } from "@mui/material";
 import { CarDBService } from "../services/carDB-service";
 import { RentalService } from "../services/rental-service";
 import { HTTP_BAD_REQUEST, HTTP_CREATED, HTTP_OK} from "../utils/http-status";
+import { useNavigate } from "react-router-dom";
+import CarInformation from "./CarInformation";
 
 const theme = createTheme()
 
-export class CarListView extends React.Component {
+class CarListViewClass extends React.Component {
     constructor() {
         super();
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,8 +30,14 @@ export class CarListView extends React.Component {
                     break;
                 default:
                     console.log("Internal server error");
+                    this.setState({loading: false, carData: {"cars": [{"carName": "Toyota", "id": 0}, {"carName": "Toyota2", "id": 1}]}});
+                    //this.props.navigation("/");
                     break;
-        }});
+        }}).catch(err => {
+            console.log("Error while extracting car list");
+            this.setState({loading: false, carData: {"cars": [{"carName": "Toyota", "id": 0}, {"carName": "Toyota2", "id": 1}]}});
+            //this.props.navigation("/");
+        });
     }
 
     handleSubmit(event) {
@@ -52,6 +60,14 @@ export class CarListView extends React.Component {
         }})
     }
 
+    spawnCars(carData, callbackIsRental, callbackRentalData) {
+        var list = [];
+        for(var i = 0; i < carData.cars.length; i++) {
+            list.push(<CarInformation carData = {carData.cars[i]} key = {carData.cars[i]} callbackIsRental = {callbackIsRental} callbackRentalData = {callbackRentalData}></CarInformation>);
+        }
+        return(list);
+    }
+
     render() {
         if(!this.state.loading) {
             return(
@@ -63,27 +79,7 @@ export class CarListView extends React.Component {
                     <Typography component="h1" variant="h2">
                         Available Cars:
                     </Typography>
-                    <Box component="form" onSubmit={this.handleSubmit} sx={{
-                        textAlign: "center",
-                        marginTop: 1 
-                    }}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <TextField
-                                    autoComplete="off" 
-                                    name="carId" 
-                                    required 
-                                    fullWidth 
-                                    label="carId" 
-                                    id="carId"/>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button fullWidth type="submit" variant="contained">
-                                    Rent
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </Box>
+                    {this.spawnCars(this.state.carData, this.props.callbackIsRental, this.props.callbackRentalData)}
                 </Box>
             </Container>)
         }
@@ -91,4 +87,9 @@ export class CarListView extends React.Component {
             return(<a>Loading</a>)
         }
     }
+}
+
+export default function CarListView(props) {
+    const navigation = useNavigate();
+    return <CarListViewClass {...props} navigation={navigation}></CarListViewClass>;
 }
