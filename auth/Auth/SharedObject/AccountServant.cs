@@ -6,12 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Auth.SharedObject
 {
-    public class AccountDefault : AccountDisp_
+    public class AccountServant : AccountDisp_
     {
-        private AuthContext context { get; }
-        public AccountDefault(AuthContext context)
+        private readonly AuthContext Context;
+
+        public AccountServant(AuthContext context)
         {
-            this.context = context;
+            Context = context;
         }
 
         public override TokenVerificationStatus verifyToken(AccessData accessData, Current current)
@@ -44,7 +45,7 @@ namespace Auth.SharedObject
             {
                 throw new ObjectNotExistException();
             }
-            User? user = context.Users.Include(user => user.Tokens).Include(user => user.Role).SingleOrDefault(user => user.UserID == userId);
+            User? user = Context.Users.Include(user => user.Tokens).Include(user => user.Role).SingleOrDefault(user => user.UserID == userId);
 
             if (user == null)
             {

@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SliceCompile Include="..\..\slice\auth.ice" Link="auth.ice" />
+    <SliceCompile Include="..\..\shared\slice\auth.ice" Link="auth.ice" />
   </ItemGroup>
 
 </Project>

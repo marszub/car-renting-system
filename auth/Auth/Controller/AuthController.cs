@@ -80,5 +80,21 @@ namespace Auth.Controller
                 return Unauthorized();
             }
         }
+
+        [HttpGet("user")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        public ActionResult<UserData> UserData([FromHeader(Name = "token")] string Token)
+        {
+            try
+            {
+                return Ok(tokenService.GetUser(Token));
+            }
+            catch (InvalidOperationException)
+            {
+                return Unauthorized();
+            }
+        }
     }
 }
