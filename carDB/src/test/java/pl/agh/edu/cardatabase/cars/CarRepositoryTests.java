@@ -29,7 +29,7 @@ public class CarRepositoryTests {
         final List<Car> list = carRepository.getCars();
         assertThat(list.size()).isEqualTo(1);
         assertThat(list.get(0).getName()).isEqualTo(carName1);
-        assertThat(list.get(1).getId()).isNotNull();
+        assertThat(list.get(0).getId()).isNotNull();
     }
 
     @Test
