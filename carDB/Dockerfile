@@ -4,7 +4,7 @@ COPY --chown=gradle:gradle . /home/gradle/carDB
 WORKDIR /home/gradle/carDB
 
 # load application.properties from external file
-RUN echo "spring.config.import=file:/config/application.properties" \
+RUN echo "spring.config.import=file:/config/cardb.properties" \
     > ./src/main/resources/application.properties
 # build app
 RUN ./gradlew bootJar --no-daemon
