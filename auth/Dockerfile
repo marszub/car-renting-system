@@ -12,7 +12,7 @@ RUN dotnet restore Auth/Auth.csproj
 # copy everything else and build app
 COPY Auth/. ./Auth/
 WORKDIR /
-COPY --from=slice . ./slice
+COPY --from=slice . ./shared/slice
 WORKDIR /source/Auth
 RUN dotnet build -c release --no-restore
 
