@@ -37,7 +37,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(userFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and().authorizeRequests().antMatchers("/api/*").authenticated()
+                .and().authorizeRequests().antMatchers("/api/admin/*").authenticated()
+                .antMatchers("/api/cars").permitAll()
                 .anyRequest().permitAll();
     }
 

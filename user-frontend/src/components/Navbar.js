@@ -28,7 +28,6 @@ export default function Navbar() {
             switch (res.status) {
                 case HTTP_NO_CONTENT:
                     console.log("Logged out");
-                    navigate("/");
                     break;
                 case HTTP_BAD_REQUEST:
                     console.log("Bad request");

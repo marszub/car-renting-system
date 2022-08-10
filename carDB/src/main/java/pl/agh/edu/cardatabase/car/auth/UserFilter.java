@@ -39,44 +39,27 @@ public class UserFilter extends OncePerRequestFilter {
         final String userId = request.getHeader(USERID_FIELD);
 
         SecurityContextHolder.clearContext();
-        System.out.println(request.getMethod());
         if (userToken != null) {
-            if (Objects.equals(request.getServletPath(), "/api/cars") && request.getMethod().equals("POST")) {
-                verifyAdmin(userId, userToken);
+            if (Objects.equals(request.getServletPath(), "/api/admin/cars") && request.getMethod().equals("POST")) {
+                verify(userId, userToken, Role.Admin);
             } else {
-                verifyUser(userId, userToken);
+                verify(userId, userToken, Role.User);
             }
         }
         filterChain.doFilter(request, response);
     }
 
-    private void verifyUser(final String userId, final String userToken) {
+    private void verify(final String userId, final String userToken, final Role role) {
         final ObjectPrx baseAccount = communicator.stringToProxy(constructString(userId));
         final AccountPrx account = AccountPrx.checkedCast(baseAccount);
         if (account == null) {
             throw new Error(INVALID_PROXY);
         }
 
-        final Role role = Role.User;
         if (account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
             SecurityContextHolder.getContext().setAuthentication(
                     new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId),
-                            Role.User.toString()), null, List.of()));
-        }
-    }
-
-    private void verifyAdmin(final String userId, final String userToken) {
-        final ObjectPrx baseAccount = communicator.stringToProxy(constructString(userId));
-        final AccountPrx account = AccountPrx.checkedCast(baseAccount);
-        if (account == null) {
-            throw new Error(INVALID_PROXY);
-        }
-
-        final Role role = Role.Admin;
-        if (account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId),
-                            Role.Admin.toString()), null, List.of()));
+                            role.toString()), null, List.of()));
         }
     }
 
