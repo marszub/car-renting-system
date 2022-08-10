@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 import { AuthService } from "../services/auth-service";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HTTP_COLISION, HTTP_OK, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../utils/http-status";
+import { HTTP_OK, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../utils/http-status";
 import { authValidators } from "../validators/auth-validators";
 
 const theme = createTheme()
