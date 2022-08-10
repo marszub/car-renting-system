@@ -2,8 +2,11 @@
 <!DOCTYPE module PUBLIC
         "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
-
 <module name="Checker">
+    <module name="SuppressWithPlainTextCommentFilter">
+        <property name="offCommentFormat" value="BEGIN GENERATED CONTENT"/>
+        <property name="onCommentFormat" value="END GENERATED CONTENT"/>
+    </module>
     <property name="severity" value="error"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
@@ -40,7 +43,7 @@
 
     <module name="SuppressionSingleFilter">
         <property name="checks" value="HideUtilityClassConstructor"/>
-        <property name="files" value="PlannerApiMain.java"/>
+        <property name="files" value="CarDatabaseApplicationMain.java"/>
     </module>
     <module name="SuppressionSingleFilter">
         <property name="checks" value="MultipleStringLiterals"/>
@@ -136,8 +139,6 @@
         <module name="EqualsAvoidNull"/>
         <module name="FallThrough"/>
         <module name="FinalLocalVariable"/>
-        <module name="IllegalCatch"/>
-
         <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters"/>
         <module name="CommentsIndentation"/>
@@ -151,7 +152,7 @@
         <module name="OneTopLevelClass"/>
         <module name="ThrowsCount"/>
         <module name="UncommentedMain">
-            <property name="excludedClasses" value="PlannerApiMain"/>
+            <property name="excludedClasses" value="CarDatabaseApplicationMain"/>
         </module>
         <module name="TodoComment"/>
         <module name="UpperEll"/>
