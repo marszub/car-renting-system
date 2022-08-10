@@ -1,3 +1,4 @@
+//BEGIN GENERATED CONTENT
 package pl.agh.edu.cardatabase.rentalContract;
 
 import io.reactivex.Flowable;
@@ -264,3 +265,4 @@ public class Rental extends Contract {
         public BigInteger reservationID;
     }
 }
+//END GENERATED CONTENT
