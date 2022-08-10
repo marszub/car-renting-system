@@ -45,10 +45,6 @@
         <property name="checks" value="HideUtilityClassConstructor"/>
         <property name="files" value="CarDatabaseApplicationMain.java"/>
     </module>
-    <module name="SuppressionSingleFilter">
-        <property name="checks" value="MultipleStringLiterals"/>
-        <property name="files" value="[/\\]src[/\\]test[/\\]java[/\\]pl[/\\]edu[/\\]agh[/\\]kuce[/\\]planner[/\\]"/>
-    </module>
 
     <module name="TreeWalker">
         <module name="ConstantName"/>
@@ -106,7 +102,6 @@
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageDeclaration"/>
         <module name="ModifiedControlVariable"/>
-        <module name="MultipleStringLiterals"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
