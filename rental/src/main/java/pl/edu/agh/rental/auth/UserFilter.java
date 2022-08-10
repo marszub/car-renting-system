@@ -6,13 +6,10 @@ import Auth.Role;
 import Auth.TokenVerificationStatus;
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.ObjectPrx;
-import com.zeroc.Ice.Util;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.edu.agh.rental.RentalMain;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

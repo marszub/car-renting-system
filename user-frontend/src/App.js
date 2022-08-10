@@ -6,19 +6,21 @@ import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
 import AddCar from "./components/AddCar";
 import { Rental } from "./components/Rental";
+import Navbar from "./components/Navbar"
 
 
 function App() {
   return (
     <Router>
-    <Routes>
-        <Route path='/' element={ <MainPage /> } />
-        <Route path='/sign-up' element={ <SignUpForm /> } />
-        <Route path='/sign-in' element={ <SignInForm /> } />
-        <Route path='/rental' element={ <Rental /> } />
-        <Route path="/cars" element={ <AddCar/>} />
-        <Route path='*' element={ <PageNotFound /> } />
-    </Routes>
+      <Navbar/>
+      <Routes>
+          <Route path='/' element={ <MainPage /> } />
+          <Route path='/sign-up' element={ <SignUpForm /> } />
+          <Route path='/sign-in' element={ <SignInForm /> } />
+          <Route path='/rental' element={ <Rental /> } />
+          <Route path="/cars" element={ <AddCar/>} />
+          <Route path='*' element={ <PageNotFound /> } />
+      </Routes>
     </Router>
   );
 }

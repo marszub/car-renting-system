@@ -1,5 +1,11 @@
 package pl.agh.edu.cardatabase.car.auth;
 
+import Auth.AccessData;
+import Auth.AccountPrx;
+import Auth.Role;
+import Auth.TokenVerificationStatus;
+import com.zeroc.Ice.Communicator;
+import com.zeroc.Ice.ObjectPrx;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -17,9 +23,13 @@ import java.util.Objects;
 public class UserFilter extends OncePerRequestFilter {
     public static final String TOKEN_FIELD = "token";
     public static final String USERID_FIELD = "userId";
+    public static final String INVALID_PROXY = "Invalid proxy";
 
 
-    public UserFilter() {
+    private final Communicator communicator;
+
+    public UserFilter(final Communicator communicator) {
+        this.communicator = communicator;
     }
 
     @Override
@@ -29,27 +39,31 @@ public class UserFilter extends OncePerRequestFilter {
         final String userId = request.getHeader(USERID_FIELD);
 
         SecurityContextHolder.clearContext();
-        System.out.println(request.getMethod());
         if (userToken != null) {
-            if (Objects.equals(request.getServletPath(), "/api/cars") && request.getMethod().equals("POST")) {
-                verifyAdmin(userId, userToken);
+            if (Objects.equals(request.getServletPath(), "/api/admin/cars") && request.getMethod().equals("POST")) {
+                verify(userId, userToken, Role.Admin);
             } else {
-                verifyUser(userId, userToken);
+                verify(userId, userToken, Role.User);
             }
         }
         filterChain.doFilter(request, response);
     }
 
-    private void verifyUser(final String userId, final String userToken) {
-        System.out.println("USER VERIFYING");
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId), "user"), null, List.of()));
+    private void verify(final String userId, final String userToken, final Role role) {
+        final ObjectPrx baseAccount = communicator.stringToProxy(constructString(userId));
+        final AccountPrx account = AccountPrx.checkedCast(baseAccount);
+        if (account == null) {
+            throw new Error(INVALID_PROXY);
+        }
+
+        if (account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId),
+                            role.toString()), null, List.of()));
+        }
     }
 
-    private void verifyAdmin(final String userId, final String userToken) {
-        System.out.println("ADMIN VERIFYING");
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId), "admin"), null, List.of()));
-
+    private String constructString(final String userId) {
+        return "account/" + userId + ":" + communicator.getProperties().getProperty("Account.Proxy");
     }
 }

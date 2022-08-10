@@ -18,7 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/cars")
+@RequestMapping("/api")
 public class CarController {
     private final CarService carService;
 
@@ -26,13 +26,13 @@ public class CarController {
         this.carService = carService;
     }
 
-    @PostMapping
+    @PostMapping("/admin/cars")
     @ResponseStatus(HttpStatus.CREATED)
     public CarData create(@Valid @RequestBody final CarInputData data) throws CarAlreadyExistsError {
         return carService.create(data);
     }
 
-    @GetMapping
+    @GetMapping("/cars")
     @ResponseStatus(HttpStatus.OK)
     public CarList getAvailableCars() {
         return carService.getCars();
