@@ -70,7 +70,9 @@ namespace Auth
                 Thread.Sleep(10000);
             }
             context.Database.EnsureCreated();
-            DbInitializer.Initialize(context);
+            new DbInitializer(context)
+                .InitializeRoles()
+                .CreateRootUser();
 
             var communicator = RunIceServices(args, services);
 
