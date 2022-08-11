@@ -3,7 +3,7 @@
 
 module Auth
 {
-    enum Role { User };
+    enum Role { User, Admin};
     enum TokenVerificationStatus { Ok, InvalidToken, RoleNotAssigned};
 
     struct AccessData {

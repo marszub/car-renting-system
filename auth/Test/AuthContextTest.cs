@@ -107,8 +107,11 @@ namespace test
             context.RegisterUser(registerData1);
             context.RegisterUser(registerData2);
 
-            Assert.True(context.Users.All(
-                user => user.Role == context.Roles.Single(role => role.Name == "User")));
+            int usersCount = context.Users
+                .Where(user => user.Role == context.Roles.Single(role => role.Name == "User"))
+                .Count();
+
+            Assert.Equal(2, usersCount);
 
             context.ChangeTracker.Clear();
         }
@@ -139,7 +142,11 @@ namespace test
             context.RegisterUser(registerData1);
             context.RegisterUser(registerData2);
 
-            Assert.Equal(2, context.Users.Select(user => user.UserID).Distinct().Count());
+            Assert.Equal(2, context.Users
+                .Where(user => user.Login == registerData1.Login || user.Login == registerData2.Login)
+                .Select(user => user.UserID)
+                .Distinct()
+                .Count());
 
             context.ChangeTracker.Clear();
         }

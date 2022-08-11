@@ -33,18 +33,29 @@ namespace Auth.Data
                 .IsRequired();
         }
 
-        public void RegisterUser(RegisterData data)
+        public bool TryAddUniqueUser(string login, string email, string password, Auth.Role role)
         {
-            if(UserExists(data.Login, data.Email))
+            if (UserExists(login, email))
             {
-                throw new UserAlreadyExistsException();
+                return false;
             }
 
-            User user = new User(data.Login, data.Email, HashGenerator.GetHash(data.Password));
-            user.Role = Roles.Single(role => role.Name == Auth.Role.User.ToString());
+            User user = new User(login, email, HashGenerator.GetHash(password));
+            user.Role = Roles.Single(r => r.Name == role.ToString());
             Users.Add(user);
-
             SaveChanges();
+
+            return true;
+        }
+
+        public void RegisterUser(RegisterData data)
+        {
+            if(TryAddUniqueUser(data.Login, data.Email, data.Password, Auth.Role.User))
+            {
+                return;
+            }
+
+            throw new UserAlreadyExistsException();
         }
 
         private bool UserExists(string Login, string Email)
