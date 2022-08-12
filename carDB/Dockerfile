@@ -1,7 +1,17 @@
 # syntax=docker/dockerfile:1.4
-FROM gradle:jdk18-focal AS build
-COPY --chown=gradle:gradle . /home/gradle/carDB
+FROM gradle:jdk18-focal AS environment
+RUN apt-get update
+RUN apt-get -y install zeroc-ice-compilers
+
+
+FROM environment AS build
 WORKDIR /home/gradle/carDB
+COPY --chown=gradle:gradle ./build.gradle ./
+COPY --chown=gradle:gradle ./gradlew ./
+COPY --chown=gradle:gradle ./settings.gradle ./
+COPY --chown=gradle:gradle ./src/main ./src/main
+COPY --chown=gradle:gradle ./gradle ./gradle
+COPY --from=slice --chown=gradle::gradle . /home/gradle/shared/slice
 
 # load application.properties from external file
 RUN echo "spring.config.import=file:/config/cardb.properties" \
@@ -9,6 +19,7 @@ RUN echo "spring.config.import=file:/config/cardb.properties" \
 # build app
 RUN ./gradlew bootJar --no-daemon
 
+RUN apt-get -y install tree && tree
 
 FROM eclipse-temurin:18-jdk-focal AS publish
 RUN mkdir /app
