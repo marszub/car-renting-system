@@ -30,7 +30,6 @@ contract Tarrif{
     function getPricing() public view returns(uint256[] memory,uint256[] memory,uint256[] memory){
         //I dont think there is any other way, than to make this three arrays
         //otherwise it breaks, it can not return array of structs
-        //WHYYYYYYY
         uint256[] memory carTypesArray = new uint256[](tarrifPricing.length);
         uint256[] memory pricesArray = new uint256[](tarrifPricing.length);
         uint256[] memory timesArray = new uint256[](tarrifPricing.length);

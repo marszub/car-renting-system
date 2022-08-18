@@ -32,16 +32,8 @@ public class TarrifController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPricing(@Valid @RequestBody final PricingRecord data, @CurrentUser final User user) {
-        tarrifService.addPricing(data);
+    public boolean addPricing(@Valid @RequestBody final PricingRecord data, @CurrentUser final User user) {
+        return tarrifService.addPricing(data);
     }
-
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void endRental(@PathVariable("id") final Integer reservationId,
-                          @CurrentUser final User user) throws UserUnauthorizedError {
-        //reservationService.endRental(reservationId, user);
-    }
-
 
 }

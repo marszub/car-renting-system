@@ -61,7 +61,7 @@ contract Rental {
             blockchainTime : block.timestamp,
             rentalID : nextRentalID,
             
-            rentalPricing: 100,//for now, to make the PR smaller 
+            rentalPricing: 100,//default for now, to make the PR smaller 
 
             rentalState : RentalStatus.START
 

@@ -3,6 +3,8 @@ package pl.edu.agh.tarrif.tarrif.service;
 import org.springframework.stereotype.Service;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.RemoteFunctionCall;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tuples.generated.Tuple3;
 import org.web3j.tx.gas.ContractGasProvider;
@@ -46,12 +48,21 @@ public class TarrifService {
                 Tarrif.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
     }
 
-    public void addPricing(PricingRecord record){
+    public boolean addPricing(PricingRecord record){
         try {
-            adminTarrifService.addEntry(BigInteger.valueOf(record.carType()), BigInteger.valueOf(record.price()));
-        }catch (Exception e){
+            System.out.println(record);
+            RemoteFunctionCall<TransactionReceipt> result =
+                    adminTarrifService.addEntry(BigInteger.valueOf(record.carType()), BigInteger.valueOf(record.price()));
+            System.out.println(result);
 
+            if(result.send()!=null){
+                return true;
+            }
+        }catch (Exception e){
+            System.out.println(e);
+            return false;
         }
+        return false;
     }
 
     public ArrayList<PricingRecord> getPricing(){
