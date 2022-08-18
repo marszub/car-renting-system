@@ -6,14 +6,14 @@ namespace Auth
 {
     public class AppRunner
     {
-        private Ice.Communicator? RunIceServices(string[] args, AuthContext context)
+        private Ice.Communicator? RunIceServices(string[] args, IServiceProvider services)
         {
             try
             {
-                Ice.Communicator communicator = Ice.Util.initialize(ref args);
+                Ice.Communicator communicator = Ice.Util.initialize(args[0]);
                 var adapter = communicator.createObjectAdapter("Adapter");
 
-                adapter.addDefaultServant(new AccountDefault(context), "account");
+                adapter.addServantLocator(new AccountLocator(services), "account");
 
                 adapter.activate();
 
@@ -31,18 +31,27 @@ namespace Auth
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddJsonFile(args[1],
+                                   optional: false,
+                                   reloadOnChange: true);
+            });
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddDbContext<AuthContext>(options =>
-                options.UseNpgsql(builder.Configuration.GetConnectionString("AuthPostgresConnection")));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("AuthPostgresConnection")),
+                ServiceLifetime.Transient);
 
             return builder.Build();
         }
 
         public void Run(string[] args)
         {
+            Console.WriteLine("Starting auth...");
             var app = BuildWebApp(args);
 
             if (app.Environment.IsDevelopment())
@@ -61,9 +70,11 @@ namespace Auth
                 Thread.Sleep(10000);
             }
             context.Database.EnsureCreated();
-            DbInitializer.Initialize(context);
+            new DbInitializer(context)
+                .InitializeRoles()
+                .CreateRootUser();
 
-            var communicator = RunIceServices(args, context);
+            var communicator = RunIceServices(args, services);
 
             app.UseCors();
 

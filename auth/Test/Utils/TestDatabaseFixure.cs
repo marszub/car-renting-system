@@ -31,7 +31,7 @@ namespace test.Utils
                         context.Database.EnsureDeleted();
                         context.Database.EnsureCreated();
 
-                        DbInitializer.Initialize(context);
+                        new DbInitializer(context).InitializeRoles();
                     }
 
                     _databaseInitialized = true;

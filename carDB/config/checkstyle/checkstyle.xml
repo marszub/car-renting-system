@@ -4,6 +4,10 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+    <module name="SuppressWithPlainTextCommentFilter">
+        <property name="offCommentFormat" value="BEGIN GENERATED CONTENT"/>
+        <property name="onCommentFormat" value="END GENERATED CONTENT"/>
+    </module>
     <property name="severity" value="error"/>
 
     <property name="fileExtensions" value="java, properties, xml"/>
@@ -13,6 +17,11 @@
     </module>
 
     <module name="SuppressWarningsFilter"/>
+
+    <module name="SuppressionSingleFilter">
+        <property name="checks" value="[a-zA-Z0-9]"/>
+        <property name="files" value="[/\\slice]"/>
+    </module>
 
     <module name="SuppressionFilter">
         <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
@@ -40,11 +49,7 @@
 
     <module name="SuppressionSingleFilter">
         <property name="checks" value="HideUtilityClassConstructor"/>
-        <property name="files" value="PlannerApiMain.java"/>
-    </module>
-    <module name="SuppressionSingleFilter">
-        <property name="checks" value="MultipleStringLiterals"/>
-        <property name="files" value="[/\\]src[/\\]test[/\\]java[/\\]pl[/\\]edu[/\\]agh[/\\]kuce[/\\]planner[/\\]"/>
+        <property name="files" value="CarDatabaseApplicationMain.java"/>
     </module>
 
     <module name="TreeWalker">
@@ -103,7 +108,6 @@
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageDeclaration"/>
         <module name="ModifiedControlVariable"/>
-        <module name="MultipleStringLiterals"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
@@ -136,8 +140,6 @@
         <module name="EqualsAvoidNull"/>
         <module name="FallThrough"/>
         <module name="FinalLocalVariable"/>
-        <module name="IllegalCatch"/>
-
         <module name="ArrayTypeStyle"/>
         <module name="AvoidEscapedUnicodeCharacters"/>
         <module name="CommentsIndentation"/>
@@ -151,7 +153,7 @@
         <module name="OneTopLevelClass"/>
         <module name="ThrowsCount"/>
         <module name="UncommentedMain">
-            <property name="excludedClasses" value="PlannerApiMain"/>
+            <property name="excludedClasses" value="CarDatabaseApplicationMain"/>
         </module>
         <module name="TodoComment"/>
         <module name="UpperEll"/>

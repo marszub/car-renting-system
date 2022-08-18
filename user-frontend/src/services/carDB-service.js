@@ -11,6 +11,6 @@ export class CarDBService extends HttpService {
     }
 
     createCar(carData) {
-        return super.post("/cars", carData);
+        return super.post("/admin/cars", carData);
     }
 }

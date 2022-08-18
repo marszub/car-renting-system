@@ -5,7 +5,6 @@ contract Rental {
     address private ADMIN_ADDRESS = msg.sender;//the address that put this contract here (though truffle it is the index 0 address)
 
     uint256 private nextRentalID = 1;//increment after every retnal transaction
-    //can not be 0, as 0 means undefined in mapping
 
     enum RentalStatus{START, END}
     
@@ -28,6 +27,8 @@ contract Rental {
     mapping(uint => uint) private rentalMappingEnd; //the position in the history rental of the end rental
    
     RentalRecord[] private rentalHistory;
+
+    event addedNewRentalID(uint256 reservationID);
 
 
    function addCar(uint256 _carID) public{
@@ -69,8 +70,10 @@ contract Rental {
 
         rentalHistory.push(record);
 
-        rentalMappingStart[nextRentalID] = rentalHistory.length - 1;//for possible optimization
+        rentalMappingStart[nextRentalID] = rentalHistory.length;//for possible optimization
         nextRentalID += 1;
+
+        emit addedNewRentalID(record.rentalID);//for return value in java TODO - add carID and user ID for the listener
 
         return record.rentalID;        
    }
@@ -80,11 +83,11 @@ contract Rental {
             revert("No rental with that ID started");
         }
 
-        if(!checkIfRentalEnded(rentalID)){
+        if(checkIfRentalEnded(rentalID)){
             revert("Rental with that ID has already ended");
         }
 
-        RentalRecord memory record = rentalHistory[rentalMappingStart[rentalID]];
+        RentalRecord memory record = rentalHistory[rentalMappingStart[rentalID]-1];
 
         RentalRecord memory newRecord = RentalRecord({
             rentTime : _endRentTime,
@@ -100,7 +103,9 @@ contract Rental {
 
         rentalHistory.push(newRecord);
 
-        rentalMappingEnd[record.rentalID] = rentalHistory.length -1;
+          
+
+        rentalMappingEnd[record.rentalID] = rentalHistory.length;
 
    }
 

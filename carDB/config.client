@@ -1,16 +1,16 @@
-﻿#
-# The server creates one single object adapter with the name
-# "Hello". The following line sets the endpoints for this
-# adapter.
 #
-Adapter.Endpoints=tcp -h localhost -p 5012 -z -t 5012 : udp -h localhost -p 5012 -z
+# The client reads this property to create the reference to the
+# "hello" object in the server.
+#
 
-Adapter.ThreadPool.Size=1
+Account.Proxy=tcp -h localhost -p 5012 -z : udp -h localhost -p 5012 -z
 
 #
-# Warn about connection exceptions
+# Warn about connection exceptions.
 #
 Ice.Warn.Connections=1
+
+Ice.ACM.Timeout=10
 
 #
 # Network Tracing
@@ -20,7 +20,7 @@ Ice.Warn.Connections=1
 # 2 = like 1, but more detailed
 # 3 = like 2, but also trace data transfer
 #
-Ice.Trace.Network=1
+#Ice.Trace.Network=2
 
 #
 # Protocol Tracing
@@ -43,5 +43,5 @@ Ice.Trace.Network=1
 #
 #Ice.Plugin.IceSSL=IceSSL.PluginFactory
 #IceSSL.DefaultDir=certs
-#IceSSL.Keystore=server.jks
+#IceSSL.Keystore=client.jks
 #IceSSL.Password=password

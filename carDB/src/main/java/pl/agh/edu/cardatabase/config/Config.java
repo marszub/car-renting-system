@@ -1,4 +1,4 @@
-package pl.edu.agh.rental;
+package pl.agh.edu.cardatabase.config;
 
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Util;
