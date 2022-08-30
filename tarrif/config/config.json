@@ -6,7 +6,7 @@
     "rental": "5021"
   },
   "addresses": {
-    "blockchain": "0.0.0.0",
+    "blockchain": "127.0.0.1",
     "tarrif": "127.0.0.1",
     "auth": "127.0.0.1",
     "rental": "127.0.0.1"

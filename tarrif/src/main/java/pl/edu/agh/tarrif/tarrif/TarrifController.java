@@ -21,13 +21,13 @@ public class TarrifController {
 
     @GetMapping("/pricing")
     @ResponseStatus(HttpStatus.OK)
-    public ArrayList<PricingRecord> getPricing(@CurrentUser final User user){
+    public ArrayList<PricingRecord> getPricing(){
         return tarrifService.getPricing();
     }
 
     @PostMapping("/admin/pricing")
     @ResponseStatus(HttpStatus.CREATED)
-    public boolean addPricing(@Valid @RequestBody final PricingRecord data, @CurrentUser final User user) {
+    public boolean addPricing(@Valid @RequestBody final PricingRecord data) {
         return tarrifService.addPricing(data);
     }
 

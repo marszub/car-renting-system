@@ -33,8 +33,8 @@ public class TarrifService {
     public ArrayList<PricingRecord> getPricing(){
         ArrayList<PricingRecord> pricing = new ArrayList<>();
         try {
-            Tuple3<List<BigInteger>, List<BigInteger>,List<BigInteger>> res=tarrifBlockchainProxy.getPricing();
-            for(int i =0; i<res.component1().size();i++){
+            Tuple3<List<BigInteger>, List<BigInteger>,List<BigInteger>> res = tarrifBlockchainProxy.getPricing();
+            for(int i = 0; i<res.component1().size(); i++){
                 pricing.add(new PricingRecord(res.component1().get(i).intValue(), res.component2().get(i).intValue()));
             }
 

@@ -2,8 +2,6 @@ const Rental = artifacts.require("../contracts/Rental.sol");
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised');
 
-
-
 contract("Rental", accounts => {
     const creatorAddress = accounts[0];
     before(async () => {
@@ -38,13 +36,11 @@ contract("Rental", accounts => {
 
     it("should add active rental and get it", async () => {
         const emit_event = await this.rentalTest.startRental(10,1,1);
-
+        
         const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
-
         assert.equal(returned_id, 1)//should be 1, the first rental
 
         const result = await this.rentalTest.getActiveRental(1)
-
         assert.equal(result.rentTime, 10);
     });
 
@@ -75,15 +71,12 @@ contract("Rental", accounts => {
 
       const result = await this.rentalTest.getAllAvailableCars();
       //cars
-      assert.equal(result[0][0],1);
-      assert.equal(result[0][1],2);
-      assert.equal(result[0][2],3);
+      assert.equal(result[0][0], 1);
+      assert.equal(result[0][1], 2);
+      assert.equal(result[0][2], 3);
       //availability
-      assert.equal(result[1][0],true);
-      assert.equal(result[1][1],false);
-      assert.equal(result[1][2],false);
-      //assert.equal(result[1],2);  
-
+      assert.equal(result[1][0], true);
+      assert.equal(result[1][1], false);
+      assert.equal(result[1][2], false); 
   });
-
 });

@@ -42,7 +42,7 @@ public class TarrifServiceTest {
         when(tarrifBlockchainProxy.addEntry(any())).thenReturn(null);
         this.tarrifService = new TarrifService(tarrifBlockchainProxy);
         try{
-            assertThat(tarrifService.addPricing(new PricingRecord(1,100))).isEqualTo(true);
+            assertThat(tarrifService.addPricing(new PricingRecord(1, 100))).isEqualTo(true);
         }catch(Exception e)
         {
             e.printStackTrace();
