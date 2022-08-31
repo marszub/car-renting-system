@@ -25,7 +25,7 @@ contract("Tarrif", accounts => {
    //entry (1,10) from previous test
     await this.tarrifTest.addEntry(2, 20);
     await this.tarrifTest.addEntry(3, 30);
-    const result =await  this.tarrifTest.getPricing();
+    const result = await this.tarrifTest.getPricing();
 
     assert.equal(result[0][0], 1);
     assert.equal(result[1][0], 10);
