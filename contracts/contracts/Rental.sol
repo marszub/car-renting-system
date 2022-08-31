@@ -16,6 +16,8 @@ contract Rental {
         uint256 blockchainTime;//from blockchain
         uint256 rentalID;//from blockchain
 
+        uint256 rentalPricing;//pricing at the time of starting rental
+
         RentalStatus rentalState;// is this start or end of rental
     }
 
@@ -45,7 +47,8 @@ contract Rental {
     return cars;
    }
 
-   function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID)public returns(uint256){
+   function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID)
+   public returns(uint256){
         if(!checkIfCarExists(_carID)){
             revert("Car does not exist!");
         }
@@ -58,8 +61,11 @@ contract Rental {
 
             blockchainTime : block.timestamp,
             rentalID : nextRentalID,
+            
+            rentalPricing: 100,//default for now, to make the PR smaller 
 
             rentalState : RentalStatus.START
+
         });
 
         rentalHistory.push(record);
@@ -90,6 +96,7 @@ contract Rental {
 
             blockchainTime : block.timestamp,
             rentalID : record.rentalID,
+            rentalPricing: record.rentalPricing,
 
             rentalState : RentalStatus.END
         });

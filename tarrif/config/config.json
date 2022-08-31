@@ -1,0 +1,14 @@
+{
+  "ports": {
+    "blockchain": "5031",
+    "tarrif": "5041",
+    "auth": "5011",
+    "rental": "5021"
+  },
+  "addresses": {
+    "blockchain": "127.0.0.1",
+    "tarrif": "127.0.0.1",
+    "auth": "127.0.0.1",
+    "rental": "127.0.0.1"
+  }
+}
