@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 gradlew.bat
 graddle-wrapper.jar
+slice/
 
 ### STS ###
 .apt_generated
