@@ -179,6 +179,4 @@ contract Rental {
            revert("Acces denied - no admin access");
        }
    }
-
-
 }

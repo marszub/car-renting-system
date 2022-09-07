@@ -125,4 +125,22 @@ public class RentalService {
 
         return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.rentTime.longValue());
     }
+
+    public Timestamp getCurrentRentalTime(final User user) throws NoRentalError {
+        Rental.RentalRecord result;
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try{
+            //no need for emit, this a "view" function
+            result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
+            return new Timestamp(timestamp.getTime() - result.rentTime.longValue());
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            if(e.getMessage().contains("No active rental record")){
+                throw new NoRentalError();
+            }
+            else{
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

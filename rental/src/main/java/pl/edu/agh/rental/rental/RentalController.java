@@ -14,6 +14,7 @@ import pl.edu.agh.rental.rental.dto.RentalData;
 import pl.edu.agh.rental.rental.service.RentalService;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -41,7 +42,12 @@ public class RentalController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public RentalData getRental(@CurrentUser final User user) throws NoRentalError {
-        //throw new NoRentalError();
         return reservationService.getRental(user);
+    }
+
+    @GetMapping("/{id}/time")
+    @ResponseStatus(HttpStatus.OK)
+    public Timestamp getCurrentRentalTime(@CurrentUser final User user) throws NoRentalError {
+        return reservationService.getCurrentRentalTime(user);
     }
 }
