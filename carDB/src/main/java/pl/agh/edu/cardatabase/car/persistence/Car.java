@@ -18,11 +18,35 @@ public class Car {
     @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
+
     public Car() {
     }
 
     public Car(final String name) {
         this.name = name;
+        this.latitude = 49.818069;
+        this.longitude = 19.041309;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(final Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(final Double longitude) {
+        this.longitude = longitude;
     }
 
     public Integer getId() {
