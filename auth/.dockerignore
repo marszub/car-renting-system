@@ -2,7 +2,9 @@
 **/bin/
 **/obj/
 **/out/
+Auth/config/
 
 # files
 Dockerfile*
+docker-compose*
 **/*.md

@@ -2,12 +2,9 @@ services:
     cars:
         image: cars:dev
         ports:
-            - "5030:5030/tcp"
+            - "5030:5030"
         volumes:
             - ./config/docker:/config
-        networks:
-            - car-rent
-            - default
         depends_on:
              - "cars_db"
     cars_db:
@@ -15,8 +12,3 @@ services:
         environment:
             POSTGRES_PASSWORD: password
             POSTGRES_DB: cars
-        networks:
-            - default
-networks:
-    car-rent:
-        external: true

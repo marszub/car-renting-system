@@ -1,0 +1,11 @@
+services:
+    test:
+        image: my-test
+        # environment:
+        #     - HOST_TO_SCAN='localhost'
+        depends_on:
+            - http_server
+    http_server:
+        image: httpd:2.4
+        ports:
+            - '8080:80'
