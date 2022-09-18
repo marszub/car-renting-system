@@ -1,6 +1,7 @@
 # directories
 **/.gradle/
 **/.idea/
+config/
 
 # files
 Dockerfile*
