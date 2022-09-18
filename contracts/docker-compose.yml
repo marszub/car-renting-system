@@ -1,0 +1,13 @@
+services:
+    contracts:
+        image: blockchain-initializer:dev
+        volumes:
+            - ./:/contracts
+        depends_on:
+             - "blockchain"
+    blockchain:
+        image: trufflesuite/ganache-cli:latest
+        ports:
+            - "5000:8545"
+        command: --mnemonic "frog coin ten lottery sport awful broken extra call stereo police manual"
+
