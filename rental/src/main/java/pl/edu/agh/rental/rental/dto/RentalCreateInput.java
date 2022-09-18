@@ -4,5 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public record RentalCreateInput(
         @NotNull
-        Integer carId
-) { }
+        Integer carId,
+        Integer carTypeId
+) {
+}

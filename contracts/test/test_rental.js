@@ -1,4 +1,5 @@
 const Rental = artifacts.require("../contracts/Rental.sol");
+const TarrifContract = artifacts.require("TarrifContract");
 const chai = require('chai')
 const chaiAsPromised = require('chai-as-promised');
 
@@ -6,6 +7,8 @@ contract("Rental", accounts => {
     const creatorAddress = accounts[0];
     before(async () => {
       this.rentalTest = await Rental.deployed();
+      this.tarrifHelp = await TarrifContract.deployed();
+      this.tarrifHelp.addEntry(1,10);
     });
   
     it('should deploy successfully', async () => {
@@ -35,8 +38,8 @@ contract("Rental", accounts => {
     });
 
     it("should add active rental and get it", async () => {
-        const emit_event = await this.rentalTest.startRental(10,1,1);
-        
+       // await this.tarrifHelp.addEntry(1,10);
+        const emit_event = await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address,1);
         const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
         assert.equal(returned_id, 1)//should be 1, the first rental
 
@@ -56,7 +59,7 @@ contract("Rental", accounts => {
     });
       
     //this one is from web, passes at ANY error
-    it("should fail at ending the same rental secind time", async () => {
+    it("should fail at ending the same rental second time", async () => {
 
       return this.rentalTest.endRental(1).then(() => {
         assert.ok(false, "It didn't fail");
@@ -67,7 +70,7 @@ contract("Rental", accounts => {
 
     it("should return two cars (array of three, with two marked as free (so false)), after one has been rented", async () => {
       await this.rentalTest.addCar(3);
-      await this.rentalTest.startRental(10,1,1);
+      await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address,1);
 
       const result = await this.rentalTest.getAllAvailableCars();
       //cars

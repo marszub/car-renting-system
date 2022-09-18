@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
+import "./Tarrif.sol";
+
 contract Rental {
     address private ADMIN_ADDRESS = msg.sender;//the address that put this contract here (though truffle it is the index 0 address)
-
-    uint256 private nextRentalID = 1;//increment after every retnal transaction
+    uint256 private nextRentalID = 1;//increment after every rental transaction
 
     enum RentalStatus{START, END}
     
@@ -19,6 +20,12 @@ contract Rental {
         uint256 rentalPricing;//pricing at the time of starting rental
 
         RentalStatus rentalState;// is this start or end of rental
+    }
+
+    //used to get start reord and end record at the same time
+    struct FullRecord {
+        RentalRecord start;
+        RentalRecord end;
     }
 
     uint256[] private cars;
@@ -47,7 +54,7 @@ contract Rental {
     return cars;
    }
 
-   function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID)
+   function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID, address _tarrifAddress, uint256 _carTypeID)
    public returns(uint256){
         if(!checkIfCarExists(_carID)){
             revert("Car does not exist!");
@@ -62,7 +69,7 @@ contract Rental {
             blockchainTime : block.timestamp,
             rentalID : nextRentalID,
             
-            rentalPricing: 100,//default for now, to make the PR smaller 
+            rentalPricing: Tarrif(_tarrifAddress).getCurrentCarPricing(_carTypeID), 
 
             rentalState : RentalStatus.START
 
@@ -79,11 +86,11 @@ contract Rental {
    }
 
    function endRental(uint256 rentalID, uint256 _endRentTime) public{
-        if(!checkIfRentalStarted(rentalID)){
+        if(!hasRentalStarted(rentalID)){
             revert("No rental with that ID started");
         }
 
-        if(checkIfRentalEnded(rentalID)){
+        if(hasRentalEnded(rentalID)){
             revert("Rental with that ID has already ended");
         }
 
@@ -123,6 +130,22 @@ contract Rental {
         }
         revert("No active rental record");
    }
+  
+    function getRecordHistory(uint256 rentalID) public view returns(FullRecord memory)
+    {
+      if(!hasRentalStarted(rentalID)){
+        revert("No rental with that ID started");
+      }
+
+      if(!hasRentalEnded(rentalID)){
+        revert("Rental with that ID hasn't ended yet");
+      }
+      FullRecord memory result = FullRecord({
+        start: rentalHistory[rentalMappingStart[rentalID]],
+        end: rentalHistory[rentalMappingEnd[rentalID]]
+      });
+      return result;
+    }
 
    function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory)
    {
@@ -166,11 +189,11 @@ contract Rental {
         return false;
     }
 
-    function checkIfRentalStarted(uint256 rentalID) private view returns (bool){//possible public
+    function hasRentalStarted(uint256 rentalID) private view returns (bool){//possible public
         return !(rentalMappingStart[rentalID]==0);//if it is 0 it means that it does not exist
     } 
 
-    function checkIfRentalEnded(uint256 rentalID)private view returns (bool){
+    function hasRentalEnded(uint256 rentalID)private view returns (bool){
         return !(rentalMappingEnd[rentalID]==0);
     }
     
