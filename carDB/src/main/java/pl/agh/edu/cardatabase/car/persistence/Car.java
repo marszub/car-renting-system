@@ -1,6 +1,5 @@
 package pl.agh.edu.cardatabase.car.persistence;
 
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -11,6 +10,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "cars")
 public class Car {
+    private final static double DEFAULT_LATITUDE = 49.818069;
+    private final static double DEFAULT_LONGITUDE = 19.041309;
+
     @Id
     @GeneratedValue
     private Integer id;
@@ -29,8 +31,8 @@ public class Car {
 
     public Car(final String name) {
         this.name = name;
-        this.latitude = 49.818069;
-        this.longitude = 19.041309;
+        this.latitude = DEFAULT_LATITUDE;
+        this.longitude = DEFAULT_LONGITUDE;
     }
 
     public Double getLatitude() {
