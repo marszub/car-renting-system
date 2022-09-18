@@ -26,27 +26,20 @@ class CarListClass extends React.Component {
                     break;
                 default:
                     console.log("Internal server error");
-                    //this.props.navigation("/");
+                    this.props.navigation("/");
                     break;
         }}).catch(err => {
             console.log("Error while extracting car list");
-            this.setState({loading: false, carData: {cars: 
-                [{carName: "Car1", id: 0, latitude: 49.799481, longitude: 18.911419},
-                 {carName: "Car2", id: 1, latitude: 49.796793, longitude: 18.918125},
-                 {carName: "Car3", id: 2, latitude: 49.797821, longitude: 18.907599}]
-            }});
-            //this.props.navigation("/");
+            this.props.navigation("/");
         });
     }
 
     render() {
         if(!this.state.loading) {
             return(
-            <Container>
-                <CarMap cars = {this.state.carData.cars}
-                        callbacksMap = {{isRental: this.props.callbackIsRental,
-                                         rentalData: this.props.callbackRentalData }}/>
-            </Container>)                                                         
+            <CarMap cars = {this.state.carData.cars}
+                    callbacksMap = {{isRental: this.props.callbackIsRental,
+                                     rentalData: this.props.callbackRentalData }}/>)
         }
         else {
             return(<a>Loading</a>)
