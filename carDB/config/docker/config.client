@@ -3,7 +3,7 @@
 # "hello" object in the server.
 #
 
-Account.Proxy=tcp -h auth -p 5012 -z : udp -h auth -p 5012 -z
+Account.Proxy=tcp -h host.docker.internal -p 5012 -z : udp -h host.docker.internal -p 5012 -z
 
 #
 # Warn about connection exceptions.

@@ -8,7 +8,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Auth.Controller
 {
     [ApiController]
-    [Route("api/Auth")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly AuthContext context;
