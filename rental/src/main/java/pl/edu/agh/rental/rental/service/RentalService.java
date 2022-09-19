@@ -1,5 +1,6 @@
 package pl.edu.agh.rental.rental.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import pl.edu.agh.rental.auth.User;
@@ -39,10 +40,9 @@ public class RentalService {
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
 
-    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5000/";//TODO - change to config
-    public RentalService() {
+    public RentalService(@Value("${blockchain.address}") final String blockchainAddress) {
         this.web3client =
-                Web3j.build(new HttpService(BLOCKCHAIN_ADDRESS));//where blockchain is TODO - change to config
+                Web3j.build(new HttpService(blockchainAddress));
 
         this.gasProvider =
                 new StaticGasProvider(BigInteger.valueOf(2000000000), BigInteger.valueOf(6721975));//constant values

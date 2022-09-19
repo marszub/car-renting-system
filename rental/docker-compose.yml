@@ -1,0 +1,7 @@
+services:
+    rental:
+        image: rental:dev
+        ports:
+            - "5020:5020"
+        volumes:
+            - ./config/docker:/config
