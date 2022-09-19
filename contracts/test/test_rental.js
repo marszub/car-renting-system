@@ -38,7 +38,6 @@ contract("Rental", accounts => {
     });
 
     it("should add active rental and get it", async () => {
-       // await this.tarrifHelp.addEntry(1,10);
         const emit_event = await this.rentalTest.startRental(10, 1, 1, this.tarrifHelp.address, 1);
         const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
         assert.equal(returned_id, 1)//should be 1, the first rental
