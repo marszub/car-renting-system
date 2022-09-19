@@ -4,7 +4,6 @@ pragma solidity >=0.4.22 <0.9.0;
 interface Tarrif {
   enum TarrifStatus{ACTIVE, ENDED}
   
-
   struct TarrifEntry {
         uint256 carTypeID;//from the carDB
         uint256 pricePerMinute;//or per kilometer, to discuss, or add more
@@ -13,7 +12,7 @@ interface Tarrif {
 
   }
 
-  function getFullPricing() external view returns(uint256[] memory,uint256[] memory,uint256[] memory);
+  function getFullPricing() external view returns(uint256[] memory, uint256[] memory, uint256[] memory);
   function getCurrentCarPricing(uint256 _carTypeID) external view returns(uint256);
 } 
 
@@ -48,7 +47,7 @@ contract TarrifContract is Tarrif{
       revert("No entry for that carTypeID");
     }
 
-    function getFullPricing() external view returns(uint256[] memory,uint256[] memory,uint256[] memory){
+    function getFullPricing() external view returns(uint256[] memory, uint256[] memory, uint256[] memory){
         //I dont think there is any other way, than to make this three arrays
         //otherwise it breaks, it can not return array of structs
         uint256[] memory carTypesArray = new uint256[](tarrifPricing.length);

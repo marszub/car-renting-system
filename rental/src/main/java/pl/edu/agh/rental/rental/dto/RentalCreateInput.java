@@ -6,5 +6,4 @@ public record RentalCreateInput(
         @NotNull
         Integer carId,
         Integer carTypeId
-) {
-}
+) { }

@@ -45,7 +45,7 @@ public class RentalController {
         return reservationService.getRental(user);
     }
 
-    //cuurent time, current rental
+    //current time, current rental
     @GetMapping("/time/current")
     @ResponseStatus(HttpStatus.OK)
     public long getCurrentRentalTime(@CurrentUser final User user) throws NoRentalError {
