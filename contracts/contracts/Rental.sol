@@ -22,7 +22,7 @@ contract Rental {
         RentalStatus rentalState;// is this start or end of rental
     }
 
-    //used to get start reord and end record at the same time
+    //used to get start record and end record at the same time
     struct FullRecord {
         RentalRecord start;
         RentalRecord end;
