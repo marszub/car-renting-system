@@ -6,7 +6,6 @@ namespace Auth
 {
     public class AppRunner
     {
-        private string allowedOrigins = "allowedOrigins";
         private Ice.Communicator? RunIceServices(string[] args, IServiceProvider services)
         {
             try
@@ -37,15 +36,6 @@ namespace Auth
                 config.AddJsonFile(args[1],
                                    optional: false,
                                    reloadOnChange: true);
-            });
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin();
-                    });
             });
 
             builder.Services.AddControllers();
