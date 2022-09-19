@@ -49,5 +49,5 @@
 *.war           binary
 *.jks           binary
 
-gradlew         text eof=lf
-*.sh text       text eof=lf
+gradlew         text eol=lf
+*.sh text       text eol=lf
