@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material";
 import { HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_OK } from "../utils/http-status";
 import { RentalService } from "../services/rental-service";
 import { RentalView } from "./RentalView";
-import  CarListView from "./CarListView";
+import  CarList from "./CarList";
 
 const theme = createTheme()
 
@@ -56,9 +56,9 @@ export class Rental extends React.Component {
                                     callbackRentalData = {this.setRentalDataFunction}
                                     rentalData = {this.state.rentalData} ></RentalView>);
             } else {
-                return (<CarListView callbackIsRental = {this.setRentalFunction}
-                                    callbackRentalData = {this.setRentalDataFunction}
-                                    rentalData = {this.state.rentalData} ></CarListView>);
+                return (<CarList callbackIsRental = {this.setRentalFunction}
+                                 callbackRentalData = {this.setRentalDataFunction}
+                                 rentalData = {this.state.rentalData} ></CarList>);
                 return(<a style={{textAlign: "center"}}>loading data...</a>);
             }
         }else return <a style={{textAlign: "center"}}>loading data...</a>; 
