@@ -9,7 +9,6 @@ interface Tarrif {
         uint256 pricePerMinute;//or per kilometer, to discuss, or add more
         uint256 blockchainTime;//when this entry was added (from when its valid)
         TarrifStatus status;
-
   }
 
   function getFullPricing() external view returns(uint256[] memory, uint256[] memory, uint256[] memory);
