@@ -18,11 +18,11 @@ import java.util.List;
 @Component
 public class TarrifBlockchainProxy {
     private static final String CONTRACT_ADDRESS =
-            "0xee3e92973010664a804bf96188ac4766fb84a3b9";//TODO - change to config
+            "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";//TODO - change to config
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
 
-    private static final String BLOCKCHAIN_ADDRESS = "HTTP://0.0.0.0:5031/";//TODO - change to config
+    private static final String BLOCKCHAIN_ADDRESS = "HTTP://127.0.0.1:5000/";//TODO - change to config
 
     private Web3j web3client;//connection with blockchain
     private ContractGasProvider gasProvider;//data about the costs in blockchain

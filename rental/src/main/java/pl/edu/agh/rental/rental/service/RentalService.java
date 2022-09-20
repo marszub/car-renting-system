@@ -39,6 +39,8 @@ public class RentalService {
             "0xee3e92973010664a804bf96188ac4766fb84a3b9";//TODO - change to config
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
+    private static final String TARRIF_CONTRACT_ADDRESS =
+            "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";
 
     public RentalService(@Value("${blockchain.address}") final String blockchainAddress) {
         this.web3client =
@@ -63,7 +65,7 @@ public class RentalService {
             TransactionReceipt reservationReceipt = adminRentalService.
                     startRental(BigInteger.valueOf(timestamp.getTime()),
                             BigInteger.valueOf(input.carId()),
-                            BigInteger.valueOf(user.id())).send();
+                            BigInteger.valueOf(user.id()), TARRIF_CONTRACT_ADDRESS,BigInteger.valueOf(input.carTypeId())).send();
 
             //get event from transaction ("emit" in solidity)
             reservationID = adminRentalService.getAddedNewRentalIDEvents(reservationReceipt).get(0).reservationID.intValue();
@@ -124,5 +126,75 @@ public class RentalService {
         //possibly solved with string.contains()
 
         return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.rentTime.longValue());
+    }
+
+    public long getCurrentRentalTime(final User user) throws NoRentalError {
+        Rental.RentalRecord result;
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try{
+            //no need for emit, this a "view" function
+            result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
+            return timestamp.getTime() - result.rentTime.longValue();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            if(e.getMessage().contains("No active rental record")){
+                throw new NoRentalError();
+            }
+            else{
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    public long getRentalTime(final int rentalID) throws UserUnauthorizedError{
+        Rental.FullRecord result;
+        try {
+            result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
+            return result.end.rentTime.longValue() - result.start.rentTime.longValue();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            if(e.getMessage().contains("No rental with that ID started")){
+                throw new UserUnauthorizedError();
+            }
+            if(e.getMessage().contains("Rental with that ID hasn't ended yet")){
+                throw new UserUnauthorizedError();
+            }
+            throw new RuntimeException(e);
+        }
+    }
+
+    public long getCurrentRentalCost(final User user) throws NoRentalError{
+        Rental.RentalRecord result;
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        try{
+            //no need for emit, this a "view" function
+            result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
+            return (timestamp.getTime() - result.rentTime.longValue()) * result.rentalPricing.longValue();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            if(e.getMessage().contains("No active rental record")){
+                throw new NoRentalError();
+            }
+            else{
+                throw new RuntimeException(e);
+            }
+        }
+    }
+    public long getRentalCost(final int rentalID) throws UserUnauthorizedError{
+        Rental.FullRecord result;
+        try {
+            result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
+            long time = result.end.rentTime.longValue() - result.start.rentTime.longValue();
+            return time * result.start.rentalPricing.longValue();
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            if(e.getMessage().contains("No rental with that ID started")){
+                throw new UserUnauthorizedError();
+            }
+            if(e.getMessage().contains("Rental with that ID hasn't ended yet")){
+                throw new UserUnauthorizedError();
+            }
+            throw new RuntimeException(e);
+        }
     }
 }
