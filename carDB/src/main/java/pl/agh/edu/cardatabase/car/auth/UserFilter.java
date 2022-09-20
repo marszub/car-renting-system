@@ -5,6 +5,7 @@ import Auth.AccountPrx;
 import Auth.Role;
 import Auth.TokenVerificationStatus;
 import com.zeroc.Ice.Communicator;
+import com.zeroc.Ice.ConnectionRefusedException;
 import com.zeroc.Ice.ObjectPrx;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,7 +52,12 @@ public class UserFilter extends OncePerRequestFilter {
 
     private void verify(final String userId, final String userToken, final Role role) {
         final ObjectPrx baseAccount = communicator.stringToProxy(constructString(userId));
-        final AccountPrx account = AccountPrx.checkedCast(baseAccount);
+        AccountPrx account;
+        try {
+            account = AccountPrx.checkedCast(baseAccount);
+        } catch ( ConnectionRefusedException exception) {
+            return;
+        }
         if (account == null) {
             throw new Error(INVALID_PROXY);
         }

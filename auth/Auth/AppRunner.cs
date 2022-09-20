@@ -76,7 +76,14 @@ namespace Auth
 
             var communicator = RunIceServices(args, services);
 
-            app.UseCors();
+            app.UseCors(builder =>
+            {
+                builder
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+            });
 
             app.MapControllers();
 

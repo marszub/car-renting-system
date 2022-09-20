@@ -11,6 +11,8 @@ import { HTTP_BAD_REQUEST, HTTP_NO_CONTENT } from "../utils/http-status";
 
 export default function Navbar() {
     const navigate = useNavigate();
+    const [, updateState] = React.useState();
+    const forceUpdate = React.useCallback(() => updateState({}), []);
     const [anchorEl, setAnchorEl] = React.useState(null);
 
     const handleMenu = (event) => {
@@ -28,6 +30,7 @@ export default function Navbar() {
             switch (res.status) {
                 case HTTP_NO_CONTENT:
                     console.log("Logged out");
+                    forceUpdate();
                     break;
                 case HTTP_BAD_REQUEST:
                     console.log("Bad request");

@@ -9,9 +9,15 @@ public record CarData(
         Integer id,
 
         @NotNull
-        String carName
+        String carName,
+
+        @NotNull
+        Double latitude,
+
+        @NotNull
+        Double longitude
 ) {
     public CarData(final Car car) {
-        this(car.getId(), car.getName());
+        this(car.getId(), car.getName(), car.getLatitude(), car.getLongitude());
     }
 }

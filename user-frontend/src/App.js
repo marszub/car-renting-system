@@ -8,7 +8,6 @@ import AddCar from "./components/AddCar";
 import { Rental } from "./components/Rental";
 import Navbar from "./components/Navbar"
 
-
 function App() {
   return (
     <Router>

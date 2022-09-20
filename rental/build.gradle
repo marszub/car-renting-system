@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.6.5' apply false
+    id 'org.springframework.boot' version '2.6.5'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'checkstyle'
@@ -40,7 +40,7 @@ task compileSlice(type: Exec) {
     def sliceDir = new File("${projectDir}/slice")
     sliceDir.mkdirs()
 
-    commandLine 'slice2java', '--output-dir', "${projectDir}/slice", "${projectDir}/../slice/auth.ice"
+    commandLine 'slice2java', '--output-dir', "${projectDir}/slice", "${projectDir}/../shared/slice/auth.ice"
 
     standardOutput = new ByteArrayOutputStream()
 
