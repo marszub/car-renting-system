@@ -14,6 +14,7 @@ import pl.edu.agh.rental.rental.dto.RentalData;
 import pl.edu.agh.rental.rental.service.RentalService;
 
 import javax.validation.Valid;
+import java.sql.Timestamp;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -41,7 +42,34 @@ public class RentalController {
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
     public RentalData getRental(@CurrentUser final User user) throws NoRentalError {
-        //throw new NoRentalError();
         return reservationService.getRental(user);
+    }
+
+    //current time, current rental
+    @GetMapping("/time/current")
+    @ResponseStatus(HttpStatus.OK)
+    public long getCurrentRentalTime(@CurrentUser final User user) throws NoRentalError {
+        return reservationService.getCurrentRentalTime(user);
+    }
+
+    //total time after end
+    @GetMapping("/time/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public long getRentalTime(@PathVariable("id") final Integer reservationId) throws UserUnauthorizedError{
+        return reservationService.getRentalTime(reservationId);
+    }
+
+    //current cost - current rental
+    @GetMapping("/cost/current")
+    @ResponseStatus(HttpStatus.OK)
+    public long getCurrentRentalCost(@CurrentUser final User user) throws NoRentalError {
+        return reservationService.getCurrentRentalCost(user);
+    }
+
+    //total cost after end
+    @GetMapping("/cost/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public long getRentalCost(@PathVariable("id") final Integer reservationId) throws UserUnauthorizedError{
+        return reservationService.getRentalCost(reservationId);
     }
 }

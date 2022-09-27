@@ -1,9 +1,9 @@
 const Migrations = artifacts.require("Migrations");
 const Rental = artifacts.require("Rental");
-const Tarrif = artifacts.require("Tarrif");
+const TarrifContract = artifacts.require("TarrifContract");
 
 module.exports = function (deployer) {
   deployer.deploy(Migrations);
   deployer.deploy(Rental);
-  deployer.deploy(Tarrif);
+  deployer.deploy(TarrifContract);
 };

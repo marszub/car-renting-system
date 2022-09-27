@@ -1,6 +1,6 @@
-const Tarrif = artifacts.require("../contracts/Tarrif.sol");
+const Tarrif = artifacts.require("TarrifContract");
 
-contract("Tarrif", accounts => {
+contract("TarrifContract", accounts => {
   const creatorAddress = accounts[0];
   before(async () => {
     this.tarrifTest = await Tarrif.deployed();
