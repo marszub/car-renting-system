@@ -1,5 +1,6 @@
 package pl.edu.agh.tarrif.blockchain;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
@@ -21,17 +22,14 @@ public class TarrifBlockchainProxy {
             "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";//TODO - change to config
     private static final String ADMIN_PRIVATE_KEY =
             "0x23901d28534eda9518308ce5cfea39b04b91a0518ceea6f3406b6c1ed8201e6a";//TODO - change to config
-
-    private static final String BLOCKCHAIN_ADDRESS = "HTTP://127.0.0.1:5000/";//TODO - change to config
-
     private Web3j web3client;//connection with blockchain
     private ContractGasProvider gasProvider;//data about the costs in blockchain
     private Credentials credentials;//admin Credentials in blockchain
     private Tarrif adminTarrifService;
 
-    public TarrifBlockchainProxy() {
+    public TarrifBlockchainProxy(@Value("${blockchain.address}") final String blockchainAddress) {
         this.web3client =
-                Web3j.build(new HttpService(BLOCKCHAIN_ADDRESS));//where blockchain is TODO - change to config
+                Web3j.build(new HttpService(blockchainAddress));//where blockchain is
 
         this.gasProvider =
                 new StaticGasProvider(BigInteger.valueOf(2000000000), BigInteger.valueOf(6721975));//constant values
