@@ -28,7 +28,7 @@ public class RentalBlockchainProxy {
 
     public RentalBlockchainProxy(@Value("${blockchain.address}") final String blockchainAddress) {
         this.web3client =
-                Web3j.build(new HttpService(blockchainAddress)); //where blockchain is TODO - change to config
+                Web3j.build(new HttpService(blockchainAddress)); //where blockchain is
         this.gasProvider =
                 new StaticGasProvider(BigInteger.valueOf(2000000000), BigInteger.valueOf(6721975)); //constant values
         this.credentials =
