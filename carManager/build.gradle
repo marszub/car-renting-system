@@ -25,6 +25,67 @@ dependencies {
     implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'com.zeroc:ice:3.7.7'
+    implementation 'com.zeroc:icestorm:3.7.7'
+    implementation group: 'org.web3j', name: 'core', version: '4.8.7'
+    implementation group: 'org.web3j', name: 'codegen', version: '4.8.7'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:4.6.1'
+
+}
+
+task compileSlice(type: Exec) {
+    def sliceDir = new File("${projectDir}/slice")
+    sliceDir.mkdirs()
+
+    commandLine 'slice2java', '--output-dir', "${projectDir}/slice", "${projectDir}/../slice/auth.ice"
+
+    standardOutput = new ByteArrayOutputStream()
+
+    ext.output = {
+        standardOutput.toString()
+    }
+
+}
+
+gradle.projectsEvaluated {
+    compileJava.dependsOn(compileSlice)
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+plugins {
+    id 'org.springframework.boot' version '2.6.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'checkstyle'
+}
+
+group = 'pl.edu.agh'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '18'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    main{
+        java {
+            srcDir 'slice'
+        }
+    }
+}
+
+dependencies {
+    implementation platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-security'
