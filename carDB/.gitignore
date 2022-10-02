@@ -1,11 +1,10 @@
 HELP.md
 .gradle
 build/
-!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/
 !**/src/main/**/build/
 !**/src/test/**/build/
 gradlew.bat
-graddle-wrapper.jar
 slice/
 
 ### STS ###
