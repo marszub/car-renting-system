@@ -1,7 +1,6 @@
 package pl.edu.agh.carManager.carManager.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple3;
 import pl.edu.agh.carManager.carManager.dto.PricingRecord;
@@ -19,7 +18,7 @@ public class CarManagerService {
     public CarManagerService(final TarrifBlockchainProxy tarrifBlockchainProxy) {
         this.tarrifBlockchainProxy = tarrifBlockchainProxy;
     }
-    @Transactional
+
     public boolean addPricing(PricingRecord record) {
         try {
             TransactionReceipt result = tarrifBlockchainProxy.addEntry(record);
