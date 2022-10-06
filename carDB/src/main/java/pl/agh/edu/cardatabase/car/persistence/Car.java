@@ -1,10 +1,15 @@
 package pl.agh.edu.cardatabase.car.persistence;
 
+import pl.agh.edu.cardatabase.carCategory.persistence.CarCategory;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Column;
 import java.util.Objects;
 
 @Entity
@@ -26,13 +31,26 @@ public class Car {
     @Column(nullable = false)
     private Double longitude;
 
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "car_category_id", nullable = false)
+    private CarCategory carCategory;
+
     public Car() {
     }
 
-    public Car(final String name) {
+    public Car(final String name, final CarCategory category) {
         this.name = name;
         this.latitude = DEFAULT_LATITUDE;
         this.longitude = DEFAULT_LONGITUDE;
+        this.carCategory = category;
+    }
+
+    public CarCategory getCarCategory() {
+        return carCategory;
+    }
+
+    public void setCarCategory(final CarCategory carCategory) {
+        this.carCategory = carCategory;
     }
 
     public Double getLatitude() {

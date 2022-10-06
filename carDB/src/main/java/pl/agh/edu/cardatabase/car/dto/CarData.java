@@ -12,12 +12,12 @@ public record CarData(
         String carName,
 
         @NotNull
-        Double latitude,
+        Integer carCategory,
 
         @NotNull
-        Double longitude
+        Coordinates coordinates
 ) {
     public CarData(final Car car) {
-        this(car.getId(), car.getName(), car.getLatitude(), car.getLongitude());
+        this(car.getId(), car.getName(), 0, new Coordinates(car.getLatitude(), car.getLongitude()));
     }
 }

@@ -1,4 +1,4 @@
-package pl.agh.edu.cardatabase.car.auth;
+package pl.agh.edu.cardatabase.auth;
 
 import org.springframework.security.core.annotation.CurrentSecurityContext;
 
