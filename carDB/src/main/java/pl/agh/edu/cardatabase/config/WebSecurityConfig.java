@@ -13,7 +13,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import pl.agh.edu.cardatabase.car.auth.UserFilter;
+import pl.agh.edu.cardatabase.auth.UserFilter;
 
 import java.util.Arrays;
 import java.util.List;

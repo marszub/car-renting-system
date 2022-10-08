@@ -12,6 +12,7 @@ import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
 import pl.agh.edu.cardatabase.car.service.CarService;
 
 import javax.validation.Valid;
@@ -28,7 +29,7 @@ public class CarController {
 
     @PostMapping("/admin/cars")
     @ResponseStatus(HttpStatus.CREATED)
-    public CarData create(@Valid @RequestBody final CarInputData data) throws CarAlreadyExistsError {
+    public CarData create(@Valid @RequestBody final CarInputData data) throws CarAlreadyExistsError, CarCategoryDoesNotExistError {
         return carService.create(data);
     }
 

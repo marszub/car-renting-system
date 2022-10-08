@@ -2,10 +2,10 @@ package pl.agh.edu.cardatabase.car.dto;
 
 import javax.validation.constraints.NotNull;
 
-public record CarInputData(
+public record Coordinates(
         @NotNull
-        String name,
+        Double latitude,
 
         @NotNull
-        Integer carCategory
+        Double longitude
 ) { }

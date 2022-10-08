@@ -1,4 +1,4 @@
-package pl.agh.edu.cardatabase.car.auth;
+package pl.agh.edu.cardatabase.auth;
 
 import Auth.AccessData;
 import Auth.AccountPrx;
@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 public class UserFilter extends OncePerRequestFilter {
@@ -41,7 +40,7 @@ public class UserFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.clearContext();
         if (userToken != null) {
-            if (Objects.equals(request.getServletPath(), "/api/admin/cars") && request.getMethod().equals("POST")) {
+            if (request.getServletPath().contains("/api/admin")) {
                 verify(userId, userToken, Role.Admin);
             } else {
                 verify(userId, userToken, Role.User);
