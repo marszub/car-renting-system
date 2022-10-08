@@ -18,6 +18,6 @@ public record CarData(
         Coordinates coordinates
 ) {
     public CarData(final Car car) {
-        this(car.getId(), car.getName(), 0, new Coordinates(car.getLatitude(), car.getLongitude()));
+        this(car.getId(), car.getName(), car.getCarCategory().getId(), new Coordinates(car.getLatitude(), car.getLongitude()));
     }
 }

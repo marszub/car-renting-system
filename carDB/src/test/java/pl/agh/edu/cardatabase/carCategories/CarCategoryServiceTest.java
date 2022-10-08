@@ -57,5 +57,7 @@ public class CarCategoryServiceTest {
         final CarCategoryService carCategoryService = new CarCategoryService(carCategoryRepository);
         CarCategoryList resultList = carCategoryService.getCategories();
         assertThat(resultList.carCategories().size()).isEqualTo(2);
+        assertThat(resultList.carCategories().get(0).carCategoryName()).isEqualTo(carCategory.getName());
+        assertThat(resultList.carCategories().get(1).carCategoryName()).isEqualTo(carCategory2.getName());
     }
 }
