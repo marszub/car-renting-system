@@ -80,6 +80,7 @@ contract Rental {
             revert("Car does not exist!");
         }
 
+
         //memory - exists only in function call, temporary variable
         RentalRecord memory record = RentalRecord({
             startRentTime : _rentTime,
