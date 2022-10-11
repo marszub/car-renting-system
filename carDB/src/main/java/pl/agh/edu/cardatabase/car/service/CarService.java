@@ -7,13 +7,16 @@ import pl.agh.edu.cardatabase.blockchain.RentalBlockchainProxy;
 import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.dto.CarLocationUpdateInput;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
+import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
 import pl.agh.edu.cardatabase.car.persistence.Car;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategory;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategoryRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
@@ -74,5 +77,14 @@ public class CarService {
             }
         }
         return new CarList(carList.stream().map(CarData::new).toList());
+    }
+
+    public void updateCarLocation(CarLocationUpdateInput data, Integer id) throws CarDoesNotExistError {
+        try {
+            carRepository.getById(id);
+        } catch (EntityNotFoundException e) {
+            throw new CarDoesNotExistError();
+        }
+        carRepository.updateCarLocation(id, data.coordinates().latitude(), data.coordinates().longitude());
     }
 }
