@@ -38,15 +38,15 @@ contract("Rental", accounts => {
         const emit_event = await this.rentalTest.startRental(10,1,1);
         
         const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
-        assert.equal(returned_id, 1)//should be 1, the first rental
+        assert.equal(returned_id, 0)//should be 0, the first rental
 
         const result = await this.rentalTest.getActiveRental(1)
-        assert.equal(result.rentTime, 10);
+        assert.equal(result.startRentTime, 10);
     });
 
     //this one is from web, passes at ANY error
     it("should end rental and fail at getting it", async () => {
-      await this.rentalTest.endRental(1, 20)
+      await this.rentalTest.endRental(0, 20)
 
       return this.rentalTest.getActiveRental(1).then(() => {
         assert.ok(false, "It didn't fail");
@@ -58,7 +58,7 @@ contract("Rental", accounts => {
     //this one is from web, passes at ANY error
     it("should fail at ending the same rental secind time", async () => {
 
-      return this.rentalTest.endRental(1).then(() => {
+      return this.rentalTest.endRental(0).then(() => {
         assert.ok(false, "It didn't fail");
       }, () => {
         assert.ok(true, "Passed");
@@ -79,4 +79,35 @@ contract("Rental", accounts => {
       assert.equal(result[1][1], false);
       assert.equal(result[1][2], false); 
   });
+
+    it("should start rental, park a car", async() =>{
+      const emit_event = await this.rentalTest.startRental(10,1,1);
+        
+      const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
+      
+      await this.rentalTest.startParking(returned_id, 100);
+
+      const result = await this.rentalTest.getActiveRental(1);
+      assert.equal(result.parkingHistoryStarts, 100);
+      assert.equal(result.parkingHistoryEnds.length, 0);
+
+      const carStatus = await this.rentalTest.checkCarStatus(1);
+      assert.equal(carStatus, 2);//2 is PARKED
+
+      await this.rentalTest.endRental(returned_id, 110);
+  }); 
+
+    it("should unpark the car", async() =>{
+      const emit_event = await this.rentalTest.startRental(10,1,1);
+      const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
+      
+      await this.rentalTest.startParking(returned_id, 100);
+
+      await this.rentalTest.endParking(returned_id, 110);
+
+      const result = await this.rentalTest.getActiveRental(1);
+      assert.equal(result.parkingHistoryEnds, 110);
+      
+      await this.rentalTest.endRental(returned_id, 110);
+    });
 });
