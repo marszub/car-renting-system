@@ -3,6 +3,7 @@ package pl.edu.agh.carManager.carManager.service;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple3;
+import pl.edu.agh.carManager.blockchain.RentalBlockchainProxy;
 import pl.edu.agh.carManager.carManager.dto.PricingRecord;
 import pl.edu.agh.carManager.blockchain.TarrifBlockchainProxy;
 
@@ -14,10 +15,18 @@ import java.util.List;
 public class CarManagerService {
 
     private final TarrifBlockchainProxy tarrifBlockchainProxy;
+    private final RentalBlockchainProxy rentalBlockchainProxy;
 
-    public CarManagerService(final TarrifBlockchainProxy tarrifBlockchainProxy) {
+    public CarManagerService(final TarrifBlockchainProxy tarrifBlockchainProxy,
+                             final RentalBlockchainProxy rentalBlockchainProxy) {
         this.tarrifBlockchainProxy = tarrifBlockchainProxy;
+        this.rentalBlockchainProxy = rentalBlockchainProxy;
     }
+
+    public CarActivity carActivity(int carID){
+        rentalBlockchainProxy.getActiveRental();
+    }
+
 
     public boolean addPricing(PricingRecord record) {
         try {

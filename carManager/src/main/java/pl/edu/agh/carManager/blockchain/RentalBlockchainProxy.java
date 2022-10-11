@@ -37,6 +37,12 @@ public class RentalBlockchainProxy {
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider); //object used to call contracts
     }
 
+    public Rental.RentalRecord getActiveRental(final BigInteger userID) throws Exception {
+        return adminBlockchainRentalService.getActiveRental(userID).send();
+    }
+
+
+
     public TransactionReceipt addCar(final BigInteger bigInteger) throws Exception {
         return adminBlockchainRentalService.addCar(bigInteger).send();
     }

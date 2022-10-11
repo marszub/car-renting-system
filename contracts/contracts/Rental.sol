@@ -79,10 +79,6 @@ contract Rental {
         if(!checkIfCarExists(_carID)){
             revert("Car does not exist!");
         }
-        if(checkIfCarRented(_carID)){
-            revert("Car has already been rented!");
-        }
-
 
         //memory - exists only in function call, temporary variable
         RentalRecord memory record = RentalRecord({

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.carManager.carManager.dto.PricingRecord;
 import pl.edu.agh.carManager.carManager.service.CarManagerService;
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -17,10 +16,10 @@ public class CarManagerController {
         this.carManagerService = carManagerService;
     }
 
-    @GetMapping("/carActivity/:id")
+    @GetMapping("/carActivity/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ArrayList<PricingRecord> carActivity(){
-        return carManagerService.getPricing();
+    public CarActivity carActivity(@PathVariable("id") int car_id){
+        return carManagerService.carActivity(car_id);
     }//TODO change
     //enum in blockchain -
     //Active, Parked, Non-Active, Przegląd
