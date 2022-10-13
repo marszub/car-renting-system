@@ -12,20 +12,23 @@ import pl.agh.edu.cardatabase.blockchain.RentalBlockchainProxy;
 import pl.agh.edu.cardatabase.car.dto.CarData;
 import pl.agh.edu.cardatabase.car.dto.CarInputData;
 import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.dto.CarLocationUpdateInput;
+import pl.agh.edu.cardatabase.car.dto.Coordinates;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
+import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
 import pl.agh.edu.cardatabase.car.persistence.Car;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
 import pl.agh.edu.cardatabase.car.service.CarService;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategory;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategoryRepository;
 
+import javax.persistence.EntityNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -65,6 +68,7 @@ public class CarServiceTest {
         when(carRepository.save(any(Car.class))).thenReturn(completeCar1);
         when(carRepository.getById(0)).thenReturn(completeCar1);
         when(carRepository.getById(1)).thenReturn(completeCar2);
+        when(carRepository.getById(3)).thenThrow(new EntityNotFoundException());
     }
 
     @Test
@@ -134,5 +138,22 @@ public class CarServiceTest {
         this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> carService.getCars());
+    }
+
+    @Test
+    @Transactional
+    void updateCarLocationCarExists() throws CarDoesNotExistError {
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        CarLocationUpdateInput input = new CarLocationUpdateInput(new Coordinates(1.00, 2.00));
+        assertThatNoException().isThrownBy(() -> carService.updateCarLocation(input, 0));
+    }
+
+    @Test
+    @Transactional
+    void updateCarLocationCarDoesNotExist() throws CarDoesNotExistError {
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        CarLocationUpdateInput input = new CarLocationUpdateInput(new Coordinates(1.00, 2.00));
+        assertThatExceptionOfType(CarDoesNotExistError.class)
+                .isThrownBy(() -> carService.updateCarLocation(input, 3));
     }
 }

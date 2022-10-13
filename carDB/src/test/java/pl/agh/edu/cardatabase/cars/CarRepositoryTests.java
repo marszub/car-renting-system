@@ -55,4 +55,25 @@ public class CarRepositoryTests {
         assertThat(list.get(1).getId()).isNotNull();
         assertThat(list.get(0).getId()).isNotEqualTo(list.get(1).getId());
     }
+
+    @Test
+    @Transactional
+    void checkIfLocationChangeWorksProperly() {
+        final double latitude = 1.4231;
+        final double longitude = 2.21012312;
+        CarCategory carCategory = carCategoryRepository.save(new CarCategory(carCategoryName));
+        final Car car = new Car(carName1, carCategory);
+        carRepository.save(car);
+        final List<Car> list = carRepository.getCars();
+        assertThat(list.size()).isEqualTo(1);
+        assertThat(list.get(0).getName()).isEqualTo(carName1);
+        assertThat(list.get(0).getId()).isNotNull();
+        carRepository.updateCarLocation(car.getId(), latitude, longitude);
+        final List<Car> list2 = carRepository.getCars();
+        assertThat(list2.size()).isEqualTo(1);
+        assertThat(list2.get(0).getName()).isEqualTo(carName1);
+        assertThat(list2.get(0).getId()).isEqualTo(car.getId());
+        assertThat(list2.get(0).getLatitude()).isEqualTo(latitude);
+        assertThat(list2.get(0).getLongitude()).isEqualTo(longitude);
+    }
 }
