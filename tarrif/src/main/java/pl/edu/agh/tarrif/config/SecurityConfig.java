@@ -1,5 +1,5 @@
 //All of this copied from Rental
-package pl.edu.agh.tarrif.auth;
+package pl.edu.agh.tarrif.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import pl.edu.agh.tarrif.auth.UserFilter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +40,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(userFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-                .and().authorizeRequests().anyRequest().authenticated();
+                .and().authorizeRequests().antMatchers("/api/admin/*").authenticated()
+                                          .anyRequest().permitAll();
     }
 
     @Bean

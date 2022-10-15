@@ -19,7 +19,7 @@ public class TarrifController {
         this.tarrifService = tarrifService;
     }
 
-    @GetMapping("/pricing")
+    @GetMapping("/admin/pricing")
     @ResponseStatus(HttpStatus.OK)
     public ArrayList<PricingRecord> getPricing(){
         return tarrifService.getPricing();

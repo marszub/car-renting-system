@@ -1,4 +1,4 @@
-package pl.edu.agh.tarrif;
+package pl.edu.agh.tarrif.config;
 
 import com.zeroc.Ice.Communicator;
 import com.zeroc.Ice.Util;

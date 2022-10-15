@@ -38,20 +38,20 @@ public class UserFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.clearContext();
         if (userToken != null) {
-            verifyUser(userId, userToken);
+            verifyAdmin(userId, userToken);
         }
         filterChain.doFilter(request, response);
     }
 
-    private void verifyUser(final String userId, final String userToken) {
+    private void verifyAdmin(final String userId, final String userToken) {
         ObjectPrx baseAccount = communicator.stringToProxy("account/" + userId + ":" + communicator.getProperties().getProperty("Account.Proxy"));
         AccountPrx account = AccountPrx.checkedCast(baseAccount);
         if (account == null) throw new Error("Invalid proxy");
 
-        Role role = Role.User;
+        Role role = Role.Admin;
         if(account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId), Role.User.toString()), null, List.of()));
+                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId), Role.Admin.toString()), null, List.of()));
         }
     }
 }
