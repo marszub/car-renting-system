@@ -8,7 +8,6 @@ import { HTTP_BAD_REQUEST, HTTP_CREATED} from "../utils/http-status";
 
 
 function openTooltip(setTooltipOpen) {
-  console.log("open");
   setTooltipOpen(true);
 }
 
@@ -16,9 +15,11 @@ function closeTooltip(setTooltipOpen) {
   setTooltipOpen(false);
 }
 
-function rentCar(carId, callbackIsRental, callbackRentalData) {
+function rentCar(carId, carTypeId, callbackIsRental, callbackRentalData) {
     const service = new RentalService();
-    service.createRental({"carId": carId}).then(res => {
+    var body = {"carId": carId, "carTypeId": carTypeId};
+    console.log(body);
+    service.createRental(body).then(res => {
         switch (res.status) {
             case HTTP_CREATED:
                 console.log("rental createad");
@@ -57,6 +58,7 @@ export default function CarMarker(props) {
                   Id: {props.carData.id}
                 </Typography>
                 <Button onClick={() => rentCar(props.carData.id,
+                                               props.carData.categoryId,
                                                props.callbacksMap.isRental,
                                                props.callbacksMap.rentalData)}>
                     Rent

@@ -4,24 +4,25 @@ import { Grid, TextField, Typography } from "@mui/material";
 import { createTheme} from "@mui/material";
 import { Box } from "@mui/material";
 import { Button } from "@mui/material";
-import { CarDBService } from "../services/carDB-service";
+import { CarDBService } from "../../services/carDB-service";
 import { useNavigate } from "react-router-dom";
-import {HTTP_CREATED, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../utils/http-status";
+import { HTTP_CREATED, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../../utils/http-status";
 
 const theme = createTheme()
 
-export default function AddCar() {
+export default function AddCarCategory() {
     const navigate = useNavigate();
+    const service = new CarDBService();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const service = new CarDBService();
         const formData = new FormData(event.currentTarget);
 
-        service.createCar({"name": formData.get("carName")}).then( res => {
+        service.createCarCategory({"categoryName": formData.get("carCategoryName")}).then( res => {
             switch (res.status) {
                 case HTTP_CREATED:
-                    console.log("carCreated");
+                    console.log("carCategory created");
+                    navigate("/admin/carCategories")
                     break;
                 case HTTP_UNAUTHORIZED:
                     console.log("Wrong login or password");
@@ -45,7 +46,7 @@ export default function AddCar() {
                 marginTop: 8
             }}>
                 <Typography component="h1" variant="h3">
-                    AddCar
+                    Create new CarCategory
                 </Typography>
             </Box>
             <Box component="form" onSubmit={handleSubmit} sx={{
@@ -56,11 +57,11 @@ export default function AddCar() {
                     <Grid item xs={12}>
                         <TextField
                             autoComplete="off" 
-                            name="carName" 
+                            name="carCategoryName" 
                             required 
                             fullWidth 
-                            label="carName" 
-                            id="carName"/>
+                            label="carCategoryName" 
+                            id="carCategoryName"/>
                     </Grid>
                     <Grid item xs={12}>
                         <Button fullWidth type="submit" variant="contained">

@@ -20,8 +20,8 @@ function spawnCars(cars, callbacks) {
     for(var i = 0; i < cars.length; i++) {
         list.push(
         <CarMarker
-            position = {{lat: cars[i].latitude, lng: cars[i].longitude}}
-            carData = {{name: cars[i].carName, id: cars[i].id}}
+            position = {{lat: cars[i].coordinates.latitude, lng: cars[i].coordinates.longitude}}
+            carData = {{name: cars[i].carName, id: cars[i].id, categoryId: cars[i].carCategory.id}}
             callbacksMap = {callbacks}
             key = {cars[i].id}
         />);

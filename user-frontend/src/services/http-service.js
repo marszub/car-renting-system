@@ -3,7 +3,8 @@ import {HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_UNAUTHORIZED, isServerError, HTT
 import { tokenStorage } from "./token-storage";
 import { userIdStorage } from "./userId-storage";
 
-const onResponseFunction = (res) => {
+const onResponseFunction = (res, service) => {
+    console.log(service);
         if (res.status == HTTP_NO_CONTENT) {
             return new ShortResponse(res.status, res.body);
         }else if (res.status == HTTP_BAD_REQUEST) {
@@ -28,7 +29,7 @@ export class HttpService {
         this.onResponse = onResponse;
     }
 
-    request(path, requestMethod, body) {
+    request(path, requestMethod, body, service) {
         return fetch(`${this.servicePath}${path}`, {
             method: requestMethod,
             headers: {
@@ -38,27 +39,27 @@ export class HttpService {
             },
             credentials: 'include',
             body: body && JSON.stringify(body)
-        }).then(this.onResponse);
+        }).then((res) => this.onResponse(res, service));
     }
 
-    get(path, query, body=null) {
-        return this.request(`${path}?${new URLSearchParams(query)}`, "GET", body);
+    get(path, query, body=null, service="user") {
+        return this.request(`${path}?${new URLSearchParams(query)}`, "GET", body, service);
     }
 
-    post(path, body) {
-        return this.request(path, "POST", body);
+    post(path, body, service="user") {
+        return this.request(path, "POST", body, service);
     }
     
-    patch(path, body) {
-        return this.request(path, "PATCH", body);
+    patch(path, body, service="user") {
+        return this.request(path, "PATCH", body, service);
     }
 
-    put(path, body=null) {
-        return this.request(path, "PUT", body);
+    put(path, body=null, service="user") {
+        return this.request(path, "PUT", body, service);
     }
 
-    delete(path, body) {
-        return this.request(path, "DELETE", body);
+    delete(path, body, service="user") {
+        return this.request(path, "DELETE", body, service);
     }
 
     onUnexpectedHttpStatus(status) {
