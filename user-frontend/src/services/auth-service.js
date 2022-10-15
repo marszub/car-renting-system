@@ -4,7 +4,7 @@ import { HTTP_NO_CONTENT, HTTP_OK, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED, isServer
 import { tokenStorage } from "./token-storage";
 import { userIdStorage } from "./userId-storage";
 
-const onResponse = (res) => {
+const onResponse = (res, service) => {
         if (res.status == HTTP_NO_CONTENT) {
             return new ShortResponse(res.status, res.body);
         }else if (res.status == HTTP_BAD_REQUEST) {
