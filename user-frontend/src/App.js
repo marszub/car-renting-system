@@ -10,15 +10,27 @@ import { Rental } from "./components/Rental";
 import Navbar from "./components/Navbar"
 import AddCarCategory from "./components/Admin/AddCarCategory"
 import AdminCarCategories from "./components/Admin/AdminCarCategories"
+import AdminNavbar from "./components/Admin/AdminNavbar";
+import AdminSignInForm from "./components/Admin/AdminSignInForm";
+import AdminLoginCheck from "./components/Admin/AdminLoginCheck";
 
 function App() {
   return (
     <Router>
-      <Navbar/>
+      <Routes>
+          <Route path='/admin' element={ <AdminLoginCheck/> } />
+          <Route path='/admin/*' element={ <AdminLoginCheck/> } />
+      </Routes>
+      <Routes>
+          <Route path='/admin/*' element={ <AdminNavbar /> } />
+          <Route path='*' element={ <Navbar /> } />
+      </Routes>
       <Routes>
           <Route path='/' element={ <MainPage /> } />
+          <Route path='/admin' element={ <MainPage /> } />
           <Route path='/sign-up' element={ <SignUpForm /> } />
           <Route path='/sign-in' element={ <SignInForm /> } />
+          <Route path='/admin/sign-in' element={ <AdminSignInForm /> } />
           <Route path='/rental' element={ <Rental /> } />
           <Route path="admin/cars" element={ <AdminCars/>} />
           <Route path="admin/cars/new" element={ <AddCar/>} />
