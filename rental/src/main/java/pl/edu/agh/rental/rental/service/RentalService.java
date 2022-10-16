@@ -52,17 +52,19 @@ public class RentalService {
             "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";
 
     public RentalService(@Value("${blockchain.address}") final String blockchainAddress) {
-        this.web3client =
+        web3client =
                 Web3j.build(new HttpService(blockchainAddress));
 
-        this.gasProvider =
+        gasProvider =
                 new StaticGasProvider(BigInteger.valueOf(2000000000), BigInteger.valueOf(6721975));//constant values
 
-        this.credentials =
+        credentials =
                 Credentials.create(ADMIN_PRIVATE_KEY);//choosing the account by its private key
 
-        this.adminRentalService =
+        adminRentalService =
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
+
+        carDb = new CarDb();
     }
 
     public RentalData createRental(final int carId, final User user) throws NoCarError, ActiveRentalError {

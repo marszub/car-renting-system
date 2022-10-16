@@ -17,7 +17,7 @@ public class CarDatabaseApplicationMain {
         SpringApplication.run(CarDatabaseApplicationMain.class, args);
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+    @Bean
     ApplicationRunner applicationRunner(Environment environment) {
         return args -> {
             try
@@ -28,8 +28,7 @@ public class CarDatabaseApplicationMain {
                 adapter.addServantLocator(new CarLocator(), "car");
 
                 adapter.activate();
-
-                communicator.waitForShutdown();
+                //communicator.waitForShutdown();
             }
             catch (Exception e)
             {
