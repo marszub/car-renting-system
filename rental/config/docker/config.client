@@ -4,6 +4,7 @@
 #
 
 Account.Proxy=tcp -h host.docker.internal -p 5012 -z : udp -h host.docker.internal -p 5012 -z
+Car.Proxy=tcp -h host.docker.internal -p 5032 -z : udp -h host.docker.internal -p 5032 -z
 
 #
 # Warn about connection exceptions.
