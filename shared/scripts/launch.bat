@@ -20,32 +20,38 @@ IF "%1"=="-h" (
 
 for %%I IN (%*) DO (IF "%%I"=="-a" GOTO AUTH)
 for %%I IN (%*) DO (IF "%%I"=="-auth" GOTO AUTH)
+powershell write-host -fore Green Launching auth
 call shared/scripts/auth.bat
 :AUTH
 
 for %%I IN (%*) DO (IF "%%I"=="-b" GOTO BLOCKCHAIN)
 for %%I IN (%*) DO (IF "%%I"=="-blockchain" GOTO BLOCKCHAIN)
+powershell write-host -fore Green Launching blockchain
 call shared/scripts/blockchain.bat
 :BLOCKCHAIN
 
 for %%I IN (%*) DO (IF "%%I"=="-c" GOTO CARDB)
 for %%I IN (%*) DO (IF "%%I"=="-cars" GOTO CARDB)
 for %%I IN (%*) DO (IF "%%I"=="-cardb" GOTO CARDB)
+powershell write-host -fore Green Launching cardb
 call shared/scripts/cardb.bat
 :CARDB
 
 for %%I IN (%*) DO (IF "%%I"=="-f" GOTO FRONT)
 for %%I IN (%*) DO (IF "%%I"=="-front" GOTO FRONT)
 for %%I IN (%*) DO (IF "%%I"=="-frontend" GOTO FRONT)
+powershell write-host -fore Green Launching frontend
 call shared/scripts/front.bat
 :FRONT
 
 for %%I IN (%*) DO (IF "%%I"=="-r" GOTO RENTAL)
 for %%I IN (%*) DO (IF "%%I"=="-rental" GOTO RENTAL)
+powershell write-host -fore Green Launching rental
 call shared/scripts/rental.bat
 :RENTAL
 
 for %%I IN (%*) DO (IF "%%I"=="-t" GOTO TARRIF)
 for %%I IN (%*) DO (IF "%%I"=="-tarrif" GOTO TARRIF)
+powershell write-host -fore Green Launching tarrif
 call shared/scripts/tarrif.bat
 :TARRIF
