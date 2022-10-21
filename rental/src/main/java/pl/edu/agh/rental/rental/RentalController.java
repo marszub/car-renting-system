@@ -29,7 +29,7 @@ public class RentalController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public RentalData createRental(@Valid @RequestBody final RentalCreateInput data, @CurrentUser final User user) throws NoCarError, ActiveRentalError {
-        return reservationService.createRental(data, user);
+        return reservationService.createRental(data.carId(), user);
     }
 
     @PutMapping("/{id}")
