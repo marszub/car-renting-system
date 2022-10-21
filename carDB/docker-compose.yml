@@ -3,6 +3,7 @@ services:
         image: cars:dev
         ports:
             - "5030:5030"
+            - "5032:5032"
         volumes:
             - ./config/docker:/config
         depends_on:
