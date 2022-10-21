@@ -2,8 +2,8 @@ export const coordinatesValidators = {
 
     validateLatitude(latitude) {
         var value = parseFloat(latitude);
-        if(isNaN(value) || value < -90 || value > 90) {
-            return "Inserted value must be a float in range [-90, 90]";
+        if(isNaN(value) || value < -85 || value > 85) {
+            return "Inserted value must be a float in range [-85, 85]";
         }
         return "";
     },
