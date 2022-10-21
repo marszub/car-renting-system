@@ -42,7 +42,6 @@ public class TarrifService {
             throw new RuntimeException(e);
         }
         return pricing;
-        //TODO add to car DB the car types
     }
     //TODO add to rental microservice counting, how much it costs
 }

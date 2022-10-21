@@ -62,6 +62,8 @@ public class RentalService {
         try {
             //send request synchronously, it throws error if it reverts
             System.out.println(input.carId());
+            System.out.print(input.carTypeId());
+            System.out.print(input);
             TransactionReceipt reservationReceipt = adminRentalService.
                     startRental(BigInteger.valueOf(timestamp.getTime()),
                             BigInteger.valueOf(input.carId()),

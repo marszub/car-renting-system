@@ -42,13 +42,14 @@ export default function AdminCarCategoriesTable(props) {
                     <th>
                         Name
                     </th>
-                    <th>
-                        <Button onClick={() => navigate("/admin/carCategories/new")}>Add Car Category</Button>
-                    </th>
+                    <th/>
                 </tr>
             </thead>
             <tbody>
                 {listCarCategories(props.carCategories.carCategories)}
+                <tr>
+                    <Button onClick={() => navigate("/admin/carCategories/new")}>Add Car Category</Button>
+                </tr>
             </tbody>
         </table>
     )
