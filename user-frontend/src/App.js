@@ -6,7 +6,7 @@ import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
 import AdminCars from "./components/Admin/AdminCars";
 import AddCar from "./components/Admin/AddCar";
-import { Rental } from "./components/Rental";
+import Rental from "./components/Rental";
 import Navbar from "./components/Navbar"
 import AddCarCategory from "./components/Admin/AddCarCategory"
 import AdminCarCategories from "./components/Admin/AdminCarCategories"
@@ -20,6 +20,7 @@ function App() {
       <Routes>
           <Route path='/admin' element={ <AdminLoginCheck/> } />
           <Route path='/admin/*' element={ <AdminLoginCheck/> } />
+          <Route path="*" element={null}/>
       </Routes>
       <Routes>
           <Route path='/admin/*' element={ <AdminNavbar /> } />

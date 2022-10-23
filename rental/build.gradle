@@ -30,6 +30,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'com.zeroc:ice:3.7.7'
     implementation 'com.zeroc:icestorm:3.7.7'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.3'
     implementation group: 'org.web3j', name: 'core', version: '4.8.7'
     implementation group: 'org.web3j', name: 'codegen', version: '4.8.7'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'

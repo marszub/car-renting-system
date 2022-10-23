@@ -5,6 +5,7 @@ import { createTheme} from "@mui/material";
 import { Box } from "@mui/material";
 import { Button } from "@mui/material";
 import { CarDBService } from "../../services/carDB-service";
+import { TarrifService } from "../../services/tarrif-service";
 import { useNavigate } from "react-router-dom";
 import { HTTP_CREATED, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../../utils/http-status";
 
@@ -13,16 +14,37 @@ const theme = createTheme()
 export default function AddCarCategory() {
     const navigate = useNavigate();
     const service = new CarDBService();
+    const tarrifService = new TarrifService();
 
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
+        const tarrifData = {"price": formData.get("tarrif")};
 
         service.createCarCategory({"categoryName": formData.get("carCategoryName")}).then( res => {
             switch (res.status) {
                 case HTTP_CREATED:
                     console.log("carCategory created");
-                    navigate("/admin/carCategories")
+                    console.log(res.body)
+                    tarrifData["carType"] = res.body.id
+                    tarrifService.addPricing(tarrifData).then(res => {
+                        switch(res.status) {
+                            case HTTP_CREATED:
+                                console.log("Tarrif created");
+                                navigate("/admin/carCategories")
+                            case HTTP_UNAUTHORIZED:
+                                console.log("Wrong login or password");
+                                break;
+                            case HTTP_BAD_REQUEST:
+                                console.log("Bad request");
+                                navigate("/error");
+                                break;
+                            default:
+                                console.log("Internal server error");
+                                navigate("/error");
+                                break;
+                                    }
+                    })
                     break;
                 case HTTP_UNAUTHORIZED:
                     console.log("Wrong login or password");
@@ -62,6 +84,15 @@ export default function AddCarCategory() {
                             fullWidth 
                             label="carCategoryName" 
                             id="carCategoryName"/>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            autoComplete="off" 
+                            name="tarrif" 
+                            required 
+                            fullWidth 
+                            label="tarrif" 
+                            id="tarrif"/>
                     </Grid>
                     <Grid item xs={12}>
                         <Button fullWidth type="submit" variant="contained">

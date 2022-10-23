@@ -11,7 +11,7 @@ import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 
 import pl.edu.agh.tarrif.tarrif.dto.PricingRecord;
-import pl.edu.agh.tarrif.tarrifContract.Tarrif;
+import pl.edu.agh.tarrif.tarrifContract.TarrifContract;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -25,7 +25,7 @@ public class TarrifBlockchainProxy {
     private Web3j web3client;//connection with blockchain
     private ContractGasProvider gasProvider;//data about the costs in blockchain
     private Credentials credentials;//admin Credentials in blockchain
-    private Tarrif adminTarrifService;
+    private TarrifContract adminTarrifService;
 
     public TarrifBlockchainProxy(@Value("${blockchain.address}") final String blockchainAddress) {
         this.web3client =
@@ -38,7 +38,7 @@ public class TarrifBlockchainProxy {
                 Credentials.create(ADMIN_PRIVATE_KEY);//choosing the account by its private key
 
         this.adminTarrifService =
-                Tarrif.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
+                TarrifContract.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
     }
 
     public TransactionReceipt addEntry(PricingRecord record) throws Exception{
@@ -46,7 +46,7 @@ public class TarrifBlockchainProxy {
     }
 
     public Tuple3<List<BigInteger>, List<BigInteger>, List<BigInteger>> getPricing() throws Exception{
-        return adminTarrifService.getPricing().send();
+        return adminTarrifService.getFullPricing().send();
     }
 
 
