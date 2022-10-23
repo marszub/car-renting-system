@@ -1,4 +1,6 @@
 const Tarrif = artifacts.require("TarrifContract");
+const chai = require('chai')
+const chaiAsPromised = require('chai-as-promised');
 
 contract("TarrifContract", accounts => {
   const creatorAddress = accounts[0];
@@ -13,9 +15,15 @@ contract("TarrifContract", accounts => {
     assert.notEqual(creatorAddress, undefined);
   });
 
+  it('should return empty pricing', async()=>{
+    const result = await  this.tarrifTest.getFullPricing();
+    console.log(result)
+    assert.equal(1,1)
+  });
+
   it('should add one pricing and return it', async()=>{
     await this.tarrifTest.addEntry(1, 10);
-    const result = await  this.tarrifTest.getPricing();
+    const result = await  this.tarrifTest.getFullPricing();
 
     assert.equal(result[0][0], 1);
     assert.equal(result[1][0], 10);
@@ -25,7 +33,7 @@ contract("TarrifContract", accounts => {
    //entry (1,10) from previous test
     await this.tarrifTest.addEntry(2, 20);
     await this.tarrifTest.addEntry(3, 30);
-    const result = await this.tarrifTest.getPricing();
+    const result = await this.tarrifTest.getFullPricing();
 
     assert.equal(result[0][0], 1);
     assert.equal(result[1][0], 10);
