@@ -25,6 +25,7 @@ COPY --from=build /home/gradle/carDB/build/libs/*.jar /app/app.jar
 WORKDIR /app
 
 EXPOSE 5030
+EXPOSE 5032
 VOLUME /config
 
 ENTRYPOINT [ "java", "-jar", "/app/app.jar" ]
