@@ -1,17 +1,16 @@
 #
-# The client reads this property to create the reference to the
-# "hello" object in the server.
+# The server creates one single object adapter with the name
+# "Hello". The following line sets the endpoints for this
+# adapter.
 #
+Adapter.Endpoints=tcp -h localhost -p 5032 -z -t 5032 : udp -h localhost -p 5032 -z
 
-Account.Proxy=tcp -h host.docker.internal -p 5012 -z : udp -h host.docker.internal -p 5012 -z
-Car.Proxy=tcp -h host.docker.internal -p 5032 -z : udp -h host.docker.internal -p 5032 -z
+Adapter.ThreadPool.Size=1
 
 #
-# Warn about connection exceptions.
+# Warn about connection exceptions
 #
 Ice.Warn.Connections=1
-
-Ice.ACM.Timeout=10
 
 #
 # Network Tracing
@@ -21,7 +20,7 @@ Ice.ACM.Timeout=10
 # 2 = like 1, but more detailed
 # 3 = like 2, but also trace data transfer
 #
-#Ice.Trace.Network=2
+Ice.Trace.Network=1
 
 #
 # Protocol Tracing
@@ -44,5 +43,5 @@ Ice.ACM.Timeout=10
 #
 #Ice.Plugin.IceSSL=IceSSL.PluginFactory
 #IceSSL.DefaultDir=certs
-#IceSSL.Keystore=client.jks
+#IceSSL.Keystore=server.jks
 #IceSSL.Password=password

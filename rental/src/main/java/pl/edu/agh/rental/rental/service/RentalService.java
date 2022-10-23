@@ -1,6 +1,13 @@
 package pl.edu.agh.rental.rental.service;
 
+import Auth.AccessData;
+import Auth.AccountPrx;
+import Auth.Role;
+import Auth.TokenVerificationStatus;
+import com.zeroc.Ice.ObjectPrx;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import pl.edu.agh.rental.auth.User;
@@ -8,7 +15,6 @@ import pl.edu.agh.rental.errors.ActiveRentalError;
 import pl.edu.agh.rental.errors.NoCarError;
 import pl.edu.agh.rental.errors.NoRentalError;
 import pl.edu.agh.rental.errors.UserUnauthorizedError;
-import pl.edu.agh.rental.rental.dto.RentalCreateInput;
 import pl.edu.agh.rental.rental.dto.RentalData;
 
 import java.sql.Timestamp;
@@ -25,6 +31,7 @@ import java.time.Instant;
 import pl.edu.agh.rental.rentalContract.Rental;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -35,6 +42,8 @@ public class RentalService {
     private Credentials credentials;//admin Credentials in blockchain
     private Rental adminRentalService;
 
+    private CarDb carDb;
+
     private static final String CONTRACT_ADDRESS =
             "0xee3e92973010664a804bf96188ac4766fb84a3b9";//TODO - change to config
     private static final String ADMIN_PRIVATE_KEY =
@@ -43,31 +52,38 @@ public class RentalService {
             "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";
 
     public RentalService(@Value("${blockchain.address}") final String blockchainAddress) {
-        this.web3client =
+        web3client =
                 Web3j.build(new HttpService(blockchainAddress));
 
-        this.gasProvider =
+        gasProvider =
                 new StaticGasProvider(BigInteger.valueOf(2000000000), BigInteger.valueOf(6721975));//constant values
 
-        this.credentials =
+        credentials =
                 Credentials.create(ADMIN_PRIVATE_KEY);//choosing the account by its private key
 
-        this.adminRentalService =
+        adminRentalService =
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
+
+        carDb = new CarDb();
     }
 
-    public RentalData createRental(final RentalCreateInput input, final User user) throws NoCarError, ActiveRentalError {
+    public RentalData createRental(final int carId, final User user) throws NoCarError, ActiveRentalError {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         int reservationID;
         try {
             //send request synchronously, it throws error if it reverts
+            
             System.out.println(input.carId());
             System.out.print(input.carTypeId());
             System.out.print(input);
+            
+            System.out.println(carId);
+            int categoryId = carDb.getCarCategory(carId);
+            
             TransactionReceipt reservationReceipt = adminRentalService.
                     startRental(BigInteger.valueOf(timestamp.getTime()),
-                            BigInteger.valueOf(input.carId()),
-                            BigInteger.valueOf(user.id()), TARRIF_CONTRACT_ADDRESS,BigInteger.valueOf(input.carTypeId())).send();
+                            BigInteger.valueOf(carId),
+                            BigInteger.valueOf(user.id()), TARRIF_CONTRACT_ADDRESS,BigInteger.valueOf(categoryId)).send();
 
             //get event from transaction ("emit" in solidity)
             reservationID = adminRentalService.getAddedNewRentalIDEvents(reservationReceipt).get(0).reservationID.intValue();
@@ -85,7 +101,7 @@ public class RentalService {
             //possibly solved with string.contains()
         }
 
-        return new RentalData(reservationID, input.carId(), timestamp.getTime());
+        return new RentalData(reservationID, carId, timestamp.getTime());
     }
 
     public void endRental(final Integer rentalId, final User user) throws UserUnauthorizedError {
