@@ -17,8 +17,9 @@ contract("TarrifContract", accounts => {
 
   it('should return empty pricing', async()=>{
     const result = await  this.tarrifTest.getFullPricing();
-    console.log(result)
-    assert.equal(1,1)
+    assert.equal(result[0].length,0);
+    assert.equal(result[1].length,0);
+    assert.equal(result[2].length,0);
   });
 
   it('should add one pricing and return it', async()=>{
