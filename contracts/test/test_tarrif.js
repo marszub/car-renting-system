@@ -45,4 +45,20 @@ contract("TarrifContract", accounts => {
     assert.equal(result[0][2], 3);
     assert.equal(result[1][2], 30);
   });
+
+  it('should edit previously added pricing', async()=>{
+    //entry (1,10) from previous test
+    const result = await this.tarrifTest.getFullPricing();
+
+    assert.equal(result[0][0], 1);
+    assert.equal(result[1][0], 10);
+    
+    await this.tarrifTest.editEntry(1,13);
+
+    const result2 = await this.tarrifTest.getFullPricing();
+
+    assert.equal(result2[0][0], 1);
+    assert.equal(result2[1][0], 13);
+
+  })
 });
