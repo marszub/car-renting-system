@@ -2,6 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PageNotFound from "./components/PageNotFound";
 import MainPage from "./components/MainPage";
+import Tarrif from "./components/Tarrif";
 import SignUpForm from "./components/SignUpForm";
 import SignInForm from "./components/SignInForm";
 import AdminCars from "./components/Admin/AdminCars";
@@ -31,12 +32,13 @@ function App() {
           <Route path='/admin' element={ <MainPage /> } />
           <Route path='/sign-up' element={ <SignUpForm /> } />
           <Route path='/sign-in' element={ <SignInForm /> } />
-          <Route path='/admin/sign-in' element={ <AdminSignInForm /> } />
           <Route path='/rental' element={ <Rental /> } />
-          <Route path="admin/cars" element={ <AdminCars/>} />
-          <Route path="admin/cars/new" element={ <AddCar/>} />
-          <Route path="admin/carCategories/new" element={ <AddCarCategory/>} />
-          <Route path="admin/carCategories" element={ <AdminCarCategories/>} />
+          <Route path='/tarrif' element={ <Tarrif/> }/>
+          <Route path='/admin/sign-in' element={ <AdminSignInForm /> } />
+          <Route path="/admin/cars" element={ <AdminCars/>} />
+          <Route path="/admin/cars/new" element={ <AddCar/>} />
+          <Route path="/admin/carCategories/new" element={ <AddCarCategory/>} />
+          <Route path="/admin/carCategories" element={ <AdminCarCategories/>} />
           <Route path='*' element={ <PageNotFound /> } />
       </Routes>
     </Router>

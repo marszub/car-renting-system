@@ -16,7 +16,6 @@ export default function AdminCarsTable(props) {
     const forceUpdate = React.useCallback(() => updateState({}), []);
     const [latitudeErrorMessage, setLatitudeErrorMessage] = useState("");
     const [longitudeErrorMessage, setLongitudeErrorMessage] = useState("");
-    const [isModalOpen, setModalOpen] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -45,7 +44,6 @@ export default function AdminCarsTable(props) {
                 case HTTP_NO_CONTENT:
                     console.log("Coordinates successfully changed!");
                     var data = props.cars;
-                    setModalOpen(false);
                     for(var i = 0; i < data.cars.length; i++) {
                         if(data.cars[i].id == carIdInt) {
                             data.cars[i].coordinates = coordinates;
@@ -75,6 +73,56 @@ export default function AdminCarsTable(props) {
     const listCars = (data) => {
         var list = [];
         for(var i = 0; i < data.length; i++) {
+            var popup = null
+            popup = 
+                <Popup trigger={<Button><AddLocationAltIcon/></Button>}
+                    modal={true} onClose={resetErrors} lockScroll={true}
+                    contentStyle={{width: "40%", textAlign:"center", borderRadius: "20px"}}>
+                        <Typography component="h5" variant="h5">
+                            Change car's "{data[i].carName}" coordinates
+                        </Typography>
+                        <Box component="form"
+                            onSubmit={handleSubmit} 
+                            sx={{
+                                textAlign: "center",
+                                marginTop: 1 
+                            }}
+                        >
+                            <input type="hidden" id="ID" value={data[i].id} name = "ID"/>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        autoComplete="off" 
+                                        autoFocus 
+                                        defaultValue={data[i].coordinates.latitude}
+                                        name="Latitude" 
+                                        required 
+                                        label="Latitude" 
+                                        error={latitudeErrorMessage != ""}
+                                        helperText={latitudeErrorMessage}
+                                        id="Latitude"/>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        autoComplete="off" 
+                                        autoFocus 
+                                        name="Longitude" 
+                                        defaultValue={data[i].coordinates.longitude}
+                                        required 
+                                        type="Longitude"
+                                        label="Longitude" 
+                                        error={longitudeErrorMessage != ""}
+                                        helperText={longitudeErrorMessage}
+                                        id="Longitude"/>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button type="submit" variant="contained">
+                                        Submit
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                </Popup>
             list.push(
                 <tr key = {data[i].id}>
                     <th>
@@ -93,54 +141,7 @@ export default function AdminCarsTable(props) {
                         {data[i].coordinates.longitude}
                     </th>
                     <th>
-                        <Popup trigger={<Button><AddLocationAltIcon/></Button>}
-                            modal={true} onClose={resetErrors} lockScroll={true} open={isModalOpen}
-                            contentStyle={{width: "40%", textAlign:"center", borderRadius: "20px"}}>
-                                <Typography component="h5" variant="h5">
-                                    Change car's "{data[i].carName}" coordinates
-                                </Typography>
-                                <Box component="form"
-                                    onSubmit={handleSubmit} 
-                                    sx={{
-                                        textAlign: "center",
-                                        marginTop: 1 
-                                    }}
-                                >
-                                    <input type="hidden" id="ID" value={data[i].id} name = "ID"/>
-                                    <Grid container spacing={3}>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                autoComplete="off" 
-                                                autoFocus 
-                                                defaultValue={data[i].coordinates.latitude}
-                                                name="Latitude" 
-                                                required 
-                                                label="Latitude" 
-                                                error={latitudeErrorMessage != ""}
-                                                helperText={latitudeErrorMessage}
-                                                id="Latitude"/>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <TextField
-                                                autoComplete="off" 
-                                                autoFocus 
-                                                name="Longitude" 
-                                                defaultValue={data[i].coordinates.longitude}
-                                                required 
-                                                type="Longitude"
-                                                label="Longitude" 
-                                                error={longitudeErrorMessage != ""}
-                                                helperText={longitudeErrorMessage}
-                                                id="Longitude"/>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <Button type="submit" variant="contained">
-                                                Submit
-                                            </Button>
-                                        </Grid>
-                                    </Grid>
-                                </Box>
-                        </Popup>
+                        {popup}
                     </th>
                 </tr>
             )
@@ -176,12 +177,17 @@ export default function AdminCarsTable(props) {
                         Car longitude
                     </th>
                     <th>
-                        <Button onClick={() => navigate("/admin/cars/new")}>Add Car</Button>
+                        Edit
                     </th>
                 </tr>
             </thead>
             <tbody>
                 {listCars(props.cars.cars)}
+                <tr>
+                    <th colSpan={6} style={{textAlign: "center"}}>
+                        <Button onClick={() => navigate("/admin/cars/new")}>Add Car</Button>
+                    </th>
+                </tr>
             </tbody>
         </table>
     )

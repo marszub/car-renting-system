@@ -5,14 +5,13 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 import org.web3j.tuples.generated.Tuple3;
 import pl.edu.agh.tarrif.blockchain.TarrifBlockchainProxy;
 import pl.edu.agh.tarrif.tarrif.dto.PricingRecord;
+import pl.edu.agh.tarrif.tarrif.dto.PricingRecordsList;
 import pl.edu.agh.tarrif.tarrif.service.TarrifService;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -36,8 +35,8 @@ public class TarrifServiceTest {
     private final List<BigInteger> intList1 = Lists.newArrayList(intArray);
     private final List<BigInteger> intList2 = Lists.newArrayList(intArray);
     private final List<BigInteger> intList3 = Lists.newArrayList(intArray);
+
     @Test
-    @Transactional
     public void testAddPricing() throws Exception {
         when(tarrifBlockchainProxy.addEntry(any())).thenReturn(null);
         this.tarrifService = new TarrifService(tarrifBlockchainProxy);
@@ -50,16 +49,15 @@ public class TarrifServiceTest {
     }
 
     @Test
-    @Transactional
     public void testGetPricing() throws Exception {
         when(tarrifBlockchainProxy.getPricing()).thenReturn(new Tuple3<>(intList1, intList2, intList3));
         this.tarrifService = new TarrifService(tarrifBlockchainProxy);
         try{
-            ArrayList<PricingRecord> result = tarrifService.getPricing();
-            assertThat(result.get(0).carType()).isEqualTo(0);
-            assertThat(result.get(0).price()).isEqualTo(0);
-            assertThat(result.get(1).carType()).isEqualTo(1);
-            assertThat(result.get(1).price()).isEqualTo(1);
+            PricingRecordsList result = tarrifService.getPricing();
+            assertThat(result.tarrifs().get(0).carType()).isEqualTo(0);
+            assertThat(result.tarrifs().get(0).price()).isEqualTo(0);
+            assertThat(result.tarrifs().get(1).carType()).isEqualTo(1);
+            assertThat(result.tarrifs().get(1).price()).isEqualTo(1);
         }catch(Exception e)
         {
             e.printStackTrace();

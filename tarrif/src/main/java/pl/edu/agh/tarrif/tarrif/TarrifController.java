@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.tarrif.auth.CurrentUser;
 import pl.edu.agh.tarrif.auth.User;
 import pl.edu.agh.tarrif.tarrif.dto.PricingRecord;
+import pl.edu.agh.tarrif.tarrif.dto.PricingRecordsList;
 import pl.edu.agh.tarrif.tarrif.service.TarrifService;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class TarrifController {
 
     @GetMapping("/admin/pricing")
     @ResponseStatus(HttpStatus.OK)
-    public ArrayList<PricingRecord> getPricing(){
+    public PricingRecordsList getPricing(){
         return tarrifService.getPricing();
     }
 

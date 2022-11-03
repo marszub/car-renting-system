@@ -41,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and().authorizeRequests().antMatchers("/api/admin/*").authenticated()
                 .antMatchers("/api/cars").permitAll()
+                .antMatchers("/api/carCategories").permitAll()
                 .anyRequest().permitAll();
     }
 

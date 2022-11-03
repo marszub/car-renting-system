@@ -5,13 +5,16 @@ import { createTheme} from "@mui/material";
 import { Box } from "@mui/material";
 import { Button } from "@mui/material";
 import { CarDBService } from "../../services/carDB-service";
+import { useState } from "react";
 import { TarrifService } from "../../services/tarrif-service";
 import { useNavigate } from "react-router-dom";
 import { HTTP_CREATED, HTTP_BAD_REQUEST, HTTP_UNAUTHORIZED } from "../../utils/http-status";
+import { tarrifValidators } from "../../validators/tarrif-validators";
 
 const theme = createTheme()
 
 export default function AddCarCategory() {
+    const [tarrifErrorMessage, setTarrifErrorMessage] = useState("");
     const navigate = useNavigate();
     const service = new CarDBService();
     const tarrifService = new TarrifService();
@@ -19,7 +22,13 @@ export default function AddCarCategory() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
-        const tarrifData = {"price": formData.get("tarrif")};
+        const tarrifData = {"price": parseInt(formData.get("tarrif")*100)};
+        var tarrifError = tarrifValidators.validateTarrif(tarrifData.price);
+        setTarrifErrorMessage(tarrifError);
+
+        if(tarrifError) {
+            return;
+        }
 
         service.createCarCategory({"categoryName": formData.get("carCategoryName")}).then( res => {
             switch (res.status) {
@@ -43,7 +52,7 @@ export default function AddCarCategory() {
                                 console.log("Internal server error");
                                 navigate("/error");
                                 break;
-                                    }
+                        }
                     })
                     break;
                 case HTTP_UNAUTHORIZED:
@@ -87,11 +96,13 @@ export default function AddCarCategory() {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField
-                            autoComplete="off" 
-                            name="tarrif" 
-                            required 
-                            fullWidth 
-                            label="tarrif" 
+                            autoComplete="off"
+                            name="tarrif"
+                            required
+                            fullWidth
+                            error={tarrifErrorMessage != ""}
+                            helperText={tarrifErrorMessage}
+                            label="tarrif"
                             id="tarrif"/>
                     </Grid>
                     <Grid item xs={12}>

@@ -73,22 +73,34 @@ export default function Navbar() {
               <Link to="/" style={{textDecoration: 'none', color: 'inherit'}}>CarSharingAGH</Link>
           </Typography>
           { tokenStorage.accessToken ?
-          (
-            <Typography
-              variant="h6"
-              noWrap
-              sx={{
-                mr:2,
-                flexGrow: 1,
-                textDecoration: 'none',
-                color: 'inherit',
-                userSelect: 'none'
-              }}
-            >
-                <Link to="/rental" style={{textDecoration: 'none', color: 'inherit'}}>Rent</Link>
-            </Typography>
-          ) : <div style={{flexGrow: 1}}></div>
+            (
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  mr:2,
+                  textDecoration: 'none',
+                  color: 'inherit',
+                  userSelect: 'none'
+                }}
+              >
+                  <Link to="/rental" style={{textDecoration: 'none', color: 'inherit'}}>Rent</Link>
+              </Typography>
+            ) : <div/>
           }
+          <Typography
+            variant="h6"
+            noWrap
+            sx={{
+              mr:2,
+              textDecoration: 'none',
+              color: 'inherit',
+              userSelect: 'none'
+            }}
+          >
+              <Link to="/tarrif" style={{textDecoration: 'none', color: 'inherit'}}>Tarrifs</Link>
+          </Typography>
+          <div style={{flexGrow: 1}}></div>
           { tokenStorage.accessToken ?
               (
                 <Box>

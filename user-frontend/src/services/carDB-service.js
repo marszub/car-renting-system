@@ -26,6 +26,10 @@ export class CarDBService extends HttpService {
         return super.get("/admin/carCategories", "", null, "admin");
     }
 
+    carCategoriesListUser() {
+        return super.get("/carCategories", "", null);
+    }
+
     updateCarLocation(body, carId) {
         return super.patch("/admin/cars/" + carId, body, "admin");
     }
