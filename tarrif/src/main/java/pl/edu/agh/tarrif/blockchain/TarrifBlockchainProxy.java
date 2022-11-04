@@ -42,6 +42,7 @@ public class TarrifBlockchainProxy {
     }
 
     public TransactionReceipt addEntry(PricingRecord record) throws Exception{
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAADDING");
         return adminTarrifService.addEntry(BigInteger.valueOf(record.carType()), BigInteger.valueOf(record.price())).send();
     }
 

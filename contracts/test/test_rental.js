@@ -112,4 +112,15 @@ contract("Rental", accounts => {
       
       await this.rentalTest.endRental(returned_id, 110);
     });
+
+    it("should get historical rental", async() =>{
+      const emit_event = await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address, 1);
+      const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
+
+      await this.rentalTest.endRental(returned_id, 110);
+
+      const result = await this.rentalTest.getRecordHistory(returned_id);
+
+      assert.equal(result.carID, 1);
+    })
 });

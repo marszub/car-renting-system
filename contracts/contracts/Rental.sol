@@ -37,7 +37,6 @@ contract Rental {
 
     event addedNewRentalID(uint256 reservationID);
 
-
     function addCar(uint256 _carID) public{
         checkAdminPermission();
 
@@ -67,6 +66,18 @@ contract Rental {
         return (carIDs, carStatuses);
     }
 
+    function getRecordHistory(uint256 _rentalID) public view returns(RentalRecord memory){
+        checkAdminPermission();
+        if(_rentalID > rentalHistory.length){
+            revert("The rental with this ID does not exist");
+        }
+        if(rentalHistory[_rentalID].endRentTime == 0){
+            revert("The rental with this ID has not yet ended");
+        }
+
+        return rentalHistory[_rentalID];
+    }
+
    function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID, address _tarrifAddress, uint256 _carTypeID)
    public returns(uint256){
         if(!checkIfCarExists(_carID)){
@@ -92,7 +103,7 @@ contract Rental {
         });
 
         rentalHistory.push(record);
-        newCars[_carID].status = CarStatus.ACTIVE;
+        changeCarStatus(_carID, CarStatus.ACTIVE);
 
         emit addedNewRentalID(record.rentalID);//for return value in java TODO - add carID and user ID for the listener
 
@@ -112,8 +123,7 @@ contract Rental {
             revert("Car can not park");
         }
 
-
-        newCars[rentalHistory[rentalID].carID].status = CarStatus.PARKED;
+        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.PARKED);
         rentalHistory[rentalID].parkingHistoryStarts.push(_startParkingTime);
    }
 
@@ -131,7 +141,7 @@ contract Rental {
         }
 
 
-        newCars[rentalHistory[rentalID].carID].status = CarStatus.ACTIVE;
+        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.ACTIVE);
         rentalHistory[rentalID].parkingHistoryEnds.push(_endParkingTime);
    }
 
@@ -179,7 +189,12 @@ contract Rental {
    }
 
     function checkCarStatus(uint256 carID)public view returns(CarStatus){
-        return newCars[carID].status;
+        for(uint256 i = 0; i < newCars.length; i++){
+            if(newCars[i].carID == carID){
+                return newCars[i].status;
+            }
+        }
+        revert("Car does not exist!");
     }
 
    
@@ -197,7 +212,7 @@ contract Rental {
     }
 
     function checkIfCarRented(uint256 _carID) private view returns (bool){
-         for(uint256 i=rentalHistory.length; i>0; i--){
+         for(uint256 i = rentalHistory.length; i>0; i--){
             if(rentalHistory[i-1].carID == _carID){
                 if(rentalHistory[i-1].endRentTime != 0)
                 {
@@ -209,6 +224,16 @@ contract Rental {
         }
         return false;
     }
+
+    function changeCarStatus(uint256 _carID, CarStatus status) private{
+        for(uint256 i = 0; i < newCars.length; i++){
+            if(newCars[i].carID == _carID){
+                newCars[i].status = status;
+                return;
+            }
+        }
+        revert("Car does not exist!");
+   }
 
     function checkIfRentalStarted(uint256 rentalID) private view returns (bool){//possible public
         return (rentalID < rentalHistory.length);//maybe different method?
