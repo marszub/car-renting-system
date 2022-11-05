@@ -72,13 +72,10 @@ public class RentalService {
         int reservationID;
         try {
             //send request synchronously, it throws error if it reverts
-            
-            System.out.println(input.carId());
-            System.out.print(input.carTypeId());
-            System.out.print(input);
-            
             System.out.println(carId);
-            int categoryId = carDb.getCarCategory(carId);
+            int categoryId = 1;//carDb.getCarCategory(carId);
+            //IMO the carDb.getCategory does not work
+            System.out.println(categoryId);
             
             TransactionReceipt reservationReceipt = adminRentalService.
                     startRental(BigInteger.valueOf(timestamp.getTime()),
@@ -143,7 +140,7 @@ public class RentalService {
         //TODO - problem with revert() - reason as a part of message string
         //possibly solved with string.contains()
 
-        return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.rentTime.longValue());
+        return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.startRentTime.longValue());
     }
 
     public long getCurrentRentalTime(final User user) throws NoRentalError {
@@ -152,7 +149,7 @@ public class RentalService {
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return timestamp.getTime() - result.rentTime.longValue();
+            return timestamp.getTime() - result.startRentTime.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No active rental record")){
@@ -165,10 +162,10 @@ public class RentalService {
     }
 
     public long getRentalTime(final int rentalID) throws UserUnauthorizedError{
-        Rental.FullRecord result;
+        Rental.RentalRecord result;
         try {
             result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
-            return result.end.rentTime.longValue() - result.start.rentTime.longValue();
+            return result.endRentTime.longValue() - result.startRentTime.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No rental with that ID started")){
@@ -187,7 +184,7 @@ public class RentalService {
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return (timestamp.getTime() - result.rentTime.longValue()) * result.rentalPricing.longValue();
+            return (timestamp.getTime() - result.startRentTime.longValue()) * result.rentalPricing.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No active rental record")){
@@ -199,11 +196,11 @@ public class RentalService {
         }
     }
     public long getRentalCost(final int rentalID) throws UserUnauthorizedError{
-        Rental.FullRecord result;
+        Rental.RentalRecord result;
         try {
             result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
-            long time = result.end.rentTime.longValue() - result.start.rentTime.longValue();
-            return time * result.start.rentalPricing.longValue();
+            long time = result.endRentTime.longValue() - result.startRentTime.longValue();
+            return time * result.rentalPricing.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No rental with that ID started")){

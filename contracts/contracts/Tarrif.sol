@@ -41,6 +41,19 @@ contract TarrifContract is Tarrif{
       for(uint256 i = tarrifPricing.length; i>0; i--){
         if(tarrifPricing[i-1].carTypeID == _carTypeID && tarrifPricing[i-1].status == TarrifStatus.ACTIVE){
           tarrifPricing[i-1].status = TarrifStatus.ENDED;
+          return;
+        }
+      }
+      revert("No entry for that carTypeID");
+    }
+
+    function editEntry(uint256 _carTypeID, uint256 _pricePerMinute) public{
+      checkAdminPermission();
+
+      for(uint256 i = tarrifPricing.length; i>0; i--){
+        if(tarrifPricing[i-1].carTypeID == _carTypeID && tarrifPricing[i-1].status == TarrifStatus.ACTIVE){
+          tarrifPricing[i-1].pricePerMinute = _pricePerMinute;
+          return;
         }
       }
       revert("No entry for that carTypeID");

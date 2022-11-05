@@ -5,12 +5,13 @@ import "./Tarrif.sol";
 
 contract Rental {
     address private ADMIN_ADDRESS = msg.sender;//the address that put this contract here (though truffle it is the index 0 address)
-    uint256 private nextRentalID = 1;//increment after every rental transaction
 
-    enum RentalStatus{START, END}
-    
+    enum CarStatus{AVAILABLE, ACTIVE, PARKED, SERVICE}
+
     struct RentalRecord {
-        uint256 rentTime;//from microservice
+        uint256 startRentTime;//from microservice
+        uint256 endRentTime;//firs 0, hen from microservice
+
         uint256 carID;//from microservice
         uint256 userID;//from microservice
 
@@ -19,40 +20,63 @@ contract Rental {
 
         uint256 rentalPricing;//pricing at the time of starting rental
 
-        RentalStatus rentalState;// is this start or end of rental
+        uint256[] parkingHistoryStarts;//array of all parking start times
+        uint256[] parkingHistoryEnds;//array of all parking end times
+
     }
 
-    //used to get start record and end record at the same time
-    struct FullRecord {
-        RentalRecord start;
-        RentalRecord end;
+    struct Car {
+        uint256 carID;
+        CarStatus status;
     }
 
-    uint256[] private cars;
-
-    mapping(uint => uint) private rentalMappingStart; //the position in the history rental of the start rental
-    mapping(uint => uint) private rentalMappingEnd; //the position in the history rental of the end rental
+    Car[] private newCars;
+    uint256[] cars;//TODO remove after microservices start using the new one
    
     RentalRecord[] private rentalHistory;
 
     event addedNewRentalID(uint256 reservationID);
 
-
-   function addCar(uint256 _carID) public{
+    function addCar(uint256 _carID) public{
         checkAdminPermission();
 
         if(checkIfCarExists(_carID)){
             revert("Car already exists!");
         }
 
-        cars.push(_carID);
+        newCars.push(Car(_carID, CarStatus.AVAILABLE));
+        cars.push(_carID);//TODO remove
 
    }
 
-   function getCars()public view returns (uint256[] memory){
-    checkAdminPermission();
-    return cars;
-   }
+    //TODO remove 
+    function getCars()public view returns (uint256[] memory){
+        checkAdminPermission();
+        return cars;
+    }
+
+    function newGetCars() public view returns (uint256[] memory, CarStatus[] memory){
+        checkAdminPermission();
+        uint256[] memory carIDs = new uint256[](newCars.length);
+        CarStatus[] memory carStatuses = new CarStatus[](newCars.length);
+        for(uint256 i = 0; i < newCars.length; i++){
+            carIDs[i] = newCars[i].carID;
+            carStatuses[i] = newCars[i].status;
+        }
+        return (carIDs, carStatuses);
+    }
+
+    function getRecordHistory(uint256 _rentalID) public view returns(RentalRecord memory){
+        checkAdminPermission();
+        if(_rentalID > rentalHistory.length){
+            revert("The rental with this ID does not exist");
+        }
+        if(rentalHistory[_rentalID].endRentTime == 0){
+            revert("The rental with this ID has not yet ended");
+        }
+
+        return rentalHistory[_rentalID];
+    }
 
    function startRental(uint256 _rentTime, uint256 _carID, uint256 _userID, address _tarrifAddress, uint256 _carTypeID)
    public returns(uint256){
@@ -60,67 +84,87 @@ contract Rental {
             revert("Car does not exist!");
         }
 
+
         //memory - exists only in function call, temporary variable
         RentalRecord memory record = RentalRecord({
-            rentTime : _rentTime,
+            startRentTime : _rentTime,
+            endRentTime: 0,
             carID : _carID,
             userID : _userID,
 
             blockchainTime : block.timestamp,
-            rentalID : nextRentalID,
+            rentalID : rentalHistory.length,
             
             rentalPricing: Tarrif(_tarrifAddress).getCurrentCarPricing(_carTypeID), 
 
-            rentalState : RentalStatus.START
+           parkingHistoryStarts: new uint256[](0),
+           parkingHistoryEnds: new uint256[](0)
 
         });
 
         rentalHistory.push(record);
-
-        rentalMappingStart[nextRentalID] = rentalHistory.length;//for possible optimization
-        nextRentalID += 1;
+        changeCarStatus(_carID, CarStatus.ACTIVE);
 
         emit addedNewRentalID(record.rentalID);//for return value in java TODO - add carID and user ID for the listener
 
-        return record.rentalID;        
+        return record.rentalID;     
    }
 
-   function endRental(uint256 rentalID, uint256 _endRentTime) public{
-        if(!hasRentalStarted(rentalID)){
+   function startParking(uint256 rentalID, uint256 _startParkingTime) public{
+        if(!checkIfRentalStarted(rentalID)){
             revert("No rental with that ID started");
         }
 
-        if(hasRentalEnded(rentalID)){
+        if(checkIfRentalEnded(rentalID)){
             revert("Rental with that ID has already ended");
         }
 
-        RentalRecord memory record = rentalHistory[rentalMappingStart[rentalID]-1];
+        if(checkCarStatus(rentalHistory[rentalID].carID) != CarStatus.ACTIVE){
+            revert("Car can not park");
+        }
 
-        RentalRecord memory newRecord = RentalRecord({
-            rentTime : _endRentTime,
-            carID : record.carID,
-            userID : record.userID,
+        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.PARKED);
+        rentalHistory[rentalID].parkingHistoryStarts.push(_startParkingTime);
+   }
 
-            blockchainTime : block.timestamp,
-            rentalID : record.rentalID,
-            rentalPricing: record.rentalPricing,
+   function endParking(uint256 rentalID, uint256 _endParkingTime) public{
+        if(!checkIfRentalStarted(rentalID)){
+            revert("No rental with that ID started");
+        }
 
-            rentalState : RentalStatus.END
-        });
+        if(checkIfRentalEnded(rentalID)){
+            revert("Rental with that ID has already ended");
+        }
 
-        rentalHistory.push(newRecord);
+        if(checkCarStatus(rentalHistory[rentalID].carID) != CarStatus.PARKED){
+            revert("Car is not parked");
+        }
 
-          
 
-        rentalMappingEnd[record.rentalID] = rentalHistory.length;
+        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.ACTIVE);
+        rentalHistory[rentalID].parkingHistoryEnds.push(_endParkingTime);
+   }
+
+
+
+   function endRental(uint256 rentalID, uint256 _endRentTime) public{
+        if(!checkIfRentalStarted(rentalID)){
+            revert("No rental with that ID started");
+        }
+
+        if(checkIfRentalEnded(rentalID)){
+            revert("Rental with that ID has already ended");
+        }
+
+        
+        rentalHistory[rentalID].endRentTime = _endRentTime;
 
    }
 
-   function getActiveRental(uint256 _userID) public view returns(RentalRecord memory)
-   {
+   function getActiveRental(uint256 _userID) public view returns(RentalRecord memory){
         for(uint256 i=rentalHistory.length; i>0; i--){
             if(rentalHistory[i-1].userID == _userID){
-                if(rentalHistory[i-1].rentalState == RentalStatus.END)
+                if(rentalHistory[i-1].endRentTime != 0)
                 {
                     revert("No active rental record");
                 }else{
@@ -130,25 +174,8 @@ contract Rental {
         }
         revert("No active rental record");
    }
-  
-    function getRecordHistory(uint256 rentalID) public view returns(FullRecord memory)
-    {
-      if(!hasRentalStarted(rentalID)){
-        revert("No rental with that ID started");
-      }
 
-      if(!hasRentalEnded(rentalID)){
-        revert("Rental with that ID hasn't ended yet");
-      }
-      FullRecord memory result = FullRecord({
-        start: rentalHistory[rentalMappingStart[rentalID]],
-        end: rentalHistory[rentalMappingEnd[rentalID]]
-      });
-      return result;
-    }
-
-   function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory)
-   {
+   function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory){
         bool[] memory result = new bool[](cars.length);
         for(uint256 i=0; i<cars.length; i++){
             if(!checkIfCarRented(cars[i])){
@@ -161,13 +188,22 @@ contract Rental {
         return (cars,result);
    }
 
+    function checkCarStatus(uint256 carID)public view returns(CarStatus){
+        for(uint256 i = 0; i < newCars.length; i++){
+            if(newCars[i].carID == carID){
+                return newCars[i].status;
+            }
+        }
+        revert("Car does not exist!");
+    }
+
    
    //help functions
 
     function checkIfCarExists(uint256 carID) private view returns (bool){ //possible public
-        for(uint256 i = 0; i< cars.length; i++)
+        for(uint256 i = 0; i< newCars.length; i++)
         {
-            if(cars[i] == carID)
+            if(newCars[i].carID == carID)
             {
                 return true;
             }
@@ -176,9 +212,9 @@ contract Rental {
     }
 
     function checkIfCarRented(uint256 _carID) private view returns (bool){
-         for(uint256 i=rentalHistory.length; i>0; i--){
+         for(uint256 i = rentalHistory.length; i>0; i--){
             if(rentalHistory[i-1].carID == _carID){
-                if(rentalHistory[i-1].rentalState == RentalStatus.END)
+                if(rentalHistory[i-1].endRentTime != 0)
                 {
                     return false;
                 }else{
@@ -189,12 +225,22 @@ contract Rental {
         return false;
     }
 
-    function hasRentalStarted(uint256 rentalID) private view returns (bool){//possible public
-        return !(rentalMappingStart[rentalID]==0);//if it is 0 it means that it does not exist
+    function changeCarStatus(uint256 _carID, CarStatus status) private{
+        for(uint256 i = 0; i < newCars.length; i++){
+            if(newCars[i].carID == _carID){
+                newCars[i].status = status;
+                return;
+            }
+        }
+        revert("Car does not exist!");
+   }
+
+    function checkIfRentalStarted(uint256 rentalID) private view returns (bool){//possible public
+        return (rentalID < rentalHistory.length);//maybe different method?
     } 
 
-    function hasRentalEnded(uint256 rentalID)private view returns (bool){
-        return !(rentalMappingEnd[rentalID]==0);
+    function checkIfRentalEnded(uint256 rentalID)private view returns (bool){
+        return (rentalID < rentalHistory.length && rentalHistory[rentalID].endRentTime !=0);
     }
     
     function checkAdminPermission() private view {
