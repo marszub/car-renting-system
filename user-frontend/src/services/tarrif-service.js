@@ -15,6 +15,6 @@ export class TarrifService extends HttpService {
     }
 
     getPricingUser() {
-        return super.get("/admin/pricing", "", null, "admin");
+        return super.get("/pricing", "", null);
     }
 }
