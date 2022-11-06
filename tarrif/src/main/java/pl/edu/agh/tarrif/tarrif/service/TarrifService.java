@@ -5,6 +5,7 @@ import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.tuples.generated.Tuple3;
 import pl.edu.agh.tarrif.tarrif.dto.PricingRecord;
 import pl.edu.agh.tarrif.blockchain.TarrifBlockchainProxy;
+import pl.edu.agh.tarrif.tarrif.dto.PricingRecordsList;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class TarrifService {
         }
     }
 
-    public ArrayList<PricingRecord> getPricing(){
+    public PricingRecordsList getPricing(){
         ArrayList<PricingRecord> pricing = new ArrayList<>();
         try {
             Tuple3<List<BigInteger>, List<BigInteger>,List<BigInteger>> res = tarrifBlockchainProxy.getPricing();
@@ -41,7 +42,7 @@ public class TarrifService {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);
         }
-        return pricing;
+        return new PricingRecordsList(pricing);
     }
     //TODO add to rental microservice counting, how much it costs
 }

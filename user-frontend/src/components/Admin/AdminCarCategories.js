@@ -1,7 +1,7 @@
 import * as React from "react";
 import { CarDBService } from "../../services/carDB-service";
 import { TarrifService } from "../../services/tarrif-service";
-import { HTTP_BAD_REQUEST, HTTP_CREATED, HTTP_OK} from "../../utils/http-status";
+import { HTTP_BAD_REQUEST, HTTP_OK} from "../../utils/http-status";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
@@ -77,7 +77,10 @@ export default function AdminCarCategories() {
             }}>
                 <Typography component="h1" variant="h3">Available car categories</Typography>
                 <AdminCarCategoriesTable carCategories = {carCategoriesData}
-                                carDataCallback = {setCarCategoriesData}></AdminCarCategoriesTable>
+                                         carDataCallback = {setCarCategoriesData}
+                                         carCategoriesTarrifs = {carCategoriesTarrifsData}
+                                         carDataTarrifsCallback = {setCarCategoriesTarrifsData}>
+                </AdminCarCategoriesTable>
             </Box>
         </Container>
     );
