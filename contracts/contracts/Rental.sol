@@ -19,10 +19,6 @@ contract Rental {
         uint256 rentalID;//from blockchain
 
         uint256 rentalPricing;//pricing at the time of starting rental
-
-        //uint256[] parkingHistoryStarts;//array of all parking start times
-        //uint256[] parkingHistoryEnds;//array of all parking end times
-
     }
 
     struct Car {
@@ -99,10 +95,6 @@ contract Rental {
             rentalID : rentalHistory.length,
             
             rentalPricing: Tarrif(_tarrifAddress).getCurrentCarPricing(_carTypeID)
-
-           //parkingHistoryStarts: new uint256[](0),
-           //parkingHistoryEnds: new uint256[](0)
-
         });
 
         rentalHistory.push(record);
@@ -113,43 +105,7 @@ contract Rental {
         return record.rentalID;     
    }
 
-   function startParking(uint256 rentalID, uint256 _startParkingTime) public{
-        if(!checkIfRentalStarted(rentalID)){
-            revert("No rental with that ID started");
-        }
-
-        if(checkIfRentalEnded(rentalID)){
-            revert("Rental with that ID has already ended");
-        }
-
-        if(checkCarStatus(rentalHistory[rentalID].carID) != CarStatus.ACTIVE){
-            revert("Car can not park");
-        }
-
-        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.PARKED);
-        //rentalHistory[rentalID].parkingHistoryStarts.push(_startParkingTime);
-   }
-
-   function endParking(uint256 rentalID, uint256 _endParkingTime) public{
-        if(!checkIfRentalStarted(rentalID)){
-            revert("No rental with that ID started");
-        }
-
-        if(checkIfRentalEnded(rentalID)){
-            revert("Rental with that ID has already ended");
-        }
-
-        if(checkCarStatus(rentalHistory[rentalID].carID) != CarStatus.PARKED){
-            revert("Car is not parked");
-        }
-
-
-        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.ACTIVE);
-       // rentalHistory[rentalID].parkingHistoryEnds.push(_endParkingTime);
-   }
-
-
-
+   
    function endRental(uint256 rentalID, uint256 _endRentTime) public{
         if(!checkIfRentalStarted(rentalID)){
             revert("No rental with that ID started");

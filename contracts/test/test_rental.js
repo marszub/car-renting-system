@@ -81,37 +81,6 @@ contract("Rental", accounts => {
       assert.equal(result[1][1], true);
       assert.equal(result[1][2], true); 
   });
-/*
-    it("should start rental, park a car", async() =>{
-      const emit_event = await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address, 1);
-        
-      const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
-      
-      await this.rentalTest.startParking(returned_id, 100);
-
-      const result = await this.rentalTest.getActiveRental(1);
-      assert.equal(result.parkingHistoryStarts, 100);
-      assert.equal(result.parkingHistoryEnds.length, 0);
-
-      const carStatus = await this.rentalTest.checkCarStatus(1);
-      assert.equal(carStatus, 2);//2 is PARKED
-
-      await this.rentalTest.endRental(returned_id, 110);
-  }); 
-
-    it("should unpark the car", async() =>{
-      const emit_event = await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address, 1);
-      const returned_id = emit_event.logs[0].args[0].toNumber();//the id of the rental
-      
-      await this.rentalTest.startParking(returned_id, 100);
-
-      await this.rentalTest.endParking(returned_id, 110);
-
-      const result = await this.rentalTest.getActiveRental(1);
-      assert.equal(result.parkingHistoryEnds, 110);
-      
-      await this.rentalTest.endRental(returned_id, 110);
-    });*/
 
     it("should get historical rental", async() =>{
       const emit_event = await this.rentalTest.startRental(10,1,1,this.tarrifHelp.address, 1);

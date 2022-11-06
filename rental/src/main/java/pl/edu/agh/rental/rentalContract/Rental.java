@@ -77,6 +77,7 @@ public class Rental extends Contract {
         _addresses = new HashMap<String, String>();
         _addresses.put("1667515278127", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
         _addresses.put("1667575543445", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
+        _addresses.put("1667753854536", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
         _addresses.put("1667670114838", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
         _addresses.put("1666473966870", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
         _addresses.put("1667164986128", "0xEe3E92973010664a804BF96188ac4766fb84A3B9");
