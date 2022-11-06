@@ -123,6 +123,7 @@ public class RentalService {
 
     public RentalData getRental(final User user) throws NoRentalError {
         Rental.RentalRecord result;
+        System.out.println(user.id());
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
