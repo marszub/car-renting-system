@@ -20,12 +20,12 @@ export default function AdminCarCategories() {
 
     const carCategoryError = () => {
         console.log("Error while extracting carCategories list");
-        navigate("/admin");
+        navigate("/admin/error");
     }
 
     const carCategoriesTarrifsError = () => {
         console.log("Error while extracting carCategories tarrifs");
-        navigate("/admin");
+        navigate("/admin/error");
     }
 
     if(carCategoriesData == null && carCategoriesTarrifsData == null) {
@@ -39,11 +39,11 @@ export default function AdminCarCategories() {
                             setCarCategoriesData(res.body);
                             break;
                         case HTTP_BAD_REQUEST:
-                            console.log("Bad request");
+                            navigate("/admin/error");
                             break;
                         default:
                             console.log("Internal server error");
-                            navigate("/admin");
+                            navigate("/admin/error");
                             break;
                 }}).catch(carCategoryError),
             carCategoryError),
@@ -57,10 +57,11 @@ export default function AdminCarCategories() {
                             break;
                         case HTTP_BAD_REQUEST:
                             console.log("Bad request");
+                            navigate("/admin/error");
                             break;
                         default:
                             console.log("Internal server error");
-                            navigate("/admin");
+                            navigate("/admin/error");
                             break;
                 }}).catch(carCategoriesTarrifsError), carCategoriesTarrifsError)
         ])

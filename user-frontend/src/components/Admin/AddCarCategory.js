@@ -46,11 +46,11 @@ export default function AddCarCategory() {
                                 break;
                             case HTTP_BAD_REQUEST:
                                 console.log("Bad request");
-                                navigate("/error");
+                                navigate("/admin/error");
                                 break;
                             default:
                                 console.log("Internal server error");
-                                navigate("/error");
+                                navigate("/admin/error");
                                 break;
                         }
                     })
@@ -60,11 +60,11 @@ export default function AddCarCategory() {
                     break;
                 case HTTP_BAD_REQUEST:
                     console.log("Bad request");
-                    navigate("/error");
+                    navigate("/admin/error");
                     break;
                 default:
                     console.log("Internal server error");
-                    navigate("/error");
+                    navigate("/admin/error");
                     break;
             }
         });

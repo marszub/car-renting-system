@@ -90,7 +90,7 @@ export default function Tarrif() {
                             {categoriesData[i].carCategoryName}
                         </th>
                         <th>
-                            {tarrifValue}
+                            {tarrifValue.toFixed(2)}
                         </th>
                     </tr>
                 )
