@@ -1,4 +1,3 @@
-import SelectInput from "@mui/material/Select/SelectInput";
 import {HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_UNAUTHORIZED, isServerError, HTTP_COLISION} from "../utils/http-status";
 import { tokenStorage } from "./token-storage";
 import { tokenAdminStorage } from "./token-admin-storage";
@@ -6,7 +5,6 @@ import { userIdStorage } from "./userId-storage";
 import { adminIdStorage } from "./adminId-storage";
 
 const onResponseFunction = (res, service) => {
-    console.log(service);
         if (res.status == HTTP_NO_CONTENT) {
             return new ShortResponse(res.status, res.body);
         }else if (res.status == HTTP_BAD_REQUEST) {

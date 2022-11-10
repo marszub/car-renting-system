@@ -46,11 +46,11 @@ export default function AdminCarCategoriesTable(props) {
                     break;
                 case HTTP_BAD_REQUEST:
                     console.log("Bad request");
-                    navigate("/error");
+                    navigate("/admin/error");
                     break;
                 default:
                     console.log("Internal server error");
-                    navigate("/error");
+                    navigate("/admin/error");
                     break;
             }
         })
@@ -114,7 +114,7 @@ export default function AdminCarCategoriesTable(props) {
                         {carCategoriesData[i].carCategoryName}
                     </th>
                     <th>
-                        {tarrifValue}
+                        {tarrifValue.toFixed(2)}
                     </th>
                 </tr>
             )

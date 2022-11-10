@@ -28,9 +28,11 @@ async function retrieveData(setState, navigateToMain) {
                     switch (res.status) {
                         case HTTP_OK:
                             console.log("Got reservation data");
-                            console.log(res.body);
+                            var rentalData = res.body;
+                            rentalData.rentalDuration = 3455233;
+                            rentalData.rentalCost = 3423;
                             setState({isRental: true, isLoadingRental: false,
-                                      rentalData: res.body});
+                                      rentalData: rentalData});
                             break;
                         case HTTP_NO_CONTENT:
                             console.log("User has no actvie rental");
