@@ -23,16 +23,10 @@ import java.sql.Timestamp;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tuples.generated.Tuple3;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import java.math.BigInteger;
-import java.time.Instant;
 import pl.edu.agh.rental.rentalContract.Rental;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Objects;
 
 @Service
 public class RentalService {
@@ -51,7 +45,7 @@ public class RentalService {
     private static final String TARRIF_CONTRACT_ADDRESS =
             "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";
 
-    public RentalService(@Value("${blockchain.address}") final String blockchainAddress) {
+    public RentalService(@Value("${blockchain.address}") final String blockchainAddress, CarDb carDb) {
         web3client =
                 Web3j.build(new HttpService(blockchainAddress));
 
@@ -63,8 +57,7 @@ public class RentalService {
 
         adminRentalService =
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
-
-        carDb = new CarDb();
+        this.carDb = carDb;
     }
 
     public RentalData createRental(final int carId, final User user) throws NoCarError, ActiveRentalError {
@@ -73,7 +66,7 @@ public class RentalService {
         try {
             //send request synchronously, it throws error if it reverts
             System.out.println(carId);
-            int categoryId = 1;//carDb.getCarCategory(carId);
+            int categoryId = carDb.getCarCategory(carId);
             //IMO the carDb.getCategory does not work
             System.out.println(categoryId);
             

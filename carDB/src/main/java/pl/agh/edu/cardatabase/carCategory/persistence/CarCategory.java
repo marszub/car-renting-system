@@ -5,6 +5,7 @@ import pl.agh.edu.cardatabase.car.persistence.Car;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -22,7 +23,7 @@ public class CarCategory {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "carCategory", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "carCategory", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Car> carList;
 
     public CarCategory() {
