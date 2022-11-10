@@ -26,11 +26,11 @@ export default function AdminCars() {
                     break;
                 default:
                     console.log("Internal server error");
-                    navigate("/");
+                    navigate("/admin/error");
                     break;
         }}).catch(err => {
             console.log("Error while extracting carCategories list");
-            navigate("/");
+            navigate("/admin/error");
         });
     }
 

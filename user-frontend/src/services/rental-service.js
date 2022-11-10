@@ -17,4 +17,12 @@ export class RentalService extends HttpService {
     getMyRental() {
         return super.get("/rental", "");
     }
+
+    getRentalCost(rentalId) {
+        return super.get("/rental/cost/" + rentalId, "");
+    }
+
+    getCurrentRentalCost() {
+        return super.get("/rental/cost/current", "");
+    }
 }
