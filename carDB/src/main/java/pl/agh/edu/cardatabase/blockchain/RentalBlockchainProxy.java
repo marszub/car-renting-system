@@ -1,5 +1,6 @@
 package pl.agh.edu.cardatabase.blockchain;
 
+import com.zeroc.IceInternal.Ex;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.web3j.crypto.Credentials;
@@ -43,5 +44,9 @@ public class RentalBlockchainProxy {
 
     public Tuple2<List<BigInteger>, List<Boolean>> getAllAvailableCars() throws Exception {
         return adminBlockchainRentalService.getAllAvailableCars().send();
+    }
+
+    public Tuple2<List<BigInteger>, List<BigInteger>> adminGetCars() throws Exception {
+        return adminBlockchainRentalService.newGetCars().send();
     }
 }

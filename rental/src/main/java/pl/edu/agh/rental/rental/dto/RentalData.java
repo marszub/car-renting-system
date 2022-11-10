@@ -10,5 +10,11 @@ public record RentalData(
         Integer carId,
 
         @NotNull
-        Long reservationTimestamp
+        Long reservationTimestamp,
+
+        @NotNull
+        Long rentalCurrentTime,
+
+        @NotNull
+        Double rentalCost
 ) { }

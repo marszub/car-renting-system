@@ -98,7 +98,7 @@ public class RentalService {
             //possibly solved with string.contains()
         }
 
-        return new RentalData(reservationID, carId, timestamp.getTime());
+        return new RentalData(reservationID, carId, timestamp.getTime(), (long) 0.,0.);
     }
 
     public void endRental(final Integer rentalId, final User user) throws UserUnauthorizedError {
@@ -124,9 +124,11 @@ public class RentalService {
     public RentalData getRental(final User user) throws NoRentalError {
         Rental.RentalRecord result;
         System.out.println(user.id());
+        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
+
 
         }catch (Exception e) {
             System.out.println(e.getMessage());
@@ -138,19 +140,20 @@ public class RentalService {
             }
 
         }
-        //TODO - problem with revert() - reason as a part of message string
-        //possibly solved with string.contains()
+        long time = timestamp.getTime() - result.startRentTime.longValue();
+        double costMinutes =  Math.floor(time/60000) * result.rentalPricing.longValue();
 
-        return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.startRentTime.longValue());
+        return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.startRentTime.longValue(),
+                time, costMinutes);
     }
 
-    public long getCurrentRentalTime(final User user) throws NoRentalError {
+    public double getCurrentRentalCost(final User user) throws NoRentalError{
         Rental.RentalRecord result;
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return timestamp.getTime() - result.startRentTime.longValue();
+            return Math.floor((timestamp.getTime() - result.startRentTime.longValue())/60000) * result.rentalPricing.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No active rental record")){
@@ -161,46 +164,11 @@ public class RentalService {
             }
         }
     }
-
-    public long getRentalTime(final int rentalID) throws UserUnauthorizedError{
+    public double getRentalCost(final int rentalID) throws UserUnauthorizedError{
         Rental.RentalRecord result;
         try {
             result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
-            return result.endRentTime.longValue() - result.startRentTime.longValue();
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-            if(e.getMessage().contains("No rental with that ID started")){
-                throw new UserUnauthorizedError();
-            }
-            if(e.getMessage().contains("Rental with that ID hasn't ended yet")){
-                throw new UserUnauthorizedError();
-            }
-            throw new RuntimeException(e);
-        }
-    }
-
-    public long getCurrentRentalCost(final User user) throws NoRentalError{
-        Rental.RentalRecord result;
-        final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        try{
-            //no need for emit, this a "view" function
-            result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return (timestamp.getTime() - result.startRentTime.longValue()) * result.rentalPricing.longValue();
-        }catch (Exception e) {
-            System.out.println(e.getMessage());
-            if(e.getMessage().contains("No active rental record")){
-                throw new NoRentalError();
-            }
-            else{
-                throw new RuntimeException(e);
-            }
-        }
-    }
-    public long getRentalCost(final int rentalID) throws UserUnauthorizedError{
-        Rental.RentalRecord result;
-        try {
-            result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
-            long time = result.endRentTime.longValue() - result.startRentTime.longValue();
+            double time = Math.floor((result.endRentTime.longValue() - result.startRentTime.longValue())/60000);
             return time * result.rentalPricing.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());

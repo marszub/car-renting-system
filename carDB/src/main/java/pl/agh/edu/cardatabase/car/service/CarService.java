@@ -4,10 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.tuples.generated.Tuple2;
 import pl.agh.edu.cardatabase.blockchain.RentalBlockchainProxy;
-import pl.agh.edu.cardatabase.car.dto.CarData;
-import pl.agh.edu.cardatabase.car.dto.CarInputData;
-import pl.agh.edu.cardatabase.car.dto.CarList;
-import pl.agh.edu.cardatabase.car.dto.CarLocationUpdateInput;
+import pl.agh.edu.cardatabase.car.dto.*;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
 import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
@@ -18,6 +15,7 @@ import pl.agh.edu.cardatabase.carCategory.persistence.CarCategoryRepository;
 
 import javax.persistence.EntityNotFoundException;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,11 +54,11 @@ public class CarService {
         return new CarData(car);
     }
 
-    public CarList getCars() {
+    public CarList getAvailableCars() {
         final List<BigInteger> carIDs;
         final List<Boolean> carAvailability;
         try {
-            final Tuple2<java.util.List<java.math.BigInteger>, java.util.List<java.lang.Boolean>>
+            final Tuple2<List<BigInteger>, List<Boolean>>
                     res = rentalBlockchainProxy.getAllAvailableCars();
             carIDs  = res.component1();
             carAvailability = res.component2();
@@ -70,13 +68,37 @@ public class CarService {
             throw new RuntimeException(e);
         }
 
-        final List<Car> carList = carRepository.getCars();
+        final List<Car> carList = new ArrayList<>();
         for (int i = 0; i < carIDs.size(); i++) {
             if (carAvailability.get(i)) {
                 carList.add(carRepository.getById(carIDs.get(i).intValue()));
             }
         }
         return new CarList(carList.stream().map(CarData::new).toList());
+    }
+
+    //for admin
+    public AdminCarList adminGetCars() {
+        final List<BigInteger> carIDs;
+        final List<CarStatus> carStatuses;
+        try{
+            final Tuple2<List<BigInteger>,List<BigInteger>>
+                    res = rentalBlockchainProxy.adminGetCars();
+            carIDs = res.component1();
+            carStatuses = res.component2().stream().map(object -> CarStatus.values()[object.intValue()]).toList();
+
+            List<AdminCarData> resultList = new ArrayList<>();
+
+            for(int i =0; i < carIDs.size(); i++){
+                resultList.add(new AdminCarData(carRepository.getById(carIDs.get(i).intValue()), carStatuses.get(i)));
+            }
+            return new AdminCarList(resultList);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void updateCarLocation(CarLocationUpdateInput data, Integer id) throws CarDoesNotExistError {

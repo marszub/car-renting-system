@@ -22,6 +22,6 @@ public class CarController {
     @GetMapping("/cars")
     @ResponseStatus(HttpStatus.OK)
     public CarList getAvailableCars() {
-        return carService.getCars();
+        return carService.getAvailableCars();
     }
 }

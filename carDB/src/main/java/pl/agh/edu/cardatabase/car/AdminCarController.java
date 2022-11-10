@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.agh.edu.cardatabase.car.dto.CarData;
-import pl.agh.edu.cardatabase.car.dto.CarInputData;
-import pl.agh.edu.cardatabase.car.dto.CarList;
-import pl.agh.edu.cardatabase.car.dto.CarLocationUpdateInput;
+import pl.agh.edu.cardatabase.car.dto.*;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
 import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
@@ -41,8 +38,8 @@ public class AdminCarController {
 
     @GetMapping("/cars")
     @ResponseStatus(HttpStatus.OK)
-    public CarList adminGetAvailableCars() {
-        return carService.getCars();
+    public AdminCarList adminGetAvailableCars() {
+        return carService.adminGetCars();
     }
 
     @Transactional
