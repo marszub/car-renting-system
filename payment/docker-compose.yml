@@ -1,0 +1,7 @@
+services:
+    payment:
+        image: payment:dev
+        ports:
+            - "5070:5070"
+        volumes:
+            - ./config/docker:/config
