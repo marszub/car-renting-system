@@ -55,7 +55,7 @@ public class RentalController {
     //total cost after end
     @GetMapping("/cost/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public double getRentalCost(@PathVariable("id") final Integer reservationId) throws UserUnauthorizedError{
+    public long getRentalCost(@PathVariable("id") final Integer reservationId) throws UserUnauthorizedError{
         return reservationService.getRentalCost(reservationId);
     }
 }

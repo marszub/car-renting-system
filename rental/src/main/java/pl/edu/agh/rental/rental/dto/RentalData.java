@@ -16,5 +16,5 @@ public record RentalData(
         Long rentalCurrentTime,
 
         @NotNull
-        Double rentalCost
+        Long rentalCost
 ) { }

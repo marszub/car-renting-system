@@ -4,7 +4,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.web3j.tuples.generated.Tuple2;
 import pl.agh.edu.cardatabase.blockchain.RentalBlockchainProxy;
-import pl.agh.edu.cardatabase.car.dto.*;
+import pl.agh.edu.cardatabase.car.dto.CarInputData;
+import pl.agh.edu.cardatabase.car.dto.CarList;
+import pl.agh.edu.cardatabase.car.dto.CarLocationUpdateInput;
+import pl.agh.edu.cardatabase.car.dto.CarData;
+import pl.agh.edu.cardatabase.car.dto.AdminCarData;
+import pl.agh.edu.cardatabase.car.dto.AdminCarList;
+import pl.agh.edu.cardatabase.car.dto.CarStatus;
 import pl.agh.edu.cardatabase.car.error.CarAlreadyExistsError;
 import pl.agh.edu.cardatabase.car.error.CarCategoryDoesNotExistError;
 import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
@@ -89,7 +95,7 @@ public class CarService {
 
             List<AdminCarData> resultList = new ArrayList<>();
 
-            for(int i =0; i < carIDs.size(); i++){
+            for(int i = 0; i < carIDs.size(); i++){
                 resultList.add(new AdminCarData(carRepository.getById(carIDs.get(i).intValue()), carStatuses.get(i)));
             }
             return new AdminCarList(resultList);
