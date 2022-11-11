@@ -27,10 +27,9 @@ async function retrieveData(setState, navigateToMain) {
                 serviceRental.getMyRental().then(res => {
                     switch (res.status) {
                         case HTTP_OK:
-                            console.log("Got reservation data");
+                            console.log("Got rental data");
+                            console.log(res.body);
                             var rentalData = res.body;
-                            rentalData.rentalDuration = 3455233;
-                            rentalData.rentalCost = 3423;
                             setState({isRental: true, isLoadingRental: false,
                                       rentalData: rentalData});
                             break;

@@ -141,6 +141,9 @@ export default function AdminCarsTable(props) {
                         {data[i].coordinates.longitude}
                     </th>
                     <th>
+                        {data[i].carStatus}
+                    </th>
+                    <th>
                         {popup}
                     </th>
                 </tr>
@@ -155,8 +158,9 @@ export default function AdminCarsTable(props) {
                <col span="1" style={{width: "5%"}}/>
                <col span="1" style={{width: "25%"}}/>
                <col span="1" style={{width: "23%"}}/>
-               <col span="1" style={{width: "20%"}}/>
-               <col span="1" style={{width: "20%"}}/>
+               <col span="1" style={{width: "15%"}}/>
+               <col span="1" style={{width: "15%"}}/>
+               <col span="1" style={{width: "10%"}}/>
                <col span="1" style={{width: "7%"}}/>
             </colgroup>
             <thead>
@@ -177,6 +181,9 @@ export default function AdminCarsTable(props) {
                         Car longitude
                     </th>
                     <th>
+                        Status
+                    </th>
+                    <th>
                         Edit
                     </th>
                 </tr>
@@ -184,7 +191,7 @@ export default function AdminCarsTable(props) {
             <tbody>
                 {listCars(props.cars.cars)}
                 <tr>
-                    <th colSpan={6} style={{textAlign: "center"}}>
+                    <th colSpan={7} style={{textAlign: "center"}}>
                         <Button onClick={() => navigate("/admin/cars/new")}>Add Car</Button>
                     </th>
                 </tr>

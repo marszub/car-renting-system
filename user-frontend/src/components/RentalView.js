@@ -11,8 +11,8 @@ export class RentalView extends React.Component {
     constructor(props) {
         super();
         this.setCurrentCost = this.setCurrentCostFunction.bind(this);
-        var time = this.calculate_time(props.rentalData.rentalDuration);
-        this.state = { currentCost: (props.rentalData.rentalCost/100).toFixed(2), time: this.format_time(time)};
+        var time = this.calculate_time(props.rentalData.rentalCurrentTime);
+        this.state = { currentCost: (props.rentalData.rentalCost/100).toFixed(2), time: this.format_time(time), endRentalClicked: false};
         this.runTimer(time);
     }
 
@@ -67,6 +67,10 @@ export class RentalView extends React.Component {
     }
 
     endRental(rentalId, isRentalCallback, rentalDataCallback) {
+        if(this.state.endRentalClicked) {
+            return;
+        }
+        this.setState({endRentalClicked: true});
         const serviceRental = new RentalService();
         serviceRental.endRental(rentalId).then(res => {
             switch (res.status) {
@@ -127,12 +131,12 @@ export class RentalView extends React.Component {
                 </Typography>
                 <Box>
                     <Box style={{display: "inline"}}>
-                        <Button fullwidth variant="contained" onClick={() => this.calculateCost(this.setCurrentCost)}>
+                        <Button variant="contained" onClick={() => this.calculateCost(this.setCurrentCost)}>
                             Get current cost
                         </Button>
                     </Box>
                     <Box style={{display: "inline", marginLeft: "10px"}}>
-                        <Button fullwidth variant="contained" onClick={() => {
+                        <Button variant="contained" onClick={() => {
                                 this.endRental(this.props.rentalData.reservationId, this.props.callbackIsRental, this.props.callbackRentalData)
                             }}>
                             End rental
