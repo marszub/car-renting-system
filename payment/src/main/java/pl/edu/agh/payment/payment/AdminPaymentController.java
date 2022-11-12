@@ -19,23 +19,17 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/payment")
-public class PaymentController {
+@RequestMapping("/api/admin/payment")
+public class AdminPaymentController {
     private final PaymentService paymentService;
 
-    public PaymentController(final PaymentService paymentService) {
+    public AdminPaymentController(final PaymentService paymentService) {
         this.paymentService = paymentService;
     }
 
-    @PostMapping
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public Message getToken(@Valid @RequestBody final PaymentInputData data) {
-        return paymentService.getToken(data);
-    }
-
-    @PostMapping("/notification")
-    @ResponseStatus(HttpStatus.OK)
-    public void receiveFromPayU(HttpEntity<String> httpEntity) throws NotificationNotValidatedError {
-        paymentService.receiveNotification(httpEntity);
+    public PaymentList getPayments() {
+        return paymentService.getPayments();
     }
 }
