@@ -48,7 +48,7 @@ public class RentalController {
     //current cost - current rental
     @GetMapping("/cost/current")
     @ResponseStatus(HttpStatus.OK)
-    public double getCurrentRentalCost(@CurrentUser final User user) throws NoRentalError {
+    public long getCurrentRentalCost(@CurrentUser final User user) throws NoRentalError {
         return reservationService.getCurrentRentalCost(user);
     }
 

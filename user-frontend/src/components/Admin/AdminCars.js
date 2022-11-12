@@ -19,6 +19,7 @@ export default function AdminCars() {
             switch (res.status) {
                 case HTTP_OK:
                     console.log("Got cars data");
+                    console.log(res.body);
                     setCarData(res.body);
                     break;
                 case HTTP_BAD_REQUEST:
