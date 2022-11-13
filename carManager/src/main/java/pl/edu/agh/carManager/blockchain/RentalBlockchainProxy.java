@@ -10,6 +10,8 @@ import org.web3j.tuples.generated.Tuple2;
 import org.web3j.tx.gas.ContractGasProvider;
 import org.web3j.tx.gas.StaticGasProvider;
 import pl.edu.agh.carManager.rentalContract.Rental;
+import pl.edu.agh.carManager.carManager.enums.CarStatus;
+
 
 import java.math.BigInteger;
 import java.util.List;
@@ -49,5 +51,9 @@ public class RentalBlockchainProxy {
 
     public Tuple2<List<BigInteger>, List<Boolean>> getAllAvailableCars() throws Exception {
         return adminBlockchainRentalService.getAllAvailableCars().send();
+    }
+
+    public CarStatus checkCarStatus(final BigInteger carID) throws Exception {
+        return CarStatus.values()[adminBlockchainRentalService.checkCarStatus(carID).send().intValue()];
     }
 }
