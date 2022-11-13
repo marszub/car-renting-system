@@ -25,8 +25,6 @@ function rentCar(carId, carTypeId, callbackIsRental, callbackRentalData) {
                 console.log("rental createad");
                 callbackIsRental(true);
                 var rentalData = res.body;
-                rentalData.rentalDuration = 0;
-                rentalData.rentalCost = 0;
                 callbackRentalData(rentalData);
                 break;
             case HTTP_BAD_REQUEST:
