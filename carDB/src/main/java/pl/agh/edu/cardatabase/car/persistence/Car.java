@@ -5,6 +5,7 @@ import pl.agh.edu.cardatabase.carCategory.persistence.CarCategory;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -31,8 +32,11 @@ public class Car {
     @Column(nullable = false)
     private Double longitude;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "car_category_id", nullable = false)
+    @Column(nullable = false)
+    private Integer carCategoryId;
+
+    @ManyToOne(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_category_link", nullable = false)
     private CarCategory carCategory;
 
     public Car() {
@@ -42,6 +46,7 @@ public class Car {
         this.name = name;
         this.latitude = DEFAULT_LATITUDE;
         this.longitude = DEFAULT_LONGITUDE;
+        this.carCategoryId = category.getId();
         this.carCategory = category;
     }
 
@@ -71,6 +76,10 @@ public class Car {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getCarCategoryId() {
+        return carCategoryId;
     }
 
     public void setId(final Integer id) {

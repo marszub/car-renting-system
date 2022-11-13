@@ -2,24 +2,25 @@ package pl.agh.edu.cardatabase.carCategory.ice;
 
 import com.zeroc.Ice.Current;
 import com.zeroc.Ice.ObjectNotExistException;
-import org.springframework.beans.factory.annotation.Autowired;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
-import pl.agh.edu.cardatabase.carCategory.persistence.CarCategoryRepository;
 
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class CarServant implements cardb.Car {
-    @Autowired
-    private CarCategoryRepository carCategories;
-    @Autowired
-    private CarRepository cars;
+    private final CarRepository cars;
+
+    public CarServant(CarRepository carRepository) {
+        this.cars = carRepository;
+    }
 
     @Override
     public int getCategory(Current current) {
         try {
             int carId = Integer.parseInt(current.id.name);
-            return carCategories.getCarCategoryById(carId).get().getId();
+            Optional<Integer> carCategoryId = cars.getCarCategoryId(carId);
+            return carCategoryId.orElse(-1);
         } catch (Exception e) {
+        System.out.println(e.getMessage());
             throw new ObjectNotExistException();
         }
     }
