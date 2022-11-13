@@ -15,6 +15,7 @@ import pl.edu.agh.payment.payment.dto.PaymentList;
 import pl.edu.agh.payment.payment.error.NotificationNotValidatedError;
 import pl.edu.agh.payment.payment.service.PaymentService;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 
 @RestController
@@ -34,6 +35,7 @@ public class PaymentController {
     }
 
     @PostMapping("/notification")
+    @Transactional
     @ResponseStatus(HttpStatus.OK)
     public void receiveFromPayU(HttpEntity<String> httpEntity) throws NotificationNotValidatedError {
         paymentService.receiveNotification(httpEntity);
