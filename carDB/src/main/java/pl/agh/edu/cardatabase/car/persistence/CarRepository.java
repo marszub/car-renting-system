@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
-    @Query("SELECT c from Car c ")
+    @Query("SELECT c from Car c")
     List<Car> getCars();
 
     @Query("SELECT DISTINCT c.carCategoryId FROM Car c WHERE c.id = :id")

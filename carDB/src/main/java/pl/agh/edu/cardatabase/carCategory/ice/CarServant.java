@@ -17,14 +17,9 @@ public class CarServant implements cardb.Car {
     public int getCategory(Current current) {
         try {
             int carId = Integer.parseInt(current.id.name);
-            Optional<Integer> maybeCarCategoryId = cars.getCarCategoryId(carId);
-            if(maybeCarCategoryId.isPresent()) {
-                int carCategoryId = maybeCarCategoryId.get();
-                System.out.print(carCategoryId);
-                return carCategoryId;
-            }
-            return -1;
-    } catch (Exception e) {
+            Optional<Integer> carCategoryId = cars.getCarCategoryId(carId);
+            return carCategoryId.orElse(-1);
+        } catch (Exception e) {
         System.out.println(e.getMessage());
             throw new ObjectNotExistException();
         }
