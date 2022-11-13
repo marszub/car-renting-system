@@ -12,9 +12,6 @@ contract Rental {
         uint256 startRentTime;//from microservice
         uint256 endRentTime;//firs 0, hen from microservice
 
-        uint256 startRentTime;//from microservice
-        uint256 endRentTime;//firs 0, hen from microservice
-
         uint256 carID;//from microservice
         uint256 userID;//from microservice
 
@@ -27,13 +24,8 @@ contract Rental {
     struct Car {
         uint256 carID;
         CarStatus status;
-    struct Car {
-        uint256 carID;
-        CarStatus status;
     }
 
-    Car[] private newCars;
-    uint256[] cars;//TODO remove after microservices start using the new one
     Car[] private newCars;
     uint256[] cars;//TODO remove after microservices start using the new one
    
@@ -50,16 +42,9 @@ contract Rental {
 
         newCars.push(Car(_carID, CarStatus.AVAILABLE));
         cars.push(_carID);//TODO remove
-        newCars.push(Car(_carID, CarStatus.AVAILABLE));
-        cars.push(_carID);//TODO remove
 
    }
 
-    //TODO remove 
-    function getCars()public view returns (uint256[] memory){
-        checkAdminPermission();
-        return cars;
-    }
     //TODO remove 
     function getCars()public view returns (uint256[] memory){
         checkAdminPermission();
@@ -94,20 +79,19 @@ contract Rental {
         if(!checkIfCarExists(_carID)){
             revert("Car does not exist!");
         }
-
+        if(checkIfCarRented(_carID)){
+            revert("Car has already been rented!");
+        }
 
 
         //memory - exists only in function call, temporary variable
         RentalRecord memory record = RentalRecord({
             startRentTime : _rentTime,
             endRentTime: 0,
-            startRentTime : _rentTime,
-            endRentTime: 0,
             carID : _carID,
             userID : _userID,
 
             blockchainTime : block.timestamp,
-            rentalID : rentalHistory.length,
             rentalID : rentalHistory.length,
             
             rentalPricing: Tarrif(_tarrifAddress).getCurrentCarPricing(_carTypeID)
@@ -119,12 +103,10 @@ contract Rental {
         emit addedNewRentalID(record.rentalID);//for return value in java TODO - add carID and user ID for the listener
 
         return record.rentalID;     
-        return record.rentalID;     
    }
 
    
    function endRental(uint256 rentalID, uint256 _endRentTime) public{
-        if(!checkIfRentalStarted(rentalID)){
         if(!checkIfRentalStarted(rentalID)){
             revert("No rental with that ID started");
         }
@@ -139,10 +121,8 @@ contract Rental {
    }
 
    function getActiveRental(uint256 _userID) public view returns(RentalRecord memory){
-   function getActiveRental(uint256 _userID) public view returns(RentalRecord memory){
         for(uint256 i=rentalHistory.length; i>0; i--){
             if(rentalHistory[i-1].userID == _userID){
-                if(rentalHistory[i-1].endRentTime != 0)
                 if(rentalHistory[i-1].endRentTime != 0)
                 {
                     revert("No active rental record - already ended");
@@ -153,8 +133,6 @@ contract Rental {
         }
         revert("No active rental record - not in the history");
    }
-
-   function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory){
 
    function getAllAvailableCars() public view returns(uint256[] memory, bool[] memory){
         bool[] memory result = new bool[](cars.length);
