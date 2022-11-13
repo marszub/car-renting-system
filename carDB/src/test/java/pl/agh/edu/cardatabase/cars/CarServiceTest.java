@@ -124,7 +124,7 @@ public class CarServiceTest {
                 .thenReturn(new Tuple2<>(intList, booleanList));
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
         this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
-        final CarList list = carService.getCars();
+        final CarList list = carService.getAvailableCars();
         assertThat(list.cars().size()).isEqualTo(2);
         assertThat(list.cars().get(0).carName()).isEqualTo(carName1);
         assertThat(list.cars().get(1).carName()).isEqualTo(carName2);
@@ -137,7 +137,7 @@ public class CarServiceTest {
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
         this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
         assertThatExceptionOfType(RuntimeException.class)
-                .isThrownBy(() -> carService.getCars());
+                .isThrownBy(() -> carService.getAvailableCars());
     }
 
     @Test

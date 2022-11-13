@@ -6,7 +6,7 @@ import "./Tarrif.sol";
 contract Rental {
     address private ADMIN_ADDRESS = msg.sender;//the address that put this contract here (though truffle it is the index 0 address)
 
-    enum CarStatus{AVAILABLE, ACTIVE, PARKED, SERVICE}
+    enum CarStatus{AVAILABLE, RENTED, PARKED, SERVICE}
 
     struct RentalRecord {
         uint256 startRentTime;//from microservice
@@ -98,7 +98,7 @@ contract Rental {
         });
 
         rentalHistory.push(record);
-        changeCarStatus(_carID, CarStatus.ACTIVE);
+        changeCarStatus(_carID, CarStatus.RENTED);
 
         emit addedNewRentalID(record.rentalID);//for return value in java TODO - add carID and user ID for the listener
 
@@ -115,7 +115,7 @@ contract Rental {
             revert("Rental with that ID has already ended");
         }
 
-        
+        changeCarStatus(rentalHistory[rentalID].carID, CarStatus.AVAILABLE);
         rentalHistory[rentalID].endRentTime = _endRentTime;
 
    }
