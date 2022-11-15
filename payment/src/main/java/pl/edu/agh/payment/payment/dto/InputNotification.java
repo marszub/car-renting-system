@@ -2,10 +2,11 @@ package pl.edu.agh.payment.payment.dto;
 
 import javax.validation.constraints.NotNull;
 
-public record PaymentInputData(
+//It will be deleted
+public record InputNotification(
         @NotNull
-        String email,
+        String paymentPayuId,
 
         @NotNull
-        Integer rentalId
+        String changeValueTo
 ) { }

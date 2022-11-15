@@ -1,17 +1,19 @@
 package pl.edu.agh.payment.payment;
 
+import Rental.RentalDoesNotExistException;
+import Rental.UnauthorizedRequestException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import pl.edu.agh.payment.payment.dto.Message;
+import pl.edu.agh.payment.payment.auth.CurrentUser;
+import pl.edu.agh.payment.payment.auth.User;
+import pl.edu.agh.payment.payment.dto.Redirect;
 import pl.edu.agh.payment.payment.dto.PaymentInputData;
-import pl.edu.agh.payment.payment.dto.PaymentList;
 import pl.edu.agh.payment.payment.error.NotificationNotValidatedError;
 import pl.edu.agh.payment.payment.service.PaymentService;
 
@@ -29,9 +31,10 @@ public class PaymentController {
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public Message getToken(@Valid @RequestBody final PaymentInputData data) {
-        return paymentService.getToken(data);
+    @ResponseStatus(HttpStatus.TEMPORARY_REDIRECT)
+    public Redirect startPayment(@Valid @RequestBody final PaymentInputData data, @CurrentUser final User user)
+            throws UnauthorizedRequestException, RentalDoesNotExistException {
+        return paymentService.createPayment(data, user);
     }
 
     @PostMapping("/notification")

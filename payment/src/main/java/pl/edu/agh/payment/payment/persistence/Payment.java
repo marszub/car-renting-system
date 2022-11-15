@@ -26,16 +26,29 @@ public class Payment {
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
+    @Column(nullable = false)
+    private Long paymentValue;
+
     public Payment() { }
 
-    public Payment(final String payUId, final Integer rentalId, final PaymentStatus paymentStatus) {
+    public Payment(final String payUId, final Integer rentalId, final PaymentStatus paymentStatus,
+                   final Long paymentValue) {
         this.payUId = payUId;
         this.rentalId = rentalId;
         this.paymentStatus = paymentStatus;
+        this.paymentValue = paymentValue;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public Long getPaymentValue() {
+        return paymentValue;
+    }
+
+    public void setPaymentValue(final Long paymentValue) {
+        this.paymentValue = paymentValue;
     }
 
     public void setId(final Integer id) {

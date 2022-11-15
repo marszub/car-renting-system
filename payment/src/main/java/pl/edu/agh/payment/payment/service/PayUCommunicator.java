@@ -1,7 +1,7 @@
 package pl.edu.agh.payment.payment.service;
 
-import org.bouncycastle.jcajce.provider.digest.MD5;
 import org.json.JSONObject;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -25,11 +25,15 @@ public class PayUCommunicator {
     private final String clientId;
     private final HttpClient client = HttpClient.newHttpClient();
     private final String secondToken;
+    private final String notificationUrl;
+    private final String continueUrl;
 
-    public PayUCommunicator() {
-        this.clientSecret = "0778ae48ed2a8f0c54b0e2c433e2f7bd";
-        this.clientId = "451870";
-        this.secondToken = "75604486e320ee3b789fb6a0daef968a";
+    public PayUCommunicator(Environment environment) {
+        this.clientSecret = environment.getProperty("payu.client.secret");
+        this.clientId = environment.getProperty("payu.client.id");
+        this.secondToken = environment.getProperty("payu.client.second-token");
+        this.notificationUrl = environment.getProperty("payu.client.notificationUrl");
+        this.continueUrl = environment.getProperty("payu.client.continueUrl");
     }
 
     public HttpResponse<String> newPaymentRequest(JSONObject body) throws URISyntaxException,
@@ -38,9 +42,11 @@ public class PayUCommunicator {
         if(System.currentTimeMillis() > tokenValidUntil) {
             renewToken();
         }
+        //Adding other necessary data to request
+        body.put("continueUrl", this.continueUrl);
         body.put("customerIp", "127.0.0.1");
-        body.put("notifyUrl", "http://165.227.245.183:5070/api/payment/notification");
-        body.put("merchantPosId", clientId);
+        body.put("notifyUrl", this.notificationUrl);
+        body.put("merchantPosId", this.clientId);
 
         System.out.println("-----------------------------------------------------------------------------\n");
         HttpResponse<String> response = sendPaymentRequest(body);
@@ -58,7 +64,7 @@ public class PayUCommunicator {
         if(signature == null) {
             return false;
         }
-        System.out.println("-------SIGNATURE-----" + signature + "\n\n");
+        System.out.println("-------SIGNATURE-------" + signature + "\n\n");
         Object body = data.getBody();
         if(body == null) {
             return false;
@@ -79,7 +85,7 @@ public class PayUCommunicator {
         for (byte b : digest) {
             sb.append(String.format("%02X", b));
         }
-        System.out.println("-------MD5-----" + sb + "\n\n");
+        System.out.println("-------MD5PayU-------" + sb + "\n\n");
 
         return sb.toString().equalsIgnoreCase(signature);
     }
@@ -89,7 +95,7 @@ public class PayUCommunicator {
                                                                             URISyntaxException {
         HttpRequest request;
         request = HttpRequest.newBuilder(new URI("https://secure.snd.payu.com/api/v2_1/orders"))
-                .header("Authorization", "Bearer " + currentOauthToken)
+                .header("Authorization", "Bearer " + this.currentOauthToken)
                 .header("Content-Type", " application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body.toString()))
                 .build();
@@ -116,8 +122,8 @@ public class PayUCommunicator {
         System.out.println("-----------------------------------------------------------------------------\n\n\n");
         String token = obj.getString("access_token");
         int expiresIn = obj.getInt("expires_in");
-        tokenValidUntil = System.currentTimeMillis() + expiresIn * 950L;
-        currentOauthToken = token;
+        this.tokenValidUntil = System.currentTimeMillis() + expiresIn * 950L;
+        this.currentOauthToken = token;
     }
 
     private String getSignature(final HttpHeaders headers) {

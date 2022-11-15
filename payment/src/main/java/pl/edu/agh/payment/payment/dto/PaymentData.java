@@ -13,10 +13,13 @@ public record PaymentData(
         Integer rentalId,
 
         @NotNull
-        PaymentStatus paymentStatus
+        PaymentStatus paymentStatus,
+
+        @NotNull
+        Long paymentValue
 )
 {
         public PaymentData(final Payment payment) {
-                this(payment.getId(), payment.getRentalId(), payment.getPaymentStatus());
+                this(payment.getId(), payment.getRentalId(), payment.getPaymentStatus(), payment.getPaymentValue());
         }
 }

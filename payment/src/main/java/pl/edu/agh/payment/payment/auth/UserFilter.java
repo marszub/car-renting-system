@@ -5,6 +5,7 @@ import Auth.AccountPrx;
 import Auth.Role;
 import Auth.TokenVerificationStatus;
 import com.zeroc.Ice.Communicator;
+import com.zeroc.Ice.ConnectionRefusedException;
 import com.zeroc.Ice.ObjectPrx;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,10 +23,12 @@ import java.util.List;
 public class UserFilter extends OncePerRequestFilter {
     public static final String TOKEN_FIELD = "token";
     public static final String USERID_FIELD = "userId";
+    public static final String INVALID_PROXY = "Invalid proxy";
+
 
     private final Communicator communicator;
 
-    public UserFilter(Communicator communicator) {
+    public UserFilter(final Communicator communicator) {
         this.communicator = communicator;
     }
 
@@ -37,20 +40,35 @@ public class UserFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.clearContext();
         if (userToken != null) {
-            verifyUser(userId, userToken);
+            if (request.getServletPath().contains("/api/admin")) {
+                verify(userId, userToken, Role.Admin);
+            } else {
+                verify(userId, userToken, Role.User);
+            }
         }
         filterChain.doFilter(request, response);
     }
 
-    private void verifyUser(final String userId, final String userToken) {
-        ObjectPrx baseAccount = communicator.stringToProxy("account/" + userId + ":" + communicator.getProperties().getProperty("Account.Proxy"));
-        AccountPrx account = AccountPrx.checkedCast(baseAccount);
-        if (account == null) throw new Error("Invalid proxy");
-
-        Role role = Role.User;
-        if(account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId), Role.User.toString()), null, List.of()));
+    private void verify(final String userId, final String userToken, final Role role) {
+        final ObjectPrx baseAccount = communicator.stringToProxy(constructString(userId));
+        AccountPrx account;
+        try {
+            account = AccountPrx.checkedCast(baseAccount);
+        } catch ( ConnectionRefusedException exception) {
+            return;
         }
+        if (account == null) {
+            throw new Error(INVALID_PROXY);
+        }
+
+        if (account.verifyToken(new AccessData(userToken, role)) == TokenVerificationStatus.Ok) {
+            SecurityContextHolder.getContext().setAuthentication(
+                    new UsernamePasswordAuthenticationToken(new User(Integer.valueOf(userId),
+                            role.toString()), null, List.of()));
+        }
+    }
+
+    private String constructString(final String userId) {
+        return "account/" + userId + ":" + communicator.getProperties().getProperty("Account.Proxy");
     }
 }

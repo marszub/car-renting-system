@@ -147,7 +147,7 @@ public class RentalService {
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return (long) Math.floor((timestamp.getTime() - result.startRentTime.longValue())/60000)
+            return (long) (Math.floor((timestamp.getTime() - result.startRentTime.longValue())/60000) + 1)
                     * result.rentalPricing.longValue();
         }catch (Exception e) {
             System.out.println(e.getMessage());
@@ -164,7 +164,7 @@ public class RentalService {
         try {
             result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
             long time = (long) Math.floor((result.endRentTime.longValue() - result.startRentTime.longValue())/60000);
-            return (long) time * result.rentalPricing.longValue();
+            return (long) time * (result.rentalPricing.longValue() + 1);
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No rental with that ID started")){

@@ -1,5 +1,5 @@
 package pl.edu.agh.payment.payment.dto;
 
-public record Message(
-        String message
+public record Redirect(
+        String url
 ) { }
