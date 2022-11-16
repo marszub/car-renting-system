@@ -2,8 +2,10 @@ import * as React from "react";
 import { Container } from "@mui/system";
 import { Typography, Button, Box } from "@mui/material";
 import { createTheme } from "@mui/material";
-import { HTTP_BAD_REQUEST, HTTP_NO_CONTENT, HTTP_OK} from "../utils/http-status";
+import { HTTP_BAD_REQUEST, HTTP_OK, HTTP_TEMPORARY_REDIRECT } from "../utils/http-status";
 import { RentalService } from "../services/rental-service";
+import { PaymentService } from "../services/payment-service";
+import { red } from "@mui/material/colors";
 
 const theme = createTheme()
 
@@ -71,13 +73,15 @@ export class RentalView extends React.Component {
             return;
         }
         this.setState({endRentalClicked: true});
-        const serviceRental = new RentalService();
-        serviceRental.endRental(rentalId).then(res => {
+        const service = new PaymentService();
+        service.endRental({"rentalId": rentalId, "email": "janusz.jakubiec@gmail.com"}).then(res => {
             switch (res.status) {
-                case HTTP_NO_CONTENT:
+                case HTTP_TEMPORARY_REDIRECT:
                     console.log("User has no actvie rental");
+                    window.location.href = res.body.url;
                     isRentalCallback(false);
                     rentalDataCallback(null);
+                    console.log(res.body);
                     break;
                 case HTTP_BAD_REQUEST:
                     console.log("Bad request");
@@ -127,12 +131,12 @@ export class RentalView extends React.Component {
                     RentalId: {this.props.rentalData.reservationId}
                 </Typography>
                 <Typography component="h1" variant="h2">
-                    Current rental cost: {this.state.currentCost}
+                    Current rental cost: {this.state.currentCost} PLN
                 </Typography>
                 <Box>
                     <Box style={{display: "inline"}}>
                         <Button variant="contained" onClick={() => this.calculateCost(this.setCurrentCost)}>
-                            Get current cost
+                            Update cost
                         </Button>
                     </Box>
                     <Box style={{display: "inline", marginLeft: "10px"}}>
