@@ -1,0 +1,20 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLDeployment</id><coordinates><x>200</x><y>260</y><w>90</w><h>70</h></coordinates><panel_attributes>Mikroserwis
+używający
+bazę danych
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>200</x><y>370</y><w>190</w><h>40</h></coordinates><panel_attributes>Maszyna fizyczna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>200</x><y>330</y><w>190</w><h>40</h></coordinates><panel_attributes>Kontener
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>300</x><y>260</y><w>90</w><h>70</h></coordinates><panel_attributes>Montowana
+konfiguracja
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>400</x><y>260</y><w>100</w><h>70</h></coordinates><panel_attributes>Mikroserwis
+nie używający
+bazy danych
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>400</x><y>330</y><w>190</w><h>40</h></coordinates><panel_attributes>Kontener
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>500</x><y>260</y><w>90</w><h>70</h></coordinates><panel_attributes>Montowana
+konfiguracja
+bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>600</x><y>260</y><w>120</w><h>70</h></coordinates><panel_attributes>Wgrywanie
+smart
+kontraktów
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>600</x><y>330</y><w>120</w><h>40</h></coordinates><panel_attributes>Kontener
+bg=orange</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>400</x><y>370</y><w>190</w><h>40</h></coordinates><panel_attributes>Maszyna fizyczna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>730</x><y>260</y><w>140</w><h>70</h></coordinates><panel_attributes>Sieć Ethereum
+bg=magenta</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>600</x><y>370</y><w>120</w><h>40</h></coordinates><panel_attributes>Maszyna fizyczna</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>730</x><y>340</y><w>140</w><h>70</h></coordinates><panel_attributes>Dowolnie wdrożona
+baza Postgre SQL
+bg=green</panel_attributes><additional_attributes></additional_attributes></element></diagram>
