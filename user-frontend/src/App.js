@@ -15,6 +15,7 @@ import AdminNavbar from "./components/Admin/AdminNavbar";
 import AdminSignInForm from "./components/Admin/AdminSignInForm";
 import AdminLoginCheck from "./components/Admin/AdminLoginCheck";
 import AdminError from "./components/Admin/AdminError";
+import AdminPayments from "./components/Admin/AdminPayments";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           <Route path="/admin/carCategories/new" element={ <AddCarCategory/>} />
           <Route path="/admin/carCategories" element={ <AdminCarCategories/>} />
           <Route path="/admin/error" element={ <AdminError/>} />
+          <Route path="/admin/payments" element={ <AdminPayments/>} />
           <Route path='*' element={ <PageNotFound /> } />
       </Routes>
     </Router>

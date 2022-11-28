@@ -82,6 +82,7 @@ export default function AdminCarCategories() {
                                          carCategoriesTarrifs = {carCategoriesTarrifsData}
                                          carDataTarrifsCallback = {setCarCategoriesTarrifsData}>
                 </AdminCarCategoriesTable>
+                <Typography color="gray">Each tariff contains additional fee of 7.00 PLN required to start the rental</Typography>
             </Box>
         </Container>
     );

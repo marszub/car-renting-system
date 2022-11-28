@@ -15,6 +15,7 @@ IF "%1"=="-h" (
     ECHO      -f, -front, -frontend    do not run frontend
     ECHO      -r, -rental              do not run rental
     ECHO      -t, -tarrif              do not run tarrif
+    ECHO      -p, -payment             do not run payment
     exit
 )
 
@@ -55,3 +56,9 @@ for %%I IN (%*) DO (IF "%%I"=="-tarrif" GOTO TARRIF)
 powershell write-host -fore Green Launching tarrif
 call shared/scripts/tarrif.bat
 :TARRIF
+
+for %%I IN (%*) DO (IF "%%I"=="-p" GOTO PAYMENT)
+for %%I IN (%*) DO (IF "%%I"=="-payment" GOTO PAYMENT)
+powershell write-host -fore Green Launching payment
+call shared/scripts/payment.bat
+:PAYMENT

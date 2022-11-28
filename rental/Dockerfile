@@ -25,6 +25,7 @@ COPY --from=build /home/gradle/rental/build/libs/*.jar /app/app.jar
 WORKDIR /app
 
 EXPOSE 5020
+EXPOSE 5022
 VOLUME /config
 
 ENTRYPOINT [ "java", "-jar", "/app/app.jar" ]

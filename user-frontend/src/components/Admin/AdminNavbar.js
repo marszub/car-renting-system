@@ -101,6 +101,18 @@ export default function AdminNavbar() {
                 >
                     <Link to="/admin/carCategories" style={{textDecoration: 'none', color: 'inherit'}}>CarCategories</Link>
                 </Typography>
+                <Typography
+                  variant="h6"
+                  noWrap
+                  sx={{
+                    mr:2,
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    userSelect: 'none'
+                  }}
+                >
+                    <Link to="/admin/payments" style={{textDecoration: 'none', color: 'inherit'}}>Payments</Link>
+                </Typography>
               </div>
             ) : <div></div>
           }
