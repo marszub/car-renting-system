@@ -26,6 +26,7 @@ WORKDIR /app
 
 EXPOSE 5080
 EXPOSE 5081
+EXPOSE 5082
 VOLUME /config
 
 ENTRYPOINT [ "java", "-jar", "/app/app.jar" ]

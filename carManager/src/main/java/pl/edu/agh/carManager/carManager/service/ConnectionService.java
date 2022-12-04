@@ -1,10 +1,12 @@
 package pl.edu.agh.carManager.carManager.service;
 
+import cardb.CarPosition;
+import cardb.Position;
+import cardb.UnauthorizedRequestException;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import pl.edu.agh.carManager.carManager.error.CarDisconnected;
 import pl.edu.agh.carManager.carManager.error.CarDoesNotExistError;
-import pl.edu.agh.carManager.carManager.persistence.CarRepository;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -25,13 +27,15 @@ public class ConnectionService extends Thread {
     private ServerSocketChannel serverSocketChannel;
     private final Map<String, CarConnection> connectionMap = new HashMap<>();
     private final CarsMap carsMap;
+    private final PositionAccumulator positionAccumulator;
 
-    public ConnectionService(Environment environment, CarsMap carsMap) {
+    public ConnectionService(Environment environment, CarsMap carsMap, PositionAccumulator positionAccumulator) {
         System.out.println("STARTING");
         createSelector();
         serverAddress = environment.getProperty("tcp.server.address");
         serverPort = Integer.valueOf(Objects.requireNonNull(environment.getProperty("tcp.server.port")));
         createServerSocket();
+        this.positionAccumulator = positionAccumulator;
         try {
             System.out.println(serverSocketChannel.getLocalAddress());
         } catch (IOException e) {
@@ -116,7 +120,13 @@ public class ConnectionService extends Thread {
                 if(!connectionMap.containsKey(token)) {
                     connectionMap.put(token, connection);
                 }
-                System.out.println(position.latitude() + ";" + position.longitude());
+                System.out.println(position.latitude + ";" + position.longitude);
+                try {
+                    positionAccumulator.addPosition(
+                            new CarPosition(carsMap.gerCarsId(token), position, System.currentTimeMillis()));
+                } catch (UnauthorizedRequestException e) {
+                    e.printStackTrace();
+                }
             } catch (CarDisconnected e) {
                 disconnectConnection(connection);
             }

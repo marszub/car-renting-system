@@ -16,6 +16,7 @@ IF "%1"=="-h" (
     ECHO      -r, -rental              do not run rental
     ECHO      -t, -tarrif              do not run tarrif
     ECHO      -p, -payment             do not run payment
+    ECHO      -carManager              do not run carManager
     exit
 )
 
@@ -62,3 +63,8 @@ for %%I IN (%*) DO (IF "%%I"=="-payment" GOTO PAYMENT)
 powershell write-host -fore Green Launching payment
 call shared/scripts/payment.bat
 :PAYMENT
+
+for %%I IN (%*) DO (IF "%%I"=="-carManager" GOTO CARMANAGER)
+powershell write-host -fore Green Launching carManager
+call shared/scripts/carmanager.bat
+:CARMANAGER

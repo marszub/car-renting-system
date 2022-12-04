@@ -20,6 +20,7 @@ import pl.agh.edu.cardatabase.car.error.CarDoesNotExistError;
 import pl.agh.edu.cardatabase.car.persistence.Car;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
 import pl.agh.edu.cardatabase.car.service.CarService;
+import pl.agh.edu.cardatabase.carCategory.ice.CarManagerCommunicator;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategory;
 import pl.agh.edu.cardatabase.carCategory.persistence.CarCategoryRepository;
 
@@ -43,6 +44,9 @@ public class CarServiceTest {
 
     @Mock
     private CarCategoryRepository carCategoryRepository;
+
+    @Mock
+    private CarManagerCommunicator carManagerCommunicator;
 
     private CarService carService;
     private CarCategory carCategory = new CarCategory("Category");
@@ -76,7 +80,7 @@ public class CarServiceTest {
     void checkAddCarSuccess() throws Exception {
         when(rentalBlockchainProxy.addCar(any())).thenReturn(null);
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         try {
             final CarData car = carService.create(new CarInputData("Test", 1));
             assertThat(car.carName()).isEqualTo(carName1);
@@ -91,7 +95,7 @@ public class CarServiceTest {
     void checkAddCarFailureNoCarCategoryError() throws Exception {
         when(rentalBlockchainProxy.addCar(any())).thenReturn(null);
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(emptyOptionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         assertThatExceptionOfType(CarCategoryDoesNotExistError.class)
                 .isThrownBy(() -> carService.create(new CarInputData("Test1", 1)));
     }
@@ -101,7 +105,7 @@ public class CarServiceTest {
     void checkAddCarFailureBlockchainError() throws Exception {
         when(rentalBlockchainProxy.addCar(any())).thenThrow(new Exception());
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> carService.create(new CarInputData("Test1", 1)));
     }
@@ -112,7 +116,7 @@ public class CarServiceTest {
         when(rentalBlockchainProxy.addCar(any()))
                 .thenThrow(new Exception("Car already exists!"));
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         assertThatExceptionOfType(CarAlreadyExistsError.class)
                 .isThrownBy(() -> carService.create(new CarInputData("Test2", 1)));
     }
@@ -123,7 +127,7 @@ public class CarServiceTest {
         when(rentalBlockchainProxy.getAllAvailableCars())
                 .thenReturn(new Tuple2<>(intList, booleanList));
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         final CarList list = carService.getAvailableCars();
         assertThat(list.cars().size()).isEqualTo(2);
         assertThat(list.cars().get(0).carName()).isEqualTo(carName1);
@@ -135,7 +139,7 @@ public class CarServiceTest {
     void getCarsFailure() throws Exception {
         when(rentalBlockchainProxy.getAllAvailableCars()).thenThrow(new Exception());
         when(carCategoryRepository.getCarCategoryById(1)).thenReturn(optionalCarCategory);
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         assertThatExceptionOfType(RuntimeException.class)
                 .isThrownBy(() -> carService.getAvailableCars());
     }
@@ -143,7 +147,7 @@ public class CarServiceTest {
     @Test
     @Transactional
     void updateCarLocationCarExists() throws CarDoesNotExistError {
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         CarLocationUpdateInput input = new CarLocationUpdateInput(new Coordinates(1.00, 2.00));
         assertThatNoException().isThrownBy(() -> carService.updateCarLocation(input, 0));
     }
@@ -151,7 +155,7 @@ public class CarServiceTest {
     @Test
     @Transactional
     void updateCarLocationCarDoesNotExist() throws CarDoesNotExistError {
-        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository);
+        this.carService = new CarService(carRepository, rentalBlockchainProxy, carCategoryRepository, carManagerCommunicator);
         CarLocationUpdateInput input = new CarLocationUpdateInput(new Coordinates(1.00, 2.00));
         assertThatExceptionOfType(CarDoesNotExistError.class)
                 .isThrownBy(() -> carService.updateCarLocation(input, 3));

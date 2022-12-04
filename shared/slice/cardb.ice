@@ -8,10 +8,6 @@ module cardb
         idempotent int getCategory();
     };
 
-    exception CarDoesNotExistException {
-        string reason;
-    };
-
     exception UnauthorizedRequestException {
         string reason;
     };
@@ -31,7 +27,7 @@ module cardb
 
     interface CarPositionUpdater
     {
-        void updateCarsPosition(CarPositionList list, string token) throws CarDoesNotExistException, UnauthorizedRequestException;
+        void updateCarsPosition(CarPositionList list, string token) throws UnauthorizedRequestException;
     };
 };
 #endif

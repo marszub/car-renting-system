@@ -1,5 +1,6 @@
 package pl.edu.agh.carManager.carManager.service;
 
+import cardb.Position;
 import com.zeroc.Ice.ConnectionLostException;
 import pl.edu.agh.carManager.carManager.error.CarDisconnected;
 import pl.edu.agh.carManager.carManager.persistence.Car;
@@ -90,7 +91,7 @@ public class CarConnection{
             if(!Objects.equals(carToken, splitString[0])) {
                 System.out.println("ERROR");
             }
-            return new Position(splitString[1], splitString[2]);
+            return new Position(Double.parseDouble(splitString[1]), Double.parseDouble(splitString[2]));
         }
         return null;
     }

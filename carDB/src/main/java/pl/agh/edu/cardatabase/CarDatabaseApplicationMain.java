@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.transaction.support.TransactionTemplate;
 import pl.agh.edu.cardatabase.car.persistence.CarRepository;
 import pl.agh.edu.cardatabase.car.service.CarService;
 import pl.agh.edu.cardatabase.carCategory.ice.CarLocator;
@@ -28,7 +29,7 @@ public class CarDatabaseApplicationMain {
     }
 
     @Bean
-    ApplicationRunner applicationRunner(Environment environment) {
+    ApplicationRunner applicationRunner(Environment environment, TransactionTemplate transactionTemplate) {
         return args -> {
             try
             {
@@ -36,7 +37,7 @@ public class CarDatabaseApplicationMain {
                 var adapter = communicator.createObjectAdapter("Adapter");
 
                 adapter.addServantLocator(new CarLocator(carRepository), "car");
-                adapter.add(new CarPositionUpdaterServant(carService), new Identity("positionUpdater", "positionUpdater"));
+                adapter.add(new CarPositionUpdaterServant(environment, carService, transactionTemplate), new Identity("positionUpdater", "positionUpdater"));
 
                 adapter.activate();
                 //communicator.waitForShutdown();

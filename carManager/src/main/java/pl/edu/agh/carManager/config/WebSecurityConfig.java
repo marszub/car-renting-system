@@ -38,8 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and().authorizeRequests()
-                //.antMatchers("/api/payment").authenticated()
-                //.antMatchers("/api/admin/payment").authenticated()
+                .antMatchers("/api/admin").authenticated()
                 .anyRequest().permitAll();
     }
 
