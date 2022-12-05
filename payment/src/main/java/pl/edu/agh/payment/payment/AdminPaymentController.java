@@ -29,7 +29,7 @@ public class AdminPaymentController {
         return paymentService.getPayments();
     }
 
-    //That endpoint will be deleted it servers only as a mock of a PayU notification
+    //That endpoint will be deleted it serves only as a mock of a PayU notification
     @GetMapping("sendNotification")
     @ResponseStatus(HttpStatus.OK)
     public void sendNotification(@RequestBody @Valid final InputNotification inputNotification) {
