@@ -35,6 +35,7 @@ public class RentalService {
     private ContractGasProvider gasProvider;//data about the costs in blockchain
     private Credentials credentials;//admin Credentials in blockchain
     private Rental adminRentalService;
+    private final long startingPayment = 700;
 
     private CarDb carDb;
 
@@ -67,13 +68,12 @@ public class RentalService {
             //send request synchronously, it throws error if it reverts
             System.out.println(carId);
             int categoryId = carDb.getCarCategory(carId);
-            //IMO the carDb.getCategory does not work
             System.out.println(categoryId);
             
             TransactionReceipt reservationReceipt = adminRentalService.
                     startRental(BigInteger.valueOf(timestamp.getTime()),
                             BigInteger.valueOf(carId),
-                            BigInteger.valueOf(user.id()), TARRIF_CONTRACT_ADDRESS,BigInteger.valueOf(categoryId)).send();
+                            BigInteger.valueOf(user.id()), TARRIF_CONTRACT_ADDRESS, BigInteger.valueOf(categoryId)).send();
 
             //get event from transaction ("emit" in solidity)
             reservationID = adminRentalService.getAddedNewRentalIDEvents(reservationReceipt).get(0).reservationID.intValue();
@@ -91,7 +91,7 @@ public class RentalService {
             //possibly solved with string.contains()
         }
 
-        return new RentalData(reservationID, carId, timestamp.getTime(), (long) 0., (long) 0.);
+        return new RentalData(reservationID, carId, timestamp.getTime(), (long) 0., this.startingPayment);
     }
 
     public void endRental(final Integer rentalId, final User user) throws UserUnauthorizedError {
@@ -134,8 +134,8 @@ public class RentalService {
 
         }
         long time = timestamp.getTime() - result.startRentTime.longValue();
-        long costMinutes = (long) Math.floor(time/60000)
-                * result.rentalPricing.longValue();
+        long costMinutes = (long) (Math.floor(time/60000))
+                * result.rentalPricing.longValue() + startingPayment;
 
         return new RentalData(result.rentalID.intValue(), result.carID.intValue(), result.startRentTime.longValue(),
                 time, costMinutes);
@@ -147,8 +147,8 @@ public class RentalService {
         try{
             //no need for emit, this a "view" function
             result = adminRentalService.getActiveRental(BigInteger.valueOf(user.id())).send();
-            return (long) Math.floor((timestamp.getTime() - result.startRentTime.longValue())/60000)
-                    * result.rentalPricing.longValue();
+            return (long) (Math.floor((timestamp.getTime() - result.startRentTime.longValue())/60000))
+                    * result.rentalPricing.longValue() + startingPayment;
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No active rental record")){
@@ -164,7 +164,7 @@ public class RentalService {
         try {
             result = adminRentalService.getRecordHistory(BigInteger.valueOf(rentalID)).send();
             long time = (long) Math.floor((result.endRentTime.longValue() - result.startRentTime.longValue())/60000);
-            return (long) time * result.rentalPricing.longValue();
+            return (time) * (result.rentalPricing.longValue()) + startingPayment;
         }catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("No rental with that ID started")){

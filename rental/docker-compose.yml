@@ -3,5 +3,6 @@ services:
         image: rental:dev
         ports:
             - "5020:5020"
+            - "5022:5022"
         volumes:
             - ./config/docker:/config

@@ -133,6 +133,7 @@ export default function Tarrif() {
                         {listCarCategories()}
                     </tbody>
                 </table>
+                <Typography color="gray">Each tariff contains additional fee of 7.00 PLN required to start the rental</Typography>
             </Box>
         </Container>
     );
