@@ -1,0 +1,16 @@
+services:
+    carManager:
+        image: carmanager:dev
+        ports:
+            - "5080:5080"
+            - "5081:5081"
+            - "5082:5082"
+        volumes:
+            - ./config/docker:/config
+        depends_on:
+            - "carmanager_db"
+    carmanager_db:
+        image: postgres:latest
+        environment:
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: cars
