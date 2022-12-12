@@ -19,9 +19,9 @@ class Car:
         self.socket.connect(server_address)
 
     def send_data_to_server(self):
-        message = str(self.id) + ";" + str(self.latitude) + ";" + str(self.longitude)
+        message = self.id + ";" + str(self.latitude) + ";" + str(self.longitude)
         print(message)
-        self.socket.sendall(bytes(message))
+        self.socket.sendall(bytes(message, 'utf-8'))
 
     def simulate_route(self, speed=0.01, delay=10):  # while car is active
         random_direction = (random.randint(-1, 1), random.randint(-1, 1))

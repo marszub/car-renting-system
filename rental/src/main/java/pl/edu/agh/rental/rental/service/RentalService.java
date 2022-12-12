@@ -38,6 +38,7 @@ public class RentalService {
     private final long startingPayment = 700;
 
     private CarDb carDb;
+    private CarManagerCommunicator carManagerCommunicator;
 
     private static final String CONTRACT_ADDRESS =
             "0xee3e92973010664a804bf96188ac4766fb84a3b9";//TODO - change to config
@@ -46,7 +47,7 @@ public class RentalService {
     private static final String TARRIF_CONTRACT_ADDRESS =
             "0x3D21EB2e5590Ee645fFB13024621Ca05728D6774";
 
-    public RentalService(@Value("${blockchain.address}") final String blockchainAddress, CarDb carDb) {
+    public RentalService(@Value("${blockchain.address}") final String blockchainAddress, CarDb carDb, CarManagerCommunicator carManagerCommunicator) {
         web3client =
                 Web3j.build(new HttpService(blockchainAddress));
 
@@ -59,6 +60,7 @@ public class RentalService {
         adminRentalService =
                 Rental.load(CONTRACT_ADDRESS, web3client, credentials, gasProvider);//object used to call contracts
         this.carDb = carDb;
+        this.carManagerCommunicator = carManagerCommunicator;
     }
 
     public RentalData createRental(final int carId, final User user) throws NoCarError, ActiveRentalError {
@@ -77,6 +79,7 @@ public class RentalService {
 
             //get event from transaction ("emit" in solidity)
             reservationID = adminRentalService.getAddedNewRentalIDEvents(reservationReceipt).get(0).reservationID.intValue();
+            carManagerCommunicator.openCar(carId);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             if(e.getMessage().contains("Car already exists!")){
