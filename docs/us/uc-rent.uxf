@@ -1,0 +1,34 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><element><id>UMLActor</id><coordinates><x>320</x><y>470</y><w>60</w><h>110</h></coordinates><panel_attributes>Klient</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>530</x><y>340</y><w>120</w><h>40</h></coordinates><panel_attributes>Rozpoczęcie
+wypożyczenia
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>350</y><w>180</w><h>160</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;140;90;140;90;10;160;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>530</x><y>580</y><w>120</w><h>60</h></coordinates><panel_attributes>Zakończenie
+wypożyczenia
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>640</x><y>340</y><w>120</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>100;20;10;20</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>740</x><y>340</y><w>130</w><h>50</h></coordinates><panel_attributes>Otwarcie
+samochodu
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>740</x><y>270</y><w>130</w><h>50</h></coordinates><panel_attributes>Wybranie
+samochodu
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>740</x><y>410</y><w>130</w><h>50</h></coordinates><panel_attributes>Rozpoczęcie
+naliczania opłat
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>270</y><w>180</w><h>90</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>160;20;10;20;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>370</y><w>180</w><h>90</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>160;70;10;70;10;10</additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>740</x><y>580</y><w>130</w><h>60</h></coordinates><panel_attributes>Zakończenie
+naliczania opłat
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLUseCase</id><coordinates><x>740</x><y>500</y><w>130</w><h>60</h></coordinates><panel_attributes>Zamknięcie
+samochodu
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>510</y><w>180</w><h>90</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>160;20;10;20;10;70</additional_attributes></element><element><id>Relation</id><coordinates><x>640</x><y>590</y><w>120</w><h>40</h></coordinates><panel_attributes>lt=&lt;.
+&lt;&lt;include&gt;&gt;</panel_attributes><additional_attributes>100;20;10;20</additional_attributes></element><element><id>UMLNote</id><coordinates><x>340</x><y>240</y><w>190</w><h>80</h></coordinates><panel_attributes>Warunki wstępne
+--
+- Klient jest zalogowany
+- Klient aktualnie nie wypożycza
+   innego samochodu
+bg=#e0e09a</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>520</x><y>310</y><w>50</w><h>50</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>30;30;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>900</x><y>340</y><w>170</w><h>70</h></coordinates><panel_attributes>Warunki wstępne
+--
+- Samochód jest dostępny
+   do wypożyczenia
+bg=#e0e09a</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>860</x><y>290</y><w>60</w><h>70</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;40;50</additional_attributes></element><element><id>UMLNote</id><coordinates><x>630</x><y>670</y><w>170</w><h>80</h></coordinates><panel_attributes>Warunki wstępne
+--
+- Klient jest zalogowany
+- Klient ma aktywną sesję
+   wypożyczenia
+bg=#e0e09a</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>580</x><y>620</y><w>70</w><h>70</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;18;50;50</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>480</y><w>180</w><h>150</h></coordinates><panel_attributes></panel_attributes><additional_attributes>10;10;90;10;90;130;160;130</additional_attributes></element></diagram>

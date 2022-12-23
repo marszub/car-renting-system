@@ -1,3 +1,6 @@
-for /l %%x in (50, 50, 100000) do (
-   type c:\Users\givrox7\Documents\Projects\car-renting-system\shared\test\admin-login.js | docker run --rm -i -v c:\Users\givrox7\Documents\Projects\car-renting-system\shared\test\results:/results grafana/k6 run --vus %%x --duration 120s -
+for /l %%x in (1800, 100, 1801) do (
+   docker-compose up -d
+   timeout 90
+   docker run --rm -i -w /test -v d:\Documents\Studia\praca\car-renting-system\shared\test:/test grafana/k6 run --vus %%x --iterations %%x ./burst-tariff.js
+   docker-compose down
 )

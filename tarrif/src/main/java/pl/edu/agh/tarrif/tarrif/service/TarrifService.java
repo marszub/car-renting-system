@@ -21,13 +21,22 @@ public class TarrifService {
     }
 
     public boolean addPricing(PricingRecord record) {
+        boolean passed = false;
+        while(!passed){
         try {
-            TransactionReceipt result = tarrifBlockchainProxy.addEntry(record);
-            return true;
+            tarrifBlockchainProxy.addEntry(record);
+            passed = true;
         } catch (Exception e) {
+            System.out.println("TU");
             System.out.println(e);
-            return false;
+            try{
+            Thread.sleep(1000);
+            }catch(Exception ex){
+                System.out.println(ex);
+            }
         }
+    }
+    return true;
     }
 
     public PricingRecordsList getPricing(){

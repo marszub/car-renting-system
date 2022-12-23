@@ -24,7 +24,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=publish /app .
 ENTRYPOINT ["dotnet", "Auth.dll"]
-CMD ["/config/config.authice", "/config/appsettings.json"]
+CMD ["/config/auth.ice", "/config/auth.json"]
 EXPOSE 5010/tcp
 EXPOSE 5012/tcp
 EXPOSE 5012/udp
