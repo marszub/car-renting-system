@@ -4,6 +4,9 @@ const baseUrl = 'http://localhost'
 export const authUrl = `${baseUrl}:5010`;
 export const carsUrl = `${baseUrl}:5030`;
 export const tariffUrl = `${baseUrl}:5049`;
+export const rentalUrl = `${baseUrl}:5020`;
+export const paymentUrl = `${baseUrl}:5070`;
+export const blockchainUrl = `${baseUrl}:5000`;
 
 export function randomKey(length) {
     var result = '';

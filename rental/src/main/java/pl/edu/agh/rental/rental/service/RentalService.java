@@ -66,6 +66,8 @@ public class RentalService {
     public RentalData createRental(final int carId, final User user) throws NoCarError, ActiveRentalError {
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         int reservationID;
+        while(true)
+        {
         try {
             //send request synchronously, it throws error if it reverts
             System.out.println(carId);
@@ -88,11 +90,16 @@ public class RentalService {
             if(e.getMessage().contains("Active record")){
                 throw new ActiveRentalError();
             }
+            if(e.getMessage().contains("Error processing transaction request: the tx doesn't have the correct nonce.")){
+                continue;
+            }
 
             throw new RuntimeException(e);
             //TODO - problem with revert() - reason as a part of message string
             //possibly solved with string.contains()
         }
+        break;
+    }
 
         return new RentalData(reservationID, carId, timestamp.getTime(), (long) 0., this.startingPayment);
     }
@@ -100,6 +107,8 @@ public class RentalService {
     public void endRental(final Integer rentalId, final User user) throws UserUnauthorizedError {
         //TODO - change the name of the error
         final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        while(true)
+        {
         try{
             //send request synchronously, it throws error if it reverts
             adminRentalService.endRental(BigInteger.valueOf(rentalId),BigInteger.valueOf(timestamp.getTime())).send();
@@ -111,10 +120,15 @@ public class RentalService {
             if(e.getMessage().contains("Rental with that ID has already ended")){
                 throw new UserUnauthorizedError();
             }
+            if(e.getMessage().contains("Error processing transaction request: the tx doesn't have the correct nonce.")){
+                continue;
+            }
             throw new RuntimeException(e);
             //TODO - problem with revert() - reason as a part of message string
             //possibly solved with string.contains()
         }
+        break;
+    }
     }
 
     public RentalData getRental(final User user) throws NoRentalError {
