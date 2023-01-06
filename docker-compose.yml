@@ -5,48 +5,111 @@ services:
             - '5010:5010/tcp'
             - '5012:5012'
         volumes:
-            - ./auth/Auth/config:/config
-        networks:
-            - car-rent
-            - auth-db-connection
+            - ./shared/config/lan:/config
         depends_on:
-             - 'auth_db'
+             - "auth_db"
     auth_db:
         image: postgres:latest
+        ports:
+            - '5011:5432'
         environment:
             POSTGRES_PASSWORD: password
             POSTGRES_DB: auth
-        networks:
-            - auth-db-connection
+
+
 
     cars:
         image: cars:dev
         ports:
-            - '5030:5030/tcp'
+            - "5030:5030"
+            - "5032:5032"
         volumes:
-            - ./carDB/config/docker:/config
-        networks:
-            - car-rent
-            - cars-db-connection
+            - ./shared/config/lan:/config
         depends_on:
-             - 'cars_db'
-             - 'blockchain'
+             - "cars_db"
     cars_db:
         image: postgres:latest
+        ports:
+            - '5031:5432'
         environment:
             POSTGRES_PASSWORD: password
             POSTGRES_DB: cars
-        networks:
-            - cars-db-connection
 
+
+
+    carManager:
+        image: carmanager:dev
+        ports:
+            - "5080:5080"
+            - "5082:5082"
+        volumes:
+            - ./shared/config/lan:/config
+        depends_on:
+            - "carmanager_db"
+    carmanager_db:
+        image: postgres:latest
+        ports:
+            - '5081:5432'
+        environment:
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: cars
+
+
+
+    contracts:
+        image: blockchain-initializer:dev
+        volumes:
+            - ./contracts/:/contracts
+        depends_on:
+             - "blockchain"
     blockchain:
         image: trufflesuite/ganache-cli:latest
         ports:
-            - '5000:8545'
-        command: '--mnemonic "frog coin ten lottery sport awful broken extra call stereo police manual"'
-        networks:
-            - car-rent
-networks:
-    car-rent:
-    auth-db-connection:
-    cars-db-connection:
+            - "5000:8545"
+        command: --mnemonic "frog coin ten lottery sport awful broken extra call stereo police manual"
+
+
+
+    payment:
+        image: payment:dev
+        ports:
+            - "5070:5070"
+        volumes:
+            - ./shared/config/lan:/config
+        depends_on:
+            - "payments_db"
+    payments_db:
+        image: postgres:latest
+        ports:
+            - '5071:5432'
+        environment:
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: payments
+
+
+
+    rental:
+        image: rental:dev
+        ports:
+            - "5020:5020"
+            - "5022:5022"
+        volumes:
+            - ./shared/config/lan:/config
+
+
+
+    tarrif:
+        image: tarrif:dev
+        ports:
+            - "5049:5049"
+        volumes:
+            - ./shared/config/lan:/config
+
+
+
+    front:
+        image: front:dev
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./shared/config/lan:/config

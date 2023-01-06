@@ -17,7 +17,7 @@ bg=blue</panel_attributes><additional_attributes></additional_attributes></eleme
 bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>594</x><y>198</y><w>99</w><h>77</h></coordinates><panel_attributes>Montowana
 konfiguracja
 bg=blue</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>704</x><y>319</y><w>198</w><h>44</h></coordinates><panel_attributes>docker-compose
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>704</x><y>198</y><w>88</w><h>77</h></coordinates><panel_attributes>Mock
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>704</x><y>198</y><w>88</w><h>77</h></coordinates><panel_attributes>Symulator
 Ethereum
 bg=magenta</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLDeployment</id><coordinates><x>803</x><y>198</y><w>99</w><h>77</h></coordinates><panel_attributes>Wgrywanie
 smart
